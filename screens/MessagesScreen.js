@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react'
-import {View, ScrollView, Text, Button, StyleSheet} from 'react-native'
+import {View, ScrollView, Text, Button, StyleSheet, FlatList, useWindowDimensions, Platform} from 'react-native'
 import Background from './Background'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import Navbar from './Navbar'
@@ -24,6 +24,7 @@ export default function ChatScreen({ navigation }) {
 
    async function sendMessage(e) {
         e.preventDefault()
+        console.log("MESSAGE")
         const uid = authenticate.currentUser.uid
         const avatar = authenticate.currentUser.photoURL
 
@@ -42,6 +43,32 @@ export default function ChatScreen({ navigation }) {
         setMessage('')
     }
 
+  const DATA = [
+  {
+    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+    title: 'Sarah Williams',
+  },
+  {
+    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+    title: 'Sarah Williams',
+  },
+  {
+    id: '58694a0f-3da1-471f-bd96-145571e29d72',
+    title: 'Sarah Williams',
+  },
+];
+
+  const Item = ({ title }) => (
+    <View style={styles.item}>
+      <Text style={styles.title}>{title}</Text>
+    </View>
+  );
+
+  const renderItem = ({ item }) => (
+    <Item title={item.title} />
+  );
+
+
   class StyleSheets {
     static create(obj) {
       var result = {};
@@ -53,48 +80,90 @@ export default function ChatScreen({ navigation }) {
   }  
 
   const styles = StyleSheets.create({
-    msg: {
-      display: 'flex',
-      paddingTop: 0,
-      paddingBottom: 10,
-      paddingLeft: 0,
-      paddingRight: 10,
-      margin: 5,
-      marginTop: 40,
-      borderRadius: 4,
-      alignItems: 'center',
+    container: {
+      flex: 1,
+      flexDirection: "row",
+      border: '1px solid #e7e6e7',
+      margin: 80,
+    },
+    contacts: {
+      flex: 2,
+      backgroundColor: 'white',
+    },
+    messagesBox: {
+      flex: 4,
+      marginTop: 100,
+    },
+    item: {
+      padding: 20,
+      borderBottomWidth: 1,
+      borderBottomColor: '#e7e6e7',
+      marginHorizontal: 8,
+    },
+    msge: {
+      display: 'block',
+      flexDirection: "row !important",
+      paddingTop: 12,
+      paddingBottom: 12,
+      paddingLeft: 12,
+      paddingRight: 12,
+      margin: 10,
+      borderRadius: 20,
+      borderWidth: 0,
+      borderColor: "blue",
       color: 'white',
       backgroundColor: 'blue',
-      width: '20%',
     },
+    contact: {
+      listStyle: 'none',
+      padding: 20,
+      borderBottomWidth: 1,
+      borderBottomColor: '#e7e6e7',
+      borderRightWidth: 1,
+      borderRightColor: '#e7e6e7',
+    },
+    message: {
+      alignSelf: "flex-start",
+    }
   });
+
+  const window = useWindowDimensions();
+  const msgStyle = { height: window.height-400}
 
   return (
     <Background>
      <ScrollView>
       <Navbar />
-      <View className="container">
-        <View className="contacts"></View>
-        <View className="msgs">
-              {messages.map(({ id, text, photoURL, uid }) => (
-                  <View>
-                      <View key={id} style={styles.msg} className={`msg ${uid === authenticate.currentUser.uid ? 'sent' : 'received'}`}>
-                          <Image src={photoURL} alt="" />
-                          <Text>{text}</Text>
-                      </View>
-                  </View>
-              ))}
+      <View style={styles.container}>
+       {Platform.OS == "ios" ? (
+        <Text></Text>
+      ) : (
+        <View style={styles.contacts}>
+          <FlatList
+            data={DATA}
+            renderItem={renderItem}
+          /> 
         </View>
+      )}
+        <View style={styles.messagesBox}>
+          <View style={msgStyle}>
+                {messages.map(({ id, text, photoURL, uid }) => (
+                    <View key={id} style={styles.message} className={`msg ${uid === authenticate.currentUser.uid ? 'sent' : 'received'}`}>
+                        <Image src={photoURL} alt="" />
+                        <Text style={styles.msge}>{text}</Text>
+                    </View>
+                ))}
+          </View>
+          <TextInput 
+             style={{ width: '78%', fontSize: 15 }}
+             theme={{ colors: { primary: 'blue', underlineColor:'transparent',}}}
+             placeholder='Message...'
+             value={message}
+             onChangeText={e => setMessage(e)} 
+             onSubmitEditing={(event) => sendMessage(event)}
+          />
+       </View>
       </View>
-      <TextInput 
-       style={{ width: '78%', fontSize: 15, fontWeight: '600', marginLeft: 5, marginBottom: -3 }}
-       theme={{ colors: { primary: 'blue',underlineColor:'transparent',}}}
-       placeholder='Message...'
-       value={message}
-       onChangeText={e => setMessage(e)} />
-      <TouchableOpacity onPress={sendMessage}>
-      <Text>Search</Text>
-      </TouchableOpacity>
       </ScrollView>
     </Background>
   )
