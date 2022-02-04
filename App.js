@@ -6,6 +6,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import firebase from 'firebase/app';
 
+import Amplify from 'aws-amplify'
+import awsconfig from './src/aws-exports'
+Amplify.configure(awsconfig)
+
 import 'firebase/storage';
 import 'firebase/auth';
 import 'firebase/firestore';

@@ -131,7 +131,7 @@ export default function SwipeScreen(props) {
             onPress: () => console.log("Cancel Pressed"),
             style: "cancel"
           },
-          { text: "New Match", onPress: () => console.log("OK Pressed") }
+          { text: "Go to match", onPress: () => console.log("OK Pressed") }
         ]
       );
 
