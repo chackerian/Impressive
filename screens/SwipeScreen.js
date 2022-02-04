@@ -32,6 +32,8 @@ export default function SwipeScreen(props) {
     viewport: {
       height: 250,
       marginTop: 300,
+      overScrollBehavior: 'contain',
+      overScrollBehaviorY: 'contain',
       marginLeft: 'auto',
       marginRight: 'auto',
       alignItems: 'center',
