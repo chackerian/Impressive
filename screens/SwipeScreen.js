@@ -18,6 +18,10 @@ export default function SwipeScreen(props) {
   const [swiper, setSwiper] = useState();
 
   const styles = StyleSheet.create({
+    body: {
+      overscrollBehavior: 'contain',
+      overScrollBehaviorY: 'contain',
+    }, 
     image: {
       opacity: 1,
       height: 420,
