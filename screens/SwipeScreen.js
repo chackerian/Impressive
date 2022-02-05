@@ -21,6 +21,7 @@ export default function SwipeScreen(props) {
     body: {
       overscrollBehavior: 'contain',
       overScrollBehaviorY: 'contain',
+      backgroundColor: "blue",
     }, 
     image: {
       opacity: 1,
@@ -154,7 +155,7 @@ export default function SwipeScreen(props) {
   }
 
   return (
-    <View>
+    <View style={styles.body}>
      <NavSwipe />
      <View style={styles.viewport}>
       <CardStack 
