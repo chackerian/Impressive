@@ -89,8 +89,23 @@ export default function SwipeScreen(props) {
     var div = [];
 
     while(interacted.length) {
-      div.push(interacted.splice(0, 10));
+      const batch = interacted.splice(0, 10));
     }
+
+    batches.push(
+      store.collection("users")
+        .where(
+          "email",
+          'not-in',
+          [...batch]
+        )
+        .get()
+        .then(results => results.docs.map(result => ({ /* id: result.id, */ ...result.data() }) ))
+    )
+
+  // after all of the data is fetched, return it
+  return Promise.all(batches)
+    .then(content => content.flat());
 
     var snaps = []
     for(var x=0; x<div.length; x++){
