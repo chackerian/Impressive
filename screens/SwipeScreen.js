@@ -5,6 +5,7 @@ import NavSwipe from './NavSwipe';
 import CardStack, { Card } from 'react-native-card-stack-swiper';
 import { storage, store } from "../App.js";
 import firebase from 'firebase/app';
+import './nobounce.js'
 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHeart, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
@@ -19,9 +20,8 @@ export default function SwipeScreen(props) {
 
   const styles = StyleSheet.create({
     body: {
-      overscrollBehavior: 'contain',
+      overscrollBehavior: 'none',
       overScrollBehaviorY: 'contain',
-      backgroundColor: "blue",
     }, 
     image: {
       opacity: 1,
@@ -148,24 +148,15 @@ export default function SwipeScreen(props) {
 
   }
 
+
   var addDislike = function(email){
     store.collection('users').doc(props.route.params.user.email).update({
       dislikes: firebase.firestore.FieldValue.arrayUnion(email)
     })
   }
 
-  function preventPullToRefresh(element) { var prevent = false;
-    document.querySelector(element).addEventListener('touchstart', function(e){ 
-      if (e.touches.length !== 1) { return; } var scrollY = window.pageYOffset || document.body.scrollTop || document.documentElement.scrollTop; prevent = (scrollY === 0);
-      }); 
-    document.querySelector(element).addEventListener('touchmove', function(e){
-     if (prevent) { prevent = false; e.preventDefault(); } }); 
-  } 
-
-  preventPullToRefresh('#main')
-
   return (
-    <View style={styles.body} id="main">
+    <View style={styles.body} className="swipeMain">
      <NavSwipe />
      <View style={styles.viewport}>
       <CardStack 
@@ -204,4 +195,3 @@ export default function SwipeScreen(props) {
     </View>
   )
 }
-

@@ -5,8 +5,6 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Navbar from './Navbar'
 import TextInput from './TextInput'
 import { TouchableOpacity, Image } from 'react-native';
-// import SendIcon from '@mui/icons-material/Send';
-import './Chat.js';
 
 import firebase from 'firebase/app';
 
@@ -68,7 +66,6 @@ export default function ChatScreen({ navigation }) {
     <Item title={item.title} />
   );
 
-
   class StyleSheets {
     static create(obj) {
       var result = {};
@@ -84,15 +81,21 @@ export default function ChatScreen({ navigation }) {
       flex: 1,
       flexDirection: "row",
       border: '1px solid #e7e6e7',
-      margin: 80,
+      marginTop: 80,
+      marginLeft: 30,
+      marginRight: 30,
     },
     contacts: {
       flex: 2,
       backgroundColor: 'white',
+      borderRightWidth: 1,
+      borderRightColor: '#e7e6e7',
     },
     messagesBox: {
       flex: 4,
-      marginTop: 100,
+      marginTop: 20,
+      maxHeight: 301,
+      overflow: 'scroll',
     },
     item: {
       padding: 20,
@@ -114,14 +117,6 @@ export default function ChatScreen({ navigation }) {
       color: 'white',
       backgroundColor: 'blue',
     },
-    contact: {
-      listStyle: 'none',
-      padding: 20,
-      borderBottomWidth: 1,
-      borderBottomColor: '#e7e6e7',
-      borderRightWidth: 1,
-      borderRightColor: '#e7e6e7',
-    },
     message: {
       alignSelf: "flex-start",
     }
@@ -129,6 +124,7 @@ export default function ChatScreen({ navigation }) {
 
   const window = useWindowDimensions();
   const msgStyle = { height: window.height-400}
+  console.log("Platform", Platform.OS)
 
   return (
     <Background>

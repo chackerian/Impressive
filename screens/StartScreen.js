@@ -16,9 +16,8 @@ export default function StartScreen(props) {
   function logIn(){}
 
   const [usersc, setUserSc] = React.useState(null);
-
-  const navigation = useNavigation();
   const [user, setUser] = React.useState(null);
+  const navigation = useNavigation();
 
   var profile = function(){
     navigation.navigate('LoginScreen')
