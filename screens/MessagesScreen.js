@@ -5,8 +5,6 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Navbar from './Navbar'
 import TextInput from './TextInput'
 import { TouchableOpacity, Image } from 'react-native';
-// import SendIcon from '@mui/icons-material/Send';
-import './Chat.js';
 
 import firebase from 'firebase/app';
 
@@ -14,7 +12,7 @@ import { storage, store, authenticate } from "../App.js";
 const convo = String(Math.floor(Math.random()*1000000000000000))
 
 export default function ChatScreen({ navigation }) {
-  const [message, setMessage] = useState([]);
+  const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([])
   useEffect(() => {
       store.collection('messages').doc(convo).collection('convo').orderBy('createdAt').limit(50).onSnapshot(snapshot => {
@@ -23,25 +21,25 @@ export default function ChatScreen({ navigation }) {
   }, [])
 
    async function sendMessage(e) {
-        e.preventDefault()
-        console.log("MESSAGE")
-        const uid = authenticate.currentUser.uid
-        const avatar = authenticate.currentUser.photoURL
+      e.preventDefault()
+      console.log("MESSAGE")
+      const uid = authenticate.currentUser.uid
+      const avatar = authenticate.currentUser.photoURL
 
-        if (message.length > 0){
-          await store.collection('messages').doc(convo).set({
-              createdAt: firebase.firestore.FieldValue.serverTimestamp()
-          })
+      if (message.length > 0){
+        await store.collection('messages').doc(convo).set({
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        })
 
-          await store.collection('messages').doc(convo).collection('convo').add({
-              text: message,
-              avatar,
-              uid,
-              createdAt: firebase.firestore.FieldValue.serverTimestamp()
-          })
-        }
-        setMessage('')
-    }
+        await store.collection('messages').doc(convo).collection('convo').add({
+            text: message,
+            avatar,
+            uid,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        })
+      }
+      setMessage('')
+  }
 
   const DATA = [
   {
@@ -68,7 +66,6 @@ export default function ChatScreen({ navigation }) {
     <Item title={item.title} />
   );
 
-
   class StyleSheets {
     static create(obj) {
       var result = {};
@@ -84,15 +81,21 @@ export default function ChatScreen({ navigation }) {
       flex: 1,
       flexDirection: "row",
       border: '1px solid #e7e6e7',
-      margin: 80,
+      marginTop: 80,
+      marginLeft: 30,
+      marginRight: 30,
     },
     contacts: {
       flex: 2,
       backgroundColor: 'white',
+      borderRightWidth: 1,
+      borderRightColor: '#e7e6e7',
     },
     messagesBox: {
       flex: 4,
-      marginTop: 100,
+      marginTop: 20,
+      maxHeight: 301,
+      overflow: 'scroll',
     },
     item: {
       padding: 20,
@@ -108,22 +111,18 @@ export default function ChatScreen({ navigation }) {
       paddingLeft: 12,
       paddingRight: 12,
       margin: 10,
-      borderRadius: 20,
+      borderRadius: 40,
       borderWidth: 0,
       borderColor: "blue",
       color: 'white',
       backgroundColor: 'blue',
     },
-    contact: {
-      listStyle: 'none',
-      padding: 20,
-      borderBottomWidth: 1,
-      borderBottomColor: '#e7e6e7',
-      borderRightWidth: 1,
-      borderRightColor: '#e7e6e7',
-    },
     message: {
       alignSelf: "flex-start",
+    },
+    sendMessage: {
+      position:'absolute',
+      bottom: 0,
     }
   });
 
@@ -135,34 +134,33 @@ export default function ChatScreen({ navigation }) {
      <ScrollView>
       <Navbar />
       <View style={styles.container}>
-       {Platform.OS == "ios" ? (
-        <Text></Text>
-      ) : (
+       {Platform.OS == "ios" ? <Text></Text> : (
         <View style={styles.contacts}>
           <FlatList
             data={DATA}
             renderItem={renderItem}
           /> 
-        </View>
-      )}
+        </View>)}
         <View style={styles.messagesBox}>
           <View style={msgStyle}>
-                {messages.map(({ id, text, photoURL, uid }) => (
-                    <View key={id} style={styles.message} className={`msg ${uid === authenticate.currentUser.uid ? 'sent' : 'received'}`}>
-                        <Image src={photoURL} alt="" />
-                        <Text style={styles.msge}>{text}</Text>
-                    </View>
-                ))}
+              {messages.map(({ id, text, photoURL, uid }) => (
+                  <View key={id} style={styles.message}>
+                      <Image src={photoURL} alt="" />
+                      <Text style={styles.msge}>{text}</Text>
+                  </View>
+              ))}
           </View>
+       </View>
+        <View style={styles.sendMessage}>
           <TextInput 
-             style={{ width: '78%', fontSize: 15 }}
-             theme={{ colors: { primary: 'blue', underlineColor:'transparent',}}}
+             style={{ width: '78%', fontSize: 15}}
+             theme={{ colors: { primary: 'blue', underlineColor:'transparent'}}}
              placeholder='Message...'
              value={message}
              onChangeText={e => setMessage(e)} 
              onSubmitEditing={(event) => sendMessage(event)}
           />
-       </View>
+        </View>
       </View>
       </ScrollView>
     </Background>

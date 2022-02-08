@@ -1,10 +1,12 @@
-import React, {useState, useEffect, useRef, setState} from 'react'
+import React, {useState, useEffect, useRef, createRef, setState} from 'react'
 import Background from './Background'
-import {StyleSheet, Image, TextInput, Text, View, Dimensions, PanResponder, Animated, TouchableOpacity, Alert } from 'react-native';
+import {StyleSheet, Image, TextInput, Text, View, Platform, Dimensions, PanResponder, Animated, TouchableOpacity, Alert } from 'react-native';
 import NavSwipe from './NavSwipe';
 import CardStack, { Card } from 'react-native-card-stack-swiper';
 import { storage, store } from "../App.js";
 import firebase from 'firebase/app';
+import { useNavigation } from '@react-navigation/native';
+import Alerts from './Alerts.js';
 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHeart, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
@@ -16,29 +18,29 @@ export default function SwipeScreen(props) {
 
   const [images, setImages] = useState([]);
   const [swiper, setSwiper] = useState();
+  const [likeswipe, setLikeSwipe] = useState(createRef());
+  const navigation = useNavigation();
 
   const styles = StyleSheet.create({
-    body: {
-      overscrollBehavior: 'contain',
-      overScrollBehaviorY: 'contain',
-      backgroundColor: "blue",
-    }, 
     image: {
       opacity: 1,
-      height: 420,
+      height: 470,
     },
     info: {
-      padding: 2,
+      padding: 20,
+      color: 'white',
+      fontWeight: "bold",
+      backgroundColor: "#313174",
     },
     description: {
       fontSize: 20,
+      fontWeight: 'bold',
+      color: 'white',
       marginLeft: 12,
     },
     viewport: {
       height: 250,
       marginTop: 300,
-      overScrollBehavior: 'contain',
-      overScrollBehaviorY: 'contain',
       marginLeft: 'auto',
       marginRight: 'auto',
       alignItems: 'center',
@@ -62,8 +64,6 @@ export default function SwipeScreen(props) {
     },
     card:{
       width: 320,
-      height: 500,
-      backgroundColor: 'lightgray',
       borderRadius: 5,
       shadowColor: 'rgba(0,0,0,0.5)',
       shadowOffset: {
@@ -75,6 +75,8 @@ export default function SwipeScreen(props) {
     label: {
       marginLeft: 12,
       fontSize: 25,
+      color: 'white',
+      fontWeight: 'bold',
       fontFamily: 'System',
       backgroundColor: 'transparent',
     },
@@ -120,25 +122,25 @@ export default function SwipeScreen(props) {
 
     const snapshot = await store.collection('users').doc(email).get();
     const data = snapshot.data();
-    console.log(data)
 
     if (Platform.OS == "web") {
-      Alerts.success('Test message stackslide effect!', {
-        position: 'top-right',
-        effect: 'stackslide'
-      });
+      // Alert.success('Test message stackslide effect!', {
+      //   position: 'top-right',
+      //   effect: 'stackslide'
+      // });
+      console.log(likeswipe)
     } else {
 
       Alert.alert(
         "New Match",
-        "My Alert Msg",
+        "",
         [
           {
             text: "Cancel",
             onPress: () => console.log("Cancel Pressed"),
             style: "cancel"
           },
-          { text: "Go to match", onPress: () => console.log("OK Pressed") }
+          { text: "Go to match", onPress: () => navigation.navigate('Messages') }
         ]
       );
 
@@ -154,18 +156,9 @@ export default function SwipeScreen(props) {
     })
   }
 
-  function preventPullToRefresh(element) { var prevent = false;
-    document.querySelector(element).addEventListener('touchstart', function(e){ 
-      if (e.touches.length !== 1) { return; } var scrollY = window.pageYOffset || document.body.scrollTop || document.documentElement.scrollTop; prevent = (scrollY === 0);
-      }); 
-    document.querySelector(element).addEventListener('touchmove', function(e){
-     if (prevent) { prevent = false; e.preventDefault(); } }); 
-  } 
-
-  preventPullToRefresh('#main')
-
   return (
     <View style={styles.body} id="main">
+     <Alerts ref={likeswipe} />
      <NavSwipe />
      <View style={styles.viewport}>
       <CardStack 
@@ -193,12 +186,12 @@ export default function SwipeScreen(props) {
         <TouchableOpacity style={[styles.button]} onPress={() => {
           swiper.swipeLeft();
         }}>
-          <FontAwesomeIcon icon={ faTimesCircle } color={ 'red' } size={ 40 } />
+          <FontAwesomeIcon icon={ faTimesCircle } color={ '#ff2400' } size={ 40 } />
         </TouchableOpacity>
         <TouchableOpacity style={[styles.button]} onPress={() => {
           swiper.swipeRight();
         }}>
-          <FontAwesomeIcon icon={ faHeart } color={ 'green' } size={ 40 } />
+          <FontAwesomeIcon icon={ faHeart } color={ '#02ff02' } size={ 40 } />
         </TouchableOpacity>
       </View>
     </View>
