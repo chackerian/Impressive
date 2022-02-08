@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import firebase from 'firebase/app';
+
 import Amplify from 'aws-amplify'
 import awsconfig from './aws-exports.js'
 Amplify.configure(awsconfig)
