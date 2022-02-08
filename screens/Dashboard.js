@@ -25,7 +25,6 @@ export default function Dashboard(props) {
     var docRef = store.collection('users').doc(props.route.params.user.email) 
     docRef.onSnapshot((doc) => {
       if (doc.exists) {
-        console.log("DOC", doc.data())
         setName(doc.data().name);
         setAge(doc.data().age);
         setInterests(doc.data().interests);

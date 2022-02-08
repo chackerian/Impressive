@@ -24,7 +24,6 @@ export default function ImageScreen(props) {
         .then((url) => {
           setImageURL(url);
           var user = props.route.params.user.email
-          console.log("USER",user, url)
           firebase.firestore().collection('users').doc(user).update({
             picture: url
           })

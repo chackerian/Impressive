@@ -3,9 +3,7 @@ var handleTouchmove = function(evt) {
 };
 
 var enable = function() {
-	var swipe = document.getElementsByClassName("swipeMain")
-	console.log(document, window)
-	swipe.addEventListener('touchmove', handleTouchmove, { passive : false });
+	window.addEventListener('touchmove', handleTouchmove, { passive : false });
 };
 
 // Test for webkit-overflow-scrolling

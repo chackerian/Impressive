@@ -21,8 +21,6 @@ class Navbar extends Component{
 const styles = StyleSheet.create({
     topNav: {
         backgroundColor:'rgb(12,0,51)',
-        overScrollBehavior: 'contain',
-        overScrollBehaviorY: 'contain',
         position:'absolute',
         height: '10%',
         top:0,
