@@ -96,7 +96,7 @@ export default function SwipeScreen(props) {
     var div = [];
 
     while(interacted.length) {
-      const batch = interacted.splice(0, 10));
+      const batch = interacted.splice(0, 10);
     }
 
     batches.push(
