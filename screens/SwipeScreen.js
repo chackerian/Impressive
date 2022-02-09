@@ -93,11 +93,10 @@ export default function SwipeScreen(props) {
     const userDislikes = user.data().dislikes || []
 
     var interacted = userLikes.concat(userDislikes)
-    var div = [];
+    var batches = [];
 
     while(interacted.length) {
       const batch = interacted.splice(0, 10);
-    }
 
     batches.push(
       store.collection("users")
@@ -119,6 +118,7 @@ export default function SwipeScreen(props) {
       var snapshot = await store.collection("users").where("email", "not-in", div[x]).get()
       snaps.push(snapshot);
     }
+  }
 
     console.log(snaps)
 

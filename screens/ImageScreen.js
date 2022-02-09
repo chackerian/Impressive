@@ -11,6 +11,7 @@ export default function ImageScreen(props) {
 
   const [image, setImage] = useState(null);
   const [url, setImageURL] = useState("");
+  const [color, setColorValue] = useState("");
 
   const uploadImage = async (uri) => {
     const response = await fetch(uri);
@@ -43,9 +44,39 @@ export default function ImageScreen(props) {
       uploadImage(pickerResult.uri)
     }
   }
-  
+
+  const setColor = (color) => {
+    setColorValue(color)
+  }
+
+  // const dropped = (event) => {
+  //   event.preventDefault();
+  //   let dataTransferItemsList = []
+  //   if (event.dataTransfer) {
+  //     console.log('pic', event.dataTransfer);
+  //     const dt = event.dataTransfer
+  //     if (dt.files && dt.files.length) {
+  //       dataTransferItemsList = dt.files
+  //     } else if (dt.items && dt.items.length) {
+  //       dataTransferItemsList = dt.items
+  //     }
+  //   } 
+
+  //   if (event.target && event.target.files) {
+  //     dataTransferItemsList = event.target.files
+  //     console.log('files', event.target.files);
+  //   }
+  // }
+
+        //   onDragEnter={(event) => dropped(event)}
+        // onDrop={(event) => dropped(event)}
+        // onDragLeave={setColor('black')}
+
   return (
-      <View style={styles.container}>
+      <View style={styles.container}
+        onClick={openImagePicker}
+        onDragOver={setColor('blue')}
+      >
       <Button
         mode="outlined"
         color="black"
@@ -59,6 +90,9 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     marginTop: 30,
+    minHeight: 150,
+    border: '2px dashed black',
+    cursor: 'pointer',
   }
 })
 
