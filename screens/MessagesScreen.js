@@ -94,8 +94,6 @@ export default function ChatScreen({ navigation }) {
     messagesBox: {
       flex: 4,
       marginTop: 20,
-      maxHeight: 301,
-      overflow: 'scroll',
     },
     item: {
       padding: 20,
@@ -121,13 +119,14 @@ export default function ChatScreen({ navigation }) {
       alignSelf: "flex-start",
     },
     sendMessage: {
-      position:'absolute',
-      bottom: 0,
+      width: '100%',
+      borderTopWidth: 1,
+      borderTopColor: '#e7e6e7',
     }
   });
 
   const window = useWindowDimensions();
-  const msgStyle = { height: window.height-400}
+  const msgStyle = { maxHeight: window.height-400, overflow: 'scroll', minHeight: 200}
   console.log("Platform", Platform.OS)
 
   return (
@@ -151,17 +150,16 @@ export default function ChatScreen({ navigation }) {
                   </View>
               ))}
           </View>
-       </View>
-        <View style={styles.sendMessage}>
-          <TextInput 
-             style={{ width: '78%', fontSize: 15}}
-             theme={{ colors: { primary: 'blue', underlineColor:'transparent'}}}
-             placeholder='Message...'
-             value={message}
-             onChangeText={e => setMessage(e)} 
-             onSubmitEditing={(event) => sendMessage(event)}
-          />
+          <View style={styles.sendMessage}>
+            <TextInput 
+               style={{ width: '78%', fontSize: 15, marginLeft: 15, outline: 'none' }}
+               placeholder='Message...'
+               value={message}
+               onChangeText={e => setMessage(e)} 
+               onSubmitEditing={(event) => sendMessage(event)}
+            />
         </View>
+       </View>
       </View>
       </ScrollView>
     </Background>

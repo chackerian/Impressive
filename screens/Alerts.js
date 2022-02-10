@@ -18,7 +18,9 @@ export default function Alert() {
   };
 
 return (
-    <Animated.View style={{transform: [{ translateX: state.x }]}}> <Text style={styles.alert}>New Match</Text></Animated.View>
+    <Animated.View style={{transform: [{ translateX: state.x }]}}> 
+      <Text style={styles.alert}>New Match</Text>
+    </Animated.View>
   ) 
 }
 
@@ -27,10 +29,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     color: 'white',
     borderRadius: 24,
-    backgroundColor: 'rgb(44, 0, 95)',
+    backgroundColor: 'yellow',
     padding: 20,
-    margin: 5,
-    top: 300,
+    top: 100,
     right: 30,
     bottom: 'auto',
     left: 'auto',

@@ -19,7 +19,7 @@ export default function SwipeScreen(props) {
 
   const [images, setImages] = useState([]);
   const [swiper, setSwiper] = useState();
-  const [likeswipe, setLikeSwipe] = useState(createRef());
+  const [slide, setSlide] = useState(createRef());
   const navigation = useNavigation();
 
   const styles = StyleSheet.create({
@@ -95,39 +95,47 @@ export default function SwipeScreen(props) {
     var interacted = userLikes.concat(userDislikes)
     var batches = [];
 
+  //   while(interacted.length) {
+  //     const batch = interacted.splice(0, 10);
+
+  //   batches.push(
+  //     store.collection("users")
+  //       .where(
+  //         "email",
+  //         'not-in',
+  //         [...batch]
+  //       )
+  //       .get()
+  //       .then(results => results.docs.map(result => ({ /* id: result.id, */ ...result.data() }) ))
+  //   )
+
+  // // after all of the data is fetched, return it
+  // return Promise.all(batches)
+  //   .then(content => content.flat());
+
     while(interacted.length) {
-      const batch = interacted.splice(0, 10);
-
-    batches.push(
-      store.collection("users")
-        .where(
-          "email",
-          'not-in',
-          [...batch]
-        )
-        .get()
-        .then(results => results.docs.map(result => ({ /* id: result.id, */ ...result.data() }) ))
-    )
-
-  // after all of the data is fetched, return it
-  return Promise.all(batches)
-    .then(content => content.flat());
+      batches.push(interacted.splice(0, 10));
+    }
 
     var snaps = []
-    for(var x=0; x<div.length; x++){
-      var snapshot = await store.collection("users").where("email", "not-in", div[x]).get()
+    for(var x=0; x<batches.length; x++){
+      var snapshot = await store.collection("users").where("email", "not-in", batches[x]).get()
       snaps.push(snapshot);
     }
-  }
+  // }
 
     console.log(snaps)
 
     const images = [];
 
+    debugger;
+
     snapshot.docs.forEach((s) => {
       images.push(s.data());
     });
     setImages(images);
+
+    debugger;
   }
   
   useEffect(() => {
@@ -148,7 +156,7 @@ export default function SwipeScreen(props) {
       //   position: 'top-right',
       //   effect: 'stackslide'
       // });
-      console.log(likeswipe)
+      console.log("SLIDE", slide)
     } else {
 
       Alert.alert(
@@ -179,7 +187,7 @@ export default function SwipeScreen(props) {
 
   return (
     <View style={styles.body} id="main">
-     <Alerts ref={likeswipe} />
+     <Alerts slide={slide} />
      <NavSwipe />
      <View style={styles.viewport}>
       <CardStack 
