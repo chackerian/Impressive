@@ -4001,6 +4001,13 @@
   "resolved" "https://registry.npmjs.org/@protobufjs/utf8/-/utf8-1.1.0.tgz"
   "version" "1.1.0"
 
+"@react-native-async-storage/async-storage@^1.16.1":
+  "integrity" "sha512-aQ7ka+Ii1e/q+7AVFIZPt4kDeSH8b784wMDtz19Kf4A7hf+OgCHBlUQpOXsrv8XxhlBxu0hv4tfrDO15ChnV0Q=="
+  "resolved" "https://registry.npmjs.org/@react-native-async-storage/async-storage/-/async-storage-1.16.1.tgz"
+  "version" "1.16.1"
+  dependencies:
+    "merge-options" "^3.0.4"
+
 "@react-native-community/cli-debugger-ui@^4.13.1":
   "integrity" "sha512-UFnkg5RTq3s2X15fSkrWY9+5BKOFjihNSnJjTV2H5PtTUFbd55qnxxPw8CxSfK0bXb1IrSvCESprk2LEpqr5cg=="
   "resolved" "https://registry.npmjs.org/@react-native-community/cli-debugger-ui/-/cli-debugger-ui-4.13.1.tgz"
@@ -7004,6 +7011,11 @@
   "resolved" "https://registry.npmjs.org/is-plain-obj/-/is-plain-obj-1.1.0.tgz"
   "version" "1.1.0"
 
+"is-plain-obj@^2.1.0":
+  "integrity" "sha512-YWnfyRwxL/+SsrWYfOpUtz5b3YD+nyfkHvjbcanzk8zgyO4ASD67uVMRt8k5bM4lLMDnXfriRhOpemw+NfT1eA=="
+  "resolved" "https://registry.npmjs.org/is-plain-obj/-/is-plain-obj-2.1.0.tgz"
+  "version" "2.1.0"
+
 "is-plain-object@^2.0.3", "is-plain-object@^2.0.4":
   "integrity" "sha512-h5PpgXkWitc38BBMYawTYMWJHFZJVnBquFE57xFpjB8pJFiF6gZ+bU+WyI/yqXiFR5mdLsgYNaPe8uao6Uv9Og=="
   "resolved" "https://registry.npmjs.org/is-plain-object/-/is-plain-object-2.0.4.tgz"
@@ -7565,6 +7577,13 @@
   "integrity" "sha512-dn6wd0uw5GsdswPFfsgMp5NSB0/aDe6fK94YJV/AJDYXL6HVLWBsxeq7js7Ad+mU2K9LAlwpk6kN2D5mwCPVow=="
   "resolved" "https://registry.npmjs.org/mdn-data/-/mdn-data-2.0.14.tgz"
   "version" "2.0.14"
+
+"merge-options@^3.0.4":
+  "integrity" "sha512-2Sug1+knBjkaMsMgf1ctR1Ujx+Ayku4EdJN4Z+C2+JzoeF7A3OZ9KM2GY0CpQS51NR61LTurMJrRKPhSs3ZRTQ=="
+  "resolved" "https://registry.npmjs.org/merge-options/-/merge-options-3.0.4.tgz"
+  "version" "3.0.4"
+  dependencies:
+    "is-plain-obj" "^2.1.0"
 
 "merge-stream@^1.0.1":
   "integrity" "sha1-QEEgLVCKNCugAXQAjfDCUbjBNeE="
@@ -8774,6 +8793,11 @@
   "resolved" "https://registry.npmjs.org/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz"
   "version" "3.0.4"
 
+"react-native-async-storage@^0.0.1":
+  "integrity" "sha1-Xy71/zDq5ktCSOJltTTnLqQc3Gk="
+  "resolved" "https://registry.npmjs.org/react-native-async-storage/-/react-native-async-storage-0.0.1.tgz"
+  "version" "0.0.1"
+
 "react-native-card-stack-swiper@^1.2.5":
   "integrity" "sha512-Z9hWblgHTU4K3YAjbIpjC2bBAc6QpEzC4FKqY2RsX0Zd9qD4UYadKXYoUjfbYGhvbDdYuTWkGE8i8lra3bKmBw=="
   "resolved" "https://registry.npmjs.org/react-native-card-stack-swiper/-/react-native-card-stack-swiper-1.2.5.tgz"
@@ -8941,7 +8965,7 @@
     "prop-types" "^15.6.0"
     "react-timer-mixin" "^0.13.4"
 
-"react-native@*", "react-native@^0.49.1", "react-native@> 0.57", "react-native@>= 0.59", "react-native@>=0.40", "react-native@>=0.42.0", "react-native@>=0.50.0", "react-native@>=0.56", "react-native@>=0.57", "react-native@>=0.59", "react-native@>=0.59.0", "react-native@>=0.60", "react-native@>=0.62.0-rc.0 <0.64.0", "react-native@https://github.com/expo/react-native/archive/sdk-41.0.0.tar.gz":
+"react-native@*", "react-native@^0.0.0-0 || 0.60 - 0.67 || 1000.0.0", "react-native@^0.49.1", "react-native@> 0.57", "react-native@>= 0.59", "react-native@>=0.40", "react-native@>=0.42.0", "react-native@>=0.5.0", "react-native@>=0.50.0", "react-native@>=0.56", "react-native@>=0.57", "react-native@>=0.59", "react-native@>=0.59.0", "react-native@>=0.60", "react-native@>=0.62.0-rc.0 <0.64.0", "react-native@https://github.com/expo/react-native/archive/sdk-41.0.0.tar.gz":
   "integrity" "sha512-3jHI2YufrJi7eIABRf/DN/I2yOkmIZ0vAyezTz+PAUJiEs4v//5LLojWEU+W53AZsnuaEMcl/4fVy4bd+OuUbA=="
   "resolved" "https://github.com/expo/react-native/archive/sdk-41.0.0.tar.gz"
   "version" "0.63.2"
@@ -10283,6 +10307,11 @@
   "version" "1.0.7"
   dependencies:
     "makeerror" "1.0.x"
+
+"watchman@^1.0.0":
+  "integrity" "sha512-f7sP6DSVQzNUAXIBctvYyJyq6/j/FtWoEn6yh/Ot/E14a3am7JMH0tygWt6iE+T+DT+BNOUAT3hM/gZ7W9Ycmw=="
+  "resolved" "https://registry.npmjs.org/watchman/-/watchman-1.0.0.tgz"
+  "version" "1.0.0"
 
 "wcwidth@^1.0.1":
   "integrity" "sha1-8LDc+RW8X/FSivrbLA4XtTLaL+g="

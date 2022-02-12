@@ -1,27 +1,55 @@
-import React, {setState, useState} from "react";
+import React, { Component, setState, useState} from "react";
 import { Animated, Text, View, StyleSheet, Button, SafeAreaView } from "react-native";
 
-export default function Alert() {
+export default class Alerts extends Component {
 
-  const [state, setstate] = useState({
-    visible: false,
-    x: new Animated.Value(0),
-  })
+  constructor(props) {
+   super(props);
+     this.state = {
+       visibility: 'hidden',
+       x: new Animated.Value(0)
+      }
+  }
 
-  const slide = () => {
-    Animated.spring(state.x, {
-      toValue: 400,
+  slide = () => {
+    Animated.spring(this.state.x, {
+      toValue: -100,
     }).start();
     this.setState({
-      visible: true,
+      visibility: 'visible',
     });
+
+   Animated.spring(this.state.x, {
+      toValue: 200,
+      delay: 900,
+    }).start();
+    this.setState({
+      visibility: 'visible',
+    });
+
+
+    // setTimeout(() => {
+    //   console.log("test")
+    //   Animated.spring(new Animated.Value(0), {
+    //     toValue: 300,
+    //   }).start();
+    // }, 4000)
+
+    // setTimeout(function(){
+    //   Animated.spring(new Animated.Value(0), {
+    //     toValue: 300,
+    //   }).start();
+    // }, 4000)
+
   };
 
-return (
-    <Animated.View style={{transform: [{ translateX: state.x }]}}> 
-      <Text style={styles.alert}>New Match</Text>
-    </Animated.View>
-  ) 
+render() {
+  return (
+      <Animated.View style={{transform: [{ translateX: this.state.x }], visibility: this.state.visibility }}> 
+        <Text style={styles.alert}>New Match</Text>
+      </Animated.View>
+    )
+  } 
 }
 
 const styles = StyleSheet.create({
@@ -29,7 +57,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     color: 'white',
     borderRadius: 24,
-    backgroundColor: 'yellow',
+    backgroundColor: 'blue',
     padding: 20,
     top: 100,
     right: 30,

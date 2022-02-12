@@ -4,7 +4,6 @@ import { ImageBackground, StyleSheet, KeyboardAvoidingView } from 'react-native'
 export default function Background({ children }) {
   return (
     <ImageBackground
-      source={require('../assets/background.jpeg')}
       resizeMode="repeat"
       style={styles.background}
     >

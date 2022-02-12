@@ -1,11 +1,11 @@
-import React, {useState, useEffect, useRef, createRef, setState} from 'react'
+import React, {Component, useState, useEffect, useRef, createRef, setState} from 'react'
 import Background from './Background'
 import {StyleSheet, Image, TextInput, Text, View, Platform, Dimensions, PanResponder, Animated, TouchableOpacity, Alert } from 'react-native';
 import NavSwipe from './NavSwipe';
-import CardStack, { Card } from 'react-native-card-stack-swiper';
+import CardStack, { Card } from './swipe';
 import { storage, store } from "../App.js";
 import firebase from 'firebase/app';
-import './nobounce.js'
+// import './nobounce.js'
 import { useNavigation } from '@react-navigation/native';
 import Alerts from './Alerts.js';
 
@@ -21,15 +21,12 @@ export default function SwipeScreen(props) {
   const [swiper, setSwiper] = useState();
   const [slide, setSlide] = useState(createRef());
   const navigation = useNavigation();
+  const alertRef = React.createRef();
 
   const styles = StyleSheet.create({
-    body: {
-      overscrollBehavior: 'none',
-      overScrollBehaviorY: 'contain',
-    }, 
     image: {
       opacity: 1,
-      height: 470,
+      height: 420,
     },
     info: {
       padding: 20,
@@ -45,7 +42,7 @@ export default function SwipeScreen(props) {
     },
     viewport: {
       height: 250,
-      marginTop: 300,
+      marginTop: 200,
       marginLeft: 'auto',
       marginRight: 'auto',
       alignItems: 'center',
@@ -128,19 +125,20 @@ export default function SwipeScreen(props) {
 
     const images = [];
 
-    debugger;
-
     snapshot.docs.forEach((s) => {
       images.push(s.data());
     });
     setImages(images);
 
-    debugger;
   }
   
   useEffect(() => {
     cards()
   }, [])
+
+  const handleLike = () => {
+    new alertRef.current.slide()
+  };
 
   async function addLike(email){
 
@@ -152,11 +150,9 @@ export default function SwipeScreen(props) {
     const data = snapshot.data();
 
     if (Platform.OS == "web") {
-      // Alert.success('Test message stackslide effect!', {
-      //   position: 'top-right',
-      //   effect: 'stackslide'
-      // });
-      console.log("SLIDE", slide)
+      console.log("SLIDE")
+      var alert = new Alerts().slide()
+      console.log("SLIDE", alert)
     } else {
 
       Alert.alert(
@@ -178,7 +174,6 @@ export default function SwipeScreen(props) {
 
   }
 
-
   var addDislike = function(email){
     store.collection('users').doc(props.route.params.user.email).update({
       dislikes: firebase.firestore.FieldValue.arrayUnion(email)
@@ -187,18 +182,19 @@ export default function SwipeScreen(props) {
 
   return (
     <View style={styles.body} id="main">
-     <Alerts slide={slide} />
+     <Alerts  ref={alertRef}/>
      <NavSwipe />
      <View style={styles.viewport}>
       <CardStack 
         style={styles.content}
         ref={swiper => { setSwiper(swiper) }}
+        onSwipeLeft={console.log("LEFT")}
       >
        {images.map((i) => {
         var name = i.name.split(" ")[0]
         return (
           <Card style={[styles.card, styles.card1]} key={i.name} 
-            onSwipedRight={(event) => addLike(i.email)} 
+            onSwipedRight={(event) => handleLike(i.email)} 
             onSwipedLeft={(event) => addDislike(i.email)}
           >
             <Image source={{uri: i.picture}} style={styles.image} />

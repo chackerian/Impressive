@@ -91,8 +91,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 30,
     minHeight: 150,
-    border: '2px dashed black',
-    cursor: 'pointer',
+    borderRadius: 2,
+    borderStyle: 'dashed',
+    borderColor: 'black',
   }
 })
 

@@ -6,7 +6,7 @@ import * as Facebook from "expo-auth-session/providers/facebook";
 import { useNavigation } from '@react-navigation/native';
 import NavLogout from './NavLogout';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+// import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 import firebase from 'firebase/app';
 import { storage, store } from "../App.js";
@@ -120,41 +120,6 @@ export default function SettingsScreen(props) {
           theme={{ colors: { primary: 'blue',underlineColor:'transparent',}}}
           value={interests}
           onChangeText={setInterests}
-        />
-
-        <GooglePlacesAutocomplete
-          placeholder='Location'
-          value={location}
-          style={styles.locations}
-          onPress={(data, details = null) => {
-            // 'details' is provided when fetchDetails = true
-            console.log("INFO", data, details);
-            setLocation(data.terms)
-            setLocationString(data.description)
-          }}
-          query={{
-            key: 'AIzaSyD3MXFkALBGLrX_q9Crv6TFB6uZ46FwHok',
-            language: 'en',
-          }}
-          requestUrl={{
-            useOnPlatform: 'web', // or "all"
-            url:
-            'https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api', // or any proxy server that hits https://maps.googleapis.com/maps/api
-          }}
-          styles={{
-            textInputContainer: {
-              width: 200,
-              height: 10,
-            },
-            textInput: {
-              height: 48,
-              color: '#5d5d5d',
-              fontSize: 16,
-            },
-            predefinedPlacesDescription: {
-              color: '#1faadb',
-            },
-          }}
         />
 
         <Button

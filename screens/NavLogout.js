@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import { View, Text, StyleSheet, StatusBar, TouchableOpacity } from 'react-native'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import Button from './Button'
-import { faSlidersH } from '@fortawesome/free-solid-svg-icons';
-import { useNavigation } from '@react-navigation/native';
 
 class NavLogout extends Component{
 
