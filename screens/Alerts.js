@@ -6,7 +6,7 @@ export default class Alerts extends Component {
   constructor(props) {
    super(props);
      this.state = {
-       visibility: 'hidden',
+       visibility: 'none',
        x: new Animated.Value(0)
       }
   }
@@ -16,7 +16,7 @@ export default class Alerts extends Component {
       toValue: -100,
     }).start();
     this.setState({
-      visibility: 'visible',
+      visibility: 'block',
     });
 
    Animated.spring(this.state.x, {
@@ -24,28 +24,14 @@ export default class Alerts extends Component {
       delay: 900,
     }).start();
     this.setState({
-      visibility: 'visible',
+      visibility: 'none',
     });
-
-
-    // setTimeout(() => {
-    //   console.log("test")
-    //   Animated.spring(new Animated.Value(0), {
-    //     toValue: 300,
-    //   }).start();
-    // }, 4000)
-
-    // setTimeout(function(){
-    //   Animated.spring(new Animated.Value(0), {
-    //     toValue: 300,
-    //   }).start();
-    // }, 4000)
 
   };
 
 render() {
   return (
-      <Animated.View style={{transform: [{ translateX: this.state.x }], visibility: this.state.visibility }}> 
+      <Animated.View style={{transform: [{ translateX: this.state.x }], display: this.state.visibility }}> 
         <Text style={styles.alert}>New Match</Text>
       </Animated.View>
     )

@@ -22,7 +22,6 @@ export default function ChatScreen({ navigation }) {
 
    async function sendMessage(e) {
       e.preventDefault()
-      console.log("MESSAGE")
       const uid = authenticate.currentUser.uid
       const avatar = authenticate.currentUser.photoURL
 
@@ -127,7 +126,6 @@ export default function ChatScreen({ navigation }) {
 
   const window = useWindowDimensions();
   const msgStyle = { maxHeight: window.height-400, overflow: 'scroll', minHeight: 200}
-  console.log("Platform", Platform.OS)
 
   return (
     <Background>

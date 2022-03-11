@@ -20,6 +20,7 @@ class CardStack extends Component {
 
   constructor(props) {
     super(props);
+    this.changeShadowColor = props.changeShadowColor
     this.state = {
       drag: new Animated.ValueXY({ x: 0, y: 0 }),
       dragDistance: new Animated.Value(0),
@@ -57,22 +58,28 @@ class CardStack extends Component {
         this.props.onSwipeStart();
         this.setState({ touchStart: new Date().getTime() });
       },
-      onPanResponderMove: (evt, gestureState) => {
+      onPanResponderMove: (evt, gestureState, props) => {
         const movedX = gestureState.moveX - gestureState.x0;
         const movedY = gestureState.moveY - gestureState.y0;
         this.props.onSwipe(movedX, movedY);
 
-        console.log("DX", gestureState.dx)
         var x = gestureState.dx
 
-        if (x < 70){
+        if (x < 0){
           console.log('red')
           this.setState({ shadowColor: 'red' })
+          this.changeShadowColor('red');
+        } 
+        else if (x > 0 && x < 30){
+          console.log('black')
+          this.setState({ shadowColor: 'black' })
+          this.changeShadowColor('black');
         }
 
-        else if (x > 70) {
+        else if (x > 30) {
           console.log('green')
           this.setState({ shadowColor: 'green' })
+          this.changeShadowColor('green');
         }
         const { verticalSwipe, horizontalSwipe } = this.props;
         const dragDistance = this.distance((horizontalSwipe) ? gestureState.dx : 0, (verticalSwipe) ? gestureState.dy : 0);
@@ -403,7 +410,6 @@ class CardStack extends Component {
     }
   }
 
-
   /**
    * @description CardB’s click feature is trigger the CardA on the card stack. (Solved on Android)
    * @see https://facebook.github.io/react-native/docs/view#pointerevents
@@ -413,8 +419,6 @@ class CardStack extends Component {
   }
 
   render() {
-
-    console.log("Color", this.state.shadowColor)
     const { secondCardZoom, renderNoMoreCards } = this.props;
     const { drag, dragDistance, cardA, cardB, topCard, sindex } = this.state;
 
@@ -438,7 +442,9 @@ class CardStack extends Component {
           {...this._setPointerEvents(topCard, 'cardB')}
           style={[{
             position: 'absolute',
-            boxShadow: '3px 28px 88px 8px',
+            shadowOffset: {width: 0, height: 0},
+            shadowRadius: 55,
+            shadowOpacity: 0.35,
             shadowColor: this.state.shadowColor,
             zIndex: (topCard === 'cardB') ? 3 : 2,
             ...Platform.select({
@@ -460,6 +466,9 @@ class CardStack extends Component {
           {...this._setPointerEvents(topCard, 'cardA')}
           style={[{
             position: 'absolute',
+            shadowRadius: 25,
+            shadowOpacity: 0.85,
+            shadowColor: this.state.shadowColor,
             zIndex: (topCard === 'cardA') ? 3 : 2,
             ...Platform.select({
               android: {
@@ -488,7 +497,7 @@ CardStack.defaultProps = {
   secondCardZoom: 0.95,
   loop: false,
   initialIndex: 0,
-  renderNoMoreCards: () => { return (<Text>No More Cards</Text>) },
+  renderNoMoreCards: () => { return (<Text> </Text>) },
   onSwipeStart: () => null,
   onSwipeEnd: () => null,
   onSwiped: () => { },

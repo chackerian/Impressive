@@ -71,17 +71,6 @@ function AuthNavigator() {
     setUser(null)
   }
 
-  function isUser() {
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
-        console.log("IS USER")
-        return user
-      } else {
-        return false
-      }
-    });
-  }
-
     return user ? (
     <MyTabs 
       user={user} 
@@ -200,14 +189,6 @@ firebase.firestore().settings( { timestampsInSnapshots: true })
 const storage = firebase.storage();
 const store = firebase.firestore();
 const authenticate = firebase.auth();
-
-console.log("DATABASE INIT")
-var matchRef = store.collection("users")
-
-// check if matching likes
-matchRef.onSnapshot('value', snap => {
-  console.log(snap, "CHANGED")
-})
 
 export  {
    storage, store, authenticate, AuthNavigator as default

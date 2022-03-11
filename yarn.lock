@@ -3227,7 +3227,7 @@
     "json5" "^1.0.1"
     "write-file-atomic" "^2.3.0"
 
-"@expo/metro-config@^0.1.63":
+"@expo/metro-config@^0.1.59", "@expo/metro-config@^0.1.63":
   "integrity" "sha512-PvWn5DZCV6hNYA9CTOBWEfwb9FCjyQCiyYnmxjsT0k9eplIBGTtfy74uIOd0SdDdCTPCgCO8SMyabc+Qg599xg=="
   "resolved" "https://registry.npmjs.org/@expo/metro-config/-/metro-config-0.1.72.tgz"
   "version" "0.1.72"
@@ -6024,6 +6024,23 @@
   "resolved" "https://registry.npmjs.org/expo-status-bar/-/expo-status-bar-1.0.4.tgz"
   "version" "1.0.4"
 
+"expo-structured-headers@~1.0.1":
+  "integrity" "sha512-U4frE8rT5x1LqZv5Ru/9CtzY8gh0wp1MfwTu5hetPydnwxXfWchuXvKgWRjEHglFU2X/29kYFY/J1UkPvCN8xg=="
+  "resolved" "https://registry.npmjs.org/expo-structured-headers/-/expo-structured-headers-1.0.1.tgz"
+  "version" "1.0.1"
+
+"expo-updates@~0.5.4":
+  "integrity" "sha512-1R8EKkT3GoDjMRQnDaTYv31gIYIaYQGHOrjHJfwq8ai9f1W1AHux6KAH2/H6sc2o9a7roWVwjDn2kKwCm9AeHg=="
+  "resolved" "https://registry.npmjs.org/expo-updates/-/expo-updates-0.5.5.tgz"
+  "version" "0.5.5"
+  dependencies:
+    "@expo/config-plugins" "^1.0.18"
+    "@expo/metro-config" "^0.1.59"
+    "expo-structured-headers" "~1.0.1"
+    "fbemitter" "^2.1.1"
+    "resolve-from" "^5.0.0"
+    "uuid" "^3.4.0"
+
 "expo-web-browser@~9.1.0":
   "integrity" "sha512-1UkOHWUBshY7n/R9xc4Q0LN0Dxqdvvotlp8sCM/6bUB/aE+9B+duoimKtUhlnzcvfAFWgF5y5x+bIf7j6PF7ig=="
   "resolved" "https://registry.npmjs.org/expo-web-browser/-/expo-web-browser-9.1.0.tgz"
@@ -8625,7 +8642,7 @@
   dependencies:
     "asap" "~2.0.6"
 
-"prop-types@*", "prop-types@^15.6.0", "prop-types@^15.6.2", "prop-types@^15.7.2", "prop-types@^15.7.x":
+"prop-types@*", "prop-types@^15.5.8", "prop-types@^15.6.0", "prop-types@^15.6.2", "prop-types@^15.7.2", "prop-types@^15.7.x":
   "integrity" "sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ=="
   "resolved" "https://registry.npmjs.org/prop-types/-/prop-types-15.7.2.tgz"
   "version" "15.7.2"
@@ -8818,6 +8835,14 @@
   dependencies:
     "moment" "^2.22.0"
 
+"react-native-drawer@^2.5.1":
+  "integrity" "sha512-cxcQNbSWy5sbGi7anSVp6EDr6JarOBMY9lbFOeLFeVYbONiudoqRKbgEsSDgSw3/LFCLvUXK5zdjXCOedeytxQ=="
+  "resolved" "https://registry.npmjs.org/react-native-drawer/-/react-native-drawer-2.5.1.tgz"
+  "version" "2.5.1"
+  dependencies:
+    "prop-types" "^15.5.8"
+    "tween-functions" "^1.0.1"
+
 "react-native-facebook-keyframes@^1.0.1":
   "integrity" "sha1-rr2GGlsB6iw3fW0fF0hNFJJoOoA="
   "resolved" "https://registry.npmjs.org/react-native-facebook-keyframes/-/react-native-facebook-keyframes-1.0.1.tgz"
@@ -8869,6 +8894,10 @@
     "lodash.debounce" "^4.0.8"
     "prop-types" "^15.7.2"
     "qs" "~6.9.1"
+
+"react-native-interactable@github:wix/react-native-interactable#master":
+  "resolved" "git+ssh://git@github.com/wix/react-native-interactable.git#5ea6b0f3d13b3a9169fab58e84c6736471f0b83a"
+  "version" "2.0.1"
 
 "react-native-iphone-x-helper@^1.2.1", "react-native-iphone-x-helper@^1.3.0", "react-native-iphone-x-helper@^1.3.1":
   "integrity" "sha512-HOf0jzRnq2/aFUcdCJ9w9JGzN3gdEg0zFE4FyYlp4jtidqU03D5X7ZegGKfT1EWteR0gPBGp9ye5T5FvSWi9Yg=="
@@ -8965,7 +8994,7 @@
     "prop-types" "^15.6.0"
     "react-timer-mixin" "^0.13.4"
 
-"react-native@*", "react-native@^0.0.0-0 || 0.60 - 0.67 || 1000.0.0", "react-native@^0.49.1", "react-native@> 0.57", "react-native@>= 0.59", "react-native@>=0.40", "react-native@>=0.42.0", "react-native@>=0.5.0", "react-native@>=0.50.0", "react-native@>=0.56", "react-native@>=0.57", "react-native@>=0.59", "react-native@>=0.59.0", "react-native@>=0.60", "react-native@>=0.62.0-rc.0 <0.64.0", "react-native@https://github.com/expo/react-native/archive/sdk-41.0.0.tar.gz":
+"react-native@*", "react-native@^0.0.0-0 || 0.60 - 0.67 || 1000.0.0", "react-native@^0.49.1", "react-native@> 0.57", "react-native@>= 0.40.0", "react-native@>= 0.59", "react-native@>=0.40", "react-native@>=0.42.0", "react-native@>=0.5.0", "react-native@>=0.50.0", "react-native@>=0.56", "react-native@>=0.57", "react-native@>=0.59", "react-native@>=0.59.0", "react-native@>=0.60", "react-native@>=0.62.0-rc.0 <0.64.0", "react-native@https://github.com/expo/react-native/archive/sdk-41.0.0.tar.gz":
   "integrity" "sha512-3jHI2YufrJi7eIABRf/DN/I2yOkmIZ0vAyezTz+PAUJiEs4v//5LLojWEU+W53AZsnuaEMcl/4fVy4bd+OuUbA=="
   "resolved" "https://github.com/expo/react-native/archive/sdk-41.0.0.tar.gz"
   "version" "0.63.2"
@@ -9016,7 +9045,7 @@
   "resolved" "https://registry.npmjs.org/react-timer-mixin/-/react-timer-mixin-0.13.4.tgz"
   "version" "0.13.4"
 
-"react@*", "react@^16.0.0-beta.5", "react@^16.13.1", "react@^16.3.0", "react@^16.8.0 || ^17.0.0", "react@>=15.3.1", "react@>=16.0", "react@>=16.3.0", "react@>=16.5.1", "react@~16", "react@16 || 17", "react@16.13.1":
+"react@*", "react@^16.0.0-beta.5", "react@^16.13.1", "react@^16.3.0", "react@^16.8.0 || ^17.0.0", "react@>= 15.4.1", "react@>=15.3.1", "react@>=16.0", "react@>=16.3.0", "react@>=16.5.1", "react@~16", "react@16 || 17", "react@16.13.1":
   "integrity" "sha512-YMZQQq32xHLX0bz5Mnibv1/LHb3Sqzngu7xstSM+vrkE5Kzr9xE0yMByK5kMoTK30YVJE61WfbxIFFvfeDKT1w=="
   "resolved" "https://registry.npmjs.org/react/-/react-16.13.1.tgz"
   "version" "16.13.1"
@@ -10055,6 +10084,11 @@
   "version" "0.6.0"
   dependencies:
     "safe-buffer" "^5.0.1"
+
+"tween-functions@^1.0.1":
+  "integrity" "sha1-GuOlDnxguz3vd06scHrLynO7w/8="
+  "resolved" "https://registry.npmjs.org/tween-functions/-/tween-functions-1.2.0.tgz"
+  "version" "1.2.0"
 
 "tweetnacl@^0.14.3", "tweetnacl@~0.14.0":
   "integrity" "sha1-WuaBd/GS1EViadEIr6k/+HQ/T2Q="

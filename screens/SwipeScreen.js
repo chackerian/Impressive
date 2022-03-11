@@ -1,24 +1,46 @@
 import React, {Component, useState, useEffect, useRef, createRef, setState} from 'react'
 import Background from './Background'
-import {StyleSheet, Image, TextInput, Text, View, Platform, Dimensions, PanResponder, Animated, TouchableOpacity, Alert } from 'react-native';
+import {StyleSheet, StatusBar, Image, TextInput, Text, View, Platform, Dimensions, PanResponder, Animated, TouchableOpacity, Alert, Button } from 'react-native';
 import NavSwipe from './NavSwipe';
 import CardStack, { Card } from './swipe';
 import { storage, store } from "../App.js";
 import firebase from 'firebase/app';
 // import './nobounce.js'
 import { useNavigation } from '@react-navigation/native';
+
+import Drawer from 'react-native-drawer';
 import Alerts from './Alerts.js';
 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faHeart, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { faHeart, faTimesCircle, faSlidersH } from '@fortawesome/free-solid-svg-icons';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const SCREEN_WIDTH = Dimensions.get('window').width
+
+class ControlPanel extends Component {
+  render() {
+    return (
+      <View>
+        <Text>
+          Control Panel Window
+        </Text>
+        <Button
+          onPress={() => {
+            this.props.closeDrawer();
+          }}
+          title="Close Drawer"
+        />
+      </View>
+    )
+  }
+}
 
 export default function SwipeScreen(props) {
 
   const [images, setImages] = useState([]);
   const [swiper, setSwiper] = useState();
+  const [drawer, setDrawer] = useState();
+  const [shadowColor, setShadowColor] = useState("");
   const [slide, setSlide] = useState(createRef());
   const navigation = useNavigation();
   const alertRef = React.createRef();
@@ -61,6 +83,7 @@ export default function SwipeScreen(props) {
     },
     content:{
       flex: 5,
+      marginTop: 200,
       alignItems: 'center',
       justifyContent: 'center',
     },
@@ -82,6 +105,23 @@ export default function SwipeScreen(props) {
       fontFamily: 'System',
       backgroundColor: 'transparent',
     },
+    topNav: {
+        backgroundColor:'rgb(12,0,51)',
+        position:'absolute',
+        height: '10%',
+        top:0,
+        width:100+'%'
+    },
+    slider: {
+        paddingTop: 70,
+        paddingRight: 20,
+        alignItems: "flex-end",
+    },
+    text:{
+        color:'rgb(255,255,255)',
+        alignSelf: 'center',
+        fontSize: 30
+    },
   })
 
   async function cards(){
@@ -92,24 +132,6 @@ export default function SwipeScreen(props) {
     var interacted = userLikes.concat(userDislikes)
     var batches = [];
 
-  //   while(interacted.length) {
-  //     const batch = interacted.splice(0, 10);
-
-  //   batches.push(
-  //     store.collection("users")
-  //       .where(
-  //         "email",
-  //         'not-in',
-  //         [...batch]
-  //       )
-  //       .get()
-  //       .then(results => results.docs.map(result => ({ /* id: result.id, */ ...result.data() }) ))
-  //   )
-
-  // // after all of the data is fetched, return it
-  // return Promise.all(batches)
-  //   .then(content => content.flat());
-
     while(interacted.length) {
       batches.push(interacted.splice(0, 10));
     }
@@ -119,7 +141,6 @@ export default function SwipeScreen(props) {
       var snapshot = await store.collection("users").where("email", "not-in", batches[x]).get()
       snaps.push(snapshot);
     }
-  // }
 
     console.log(snaps)
 
@@ -135,10 +156,6 @@ export default function SwipeScreen(props) {
   useEffect(() => {
     cards()
   }, [])
-
-  const handleLike = () => {
-    new alertRef.current.slide()
-  };
 
   async function addLike(email){
 
@@ -180,21 +197,45 @@ export default function SwipeScreen(props) {
     })
   }
 
+  var changeShadow = function(a){
+    setShadowColor('red')
+  }
+
+  const closeFilter = () =>  {
+    drawer.close()
+  };
+
+  const openFilter = () =>  {
+    console.log("OPEN")
+    drawer.open()
+  };
+
   return (
+    <Drawer
+      ref={(ref) => setDrawer(ref)}
+      content={<ControlPanel closeDrawer={closeFilter} />}
+    >
     <View style={styles.body} id="main">
-     <Alerts  ref={alertRef}/>
-     <NavSwipe />
+     <Alerts ref={alertRef}/>
+      <View style={styles.topNav}>
+          <StatusBar barStyle="light-content"/>
+          <Text style={styles.text}></Text>
+          <TouchableOpacity style={styles.slider} onPress={() => { openFilter() }}>
+              <FontAwesomeIcon icon={ faSlidersH } size={ 30 } />
+          </TouchableOpacity> 
+      </View>
      <View style={styles.viewport}>
       <CardStack 
         style={styles.content}
         ref={swiper => { setSwiper(swiper) }}
         onSwipeLeft={console.log("LEFT")}
+        changeShadowColor={color => { changeShadow(color)} }
       >
        {images.map((i) => {
         var name = i.name.split(" ")[0]
         return (
           <Card style={[styles.card, styles.card1]} key={i.name} 
-            onSwipedRight={(event) => handleLike(i.email)} 
+            onSwipedRight={(event) => addLike(i.email)} 
             onSwipedLeft={(event) => addDislike(i.email)}
           >
             <Image source={{uri: i.picture}} style={styles.image} />
@@ -220,5 +261,6 @@ export default function SwipeScreen(props) {
         </TouchableOpacity>
       </View>
     </View>
+  </Drawer>
   )
 }
