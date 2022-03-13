@@ -49,6 +49,7 @@ function AuthNavigator() {
             picture: a.picture.data.url,
             likes: ["blank"],
             dislikes: ["blank"],
+            matches: [],
             conversations: [],
           })
         } else {

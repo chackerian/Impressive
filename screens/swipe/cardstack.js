@@ -66,18 +66,11 @@ class CardStack extends Component {
         var x = gestureState.dx
 
         if (x < 0){
-          console.log('red')
           this.setState({ shadowColor: 'red' })
           this.changeShadowColor('red');
         } 
-        else if (x > 0 && x < 30){
-          console.log('black')
-          this.setState({ shadowColor: 'black' })
-          this.changeShadowColor('black');
-        }
 
         else if (x > 30) {
-          console.log('green')
           this.setState({ shadowColor: 'green' })
           this.changeShadowColor('green');
         }
@@ -204,6 +197,11 @@ class CardStack extends Component {
   }
 
   _resetCard() {
+
+    this.setState({ shadowColor: 'black' })
+    this.changeShadowColor('black');
+    console.log("back")
+
     Animated.timing(
       this.state.dragDistance,
       {
@@ -244,6 +242,10 @@ class CardStack extends Component {
 
   _goBack(direction) {
     const { cards, sindex, topCard } = this.state;
+
+    this.setState({ shadowColor: 'black' })
+    this.changeShadowColor('black');
+    console.log("back")
 
     if ((sindex - 3) < 0 && !this.props.loop) return;
 
@@ -497,7 +499,7 @@ CardStack.defaultProps = {
   secondCardZoom: 0.95,
   loop: false,
   initialIndex: 0,
-  renderNoMoreCards: () => { return (<Text> </Text>) },
+  renderNoMoreCards: () => { return (<Text>No users left</Text>) },
   onSwipeStart: () => null,
   onSwipeEnd: () => null,
   onSwiped: () => { },
@@ -515,7 +517,7 @@ CardStack.defaultProps = {
   verticalSwipe: true,
   verticalThreshold: height / 4,
   horizontalSwipe: true,
-  horizontalThreshold: width / 2,
+  horizontalThreshold: 60,
   outputRotationRange: ['-15deg', '0deg', '15deg'],
   duration: 300
 }

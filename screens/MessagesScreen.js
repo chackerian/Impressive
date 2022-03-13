@@ -9,11 +9,15 @@ import { TouchableOpacity, Image } from 'react-native';
 import firebase from 'firebase/app';
 
 import { storage, store, authenticate } from "../App.js";
+
+// Random number
 const convo = String(Math.floor(Math.random()*1000000000000000))
 
-export default function ChatScreen({ navigation }) {
+export default function ChatScreen(props) {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([])
+  const [matchList, setMatchList] = useState([])
+
   useEffect(() => {
       store.collection('messages').doc(convo).collection('convo').orderBy('createdAt').limit(50).onSnapshot(snapshot => {
           setMessages(snapshot.docs.map(doc => doc.data()))
@@ -40,20 +44,12 @@ export default function ChatScreen({ navigation }) {
       setMessage('')
   }
 
-  const DATA = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    title: 'Sarah Williams',
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'Sarah Williams',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    title: 'Sarah Williams',
-  },
-];
+  const matchSnap = store.collection('users').doc(props.route.params.user.email)
+
+  matchSnap.get().then((doc) => {
+      console.log("MATCHES A", doc.data().matches)
+      setMatchList(doc.data().matches)
+  })
 
   const Item = ({ title }) => (
     <View style={styles.item}>
@@ -65,21 +61,12 @@ export default function ChatScreen({ navigation }) {
     <Item title={item.title} />
   );
 
-  class StyleSheets {
-    static create(obj) {
-      var result = {};
-      for (var key in obj) {
-        result[key] = obj[key]
-      }
-      return result;
-    }
-  }  
-
-  const styles = StyleSheets.create({
+  const styles = StyleSheet.create({
     container: {
       flex: 1,
       flexDirection: "row",
-      border: '1px solid #e7e6e7',
+      borderWidth: 1,
+      borderColor: '#e7e6e7',
       marginTop: 80,
       marginLeft: 30,
       marginRight: 30,
@@ -101,21 +88,17 @@ export default function ChatScreen({ navigation }) {
       marginHorizontal: 8,
     },
     msge: {
-      display: 'block',
-      flexDirection: "row !important",
-      paddingTop: 12,
-      paddingBottom: 12,
-      paddingLeft: 12,
-      paddingRight: 12,
-      margin: 10,
-      borderRadius: 40,
-      borderWidth: 0,
-      borderColor: "blue",
+      flexDirection: "row",
       color: 'white',
-      backgroundColor: 'blue',
     },
     message: {
       alignSelf: "flex-start",
+      margin: 10,
+      borderRadius: 20,
+      borderWidth: 10,
+      borderColor: "blue",
+      color: 'white',
+      backgroundColor: 'blue',
     },
     sendMessage: {
       width: '100%',
@@ -132,13 +115,12 @@ export default function ChatScreen({ navigation }) {
      <ScrollView>
       <Navbar />
       <View style={styles.container}>
-       {Platform.OS == "ios" ? <Text></Text> : (
         <View style={styles.contacts}>
           <FlatList
-            data={DATA}
+            data={matchList}
             renderItem={renderItem}
           /> 
-        </View>)}
+        </View>
         <View style={styles.messagesBox}>
           <View style={msgStyle}>
               {messages.map(({ id, text, photoURL, uid }) => (

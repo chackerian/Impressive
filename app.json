@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "test",
+    "name": "Impressive",
     "slug": "test",
-    "version": "4.0.0",
+    "version": "4.0.5",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "facebookAppId": "603428947262435",
