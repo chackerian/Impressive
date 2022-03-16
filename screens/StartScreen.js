@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, setState} from 'react'
+import React, {useEffect, useRef, useState, setState} from 'react'
 import { Image, StyleSheet, Text, View, ScrollView, Alert, Platform } from "react-native";
 import Logo from './Logo'
 import Footer from './Footer'
@@ -6,17 +6,19 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigation } from '@react-navigation/native';
 import * as Facebook from 'expo-facebook';
 import Button from './Button'
+import * as AppleAuthentication from 'expo-apple-authentication';
 
 import firebase from 'firebase/app';
 import { storage, store } from "../App.js";
 import 'firebase/auth';
+import AppleAuth from './AppleAuth.js';
 
 export default function StartScreen(props) {
 
   function logIn(){}
 
-  const [usersc, setUserSc] = React.useState(null);
-  const [user, setUser] = React.useState(null);
+  const [usersc, setUserSc] = useState(null);
+  const [user, setUser] = useState(null);
   const navigation = useNavigation();
 
   var profile = function(){
@@ -114,13 +116,16 @@ export default function StartScreen(props) {
           mode="outlined"
           color='white'
           style={styles.button}
-          onPress={profile}>Login</Button>
+          onPress={profile}>Login
+        </Button>
         
         <Button
           mode="outlined"
           style={styles.buttons}
           color='white'
-          onPress={logIn}>Facebook Sign In</Button>
+          onPress={logIn}>Facebook Sign In
+        </Button>
+        <AppleAuth login={props.route.params.login}/>
       </View>
       </ScrollView>
       <Footer />

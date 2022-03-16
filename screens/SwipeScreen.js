@@ -271,11 +271,13 @@ export default function SwipeScreen(props) {
     var likes = data.likes
 
     console.log("SWIPE LIKE", data.likes)
+
+    var liked = {name: data.name, email: email}
     if(likes.includes(props.route.params.user.email)){
 
-             store.collection('users').doc(props.route.params.user.email).update({
-                matches: firebase.firestore.FieldValue.arrayUnion(email)
-            })
+           store.collection('users').doc(props.route.params.user.email).update({
+              matches: firebase.firestore.FieldValue.arrayUnion(liked)
+          })
 
           if (Platform.OS == "web") {
             var alert = new Alerts().slide()

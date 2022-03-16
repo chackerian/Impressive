@@ -35,7 +35,7 @@ function AuthNavigator() {
   function login(a) {
     setUser(a)
     const userRef = store.collection('users').doc(a.email);
-    console.log("EMAIL", a.email)
+    console.log("EMAIL", a)
 
     userRef.get().then((doc) => {
       if (doc.exists){

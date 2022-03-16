@@ -2,7 +2,7 @@
   "expo": {
     "name": "Impressive",
     "slug": "test",
-    "version": "4.0.5",
+    "version": "4.0.8",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "facebookAppId": "603428947262435",
@@ -20,7 +20,8 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.chackerian.test"
+      "bundleIdentifier": "com.chackerian.test",
+      "usesAppleSignIn": true
     },
     "android": {
       "adaptiveIcon": {

@@ -16,7 +16,7 @@ const convo = String(Math.floor(Math.random()*1000000000000000))
 export default function ChatScreen(props) {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([])
-  const [matchList, setMatchList] = useState([])
+  const [matches, setMatches] = useState([])
 
   useEffect(() => {
       store.collection('messages').doc(convo).collection('convo').orderBy('createdAt').limit(50).onSnapshot(snapshot => {
@@ -47,13 +47,19 @@ export default function ChatScreen(props) {
   const matchSnap = store.collection('users').doc(props.route.params.user.email)
 
   matchSnap.get().then((doc) => {
-      console.log("MATCHES A", doc.data().matches)
-      setMatchList(doc.data().matches)
+      setMatches(doc.data().matches)
   })
 
-  const Item = ({ title }) => (
+  console.log("MATCHES", matches)
+
+  // let DATA = []
+  // matches.forEach((key)=>{
+  //   DATA.push({title: key})
+  // }); 
+
+  const Item = ({ name }) => (
     <View style={styles.item}>
-      <Text style={styles.title}>{title}</Text>
+      <Text style={styles.title}>{name}</Text>
     </View>
   );
 
@@ -117,7 +123,7 @@ export default function ChatScreen(props) {
       <View style={styles.container}>
         <View style={styles.contacts}>
           <FlatList
-            data={matchList}
+            data={matches}
             renderItem={renderItem}
           /> 
         </View>
