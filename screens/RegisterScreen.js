@@ -31,6 +31,7 @@ export default function RegisterScreen(props) {
       setName({ ...name, error: nameError })
       setEmail({ ...email, error: emailError })
       setPassword({ ...password, error: passwordError })
+      console.log("ERROR", emailError, passwordError, nameError)
     }
       var user = {
         name: name.value,

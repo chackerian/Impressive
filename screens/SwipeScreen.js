@@ -273,6 +273,8 @@ export default function SwipeScreen(props) {
     console.log("SWIPE LIKE", data.likes)
 
     var liked = {name: data.name, email: email}
+
+    // Match
     if(likes.includes(props.route.params.user.email)){
 
            store.collection('users').doc(props.route.params.user.email).update({

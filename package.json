@@ -14,11 +14,11 @@
     "@fortawesome/react-native-fontawesome": "^0.2.6",
     "@miblanchard/react-native-slider": "^2.1.0",
     "@react-native-async-storage/async-storage": "^1.16.1",
-    "@react-native-community/datetimepicker": "^3.5.2",
-    "@react-native-community/netinfo": "^7.1.9",
+    "@react-native-community/datetimepicker": "3.2.0",
+    "@react-native-community/netinfo": "6.0.0",
     "@react-native-firebase/app": "^12.0.0",
     "@react-native-firebase/auth": "^12.0.0",
-    "@react-native-picker/picker": "^2.2.1",
+    "@react-native-picker/picker": "1.9.11",
     "@react-navigation/bottom-tabs": "^5.11.11",
     "@react-navigation/drawer": "^5.12.5",
     "@react-navigation/material-bottom-tabs": "^5.3.15",
@@ -34,7 +34,7 @@
     "expo-random": "^11.1.2",
     "expo-status-bar": "~1.0.4",
     "expo-updates": "~0.5.4",
-    "firebase": "^8.6.3",
+    "firebase": "8.2.3",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-41.0.0.tar.gz",
@@ -49,16 +49,19 @@
     "react-native-google-places-autocomplete": "^2.2.0",
     "react-native-interactable": "github:wix/react-native-interactable#master",
     "react-native-paper": "^4.9.1",
-    "react-native-screens": "^3.3.0",
+    "react-native-screens": "~3.0.0",
     "react-native-status-bar-height": "^2.6.0",
-    "react-native-svg": "^12.1.1",
+    "react-native-svg": "12.1.0",
     "react-native-web": "~0.13.12",
     "react-swing": "^3.0.0",
     "realm": "^10.12.0",
     "watchman": "^1.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.0"
+    "@babel/core": "^7.9.0",
+    "@babel/plugin-proposal-class-properties": "^7.16.7",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-0": "^6.24.1"
   },
   "private": true
 }
