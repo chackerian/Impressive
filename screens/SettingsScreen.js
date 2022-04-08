@@ -40,9 +40,6 @@ export default function SettingsScreen(props) {
       interests: interests || "",
       birthday: date || "",
       age: userAge || "",
-      location: locationString || "",
-      city: location[0].value || "",
-      state: location[1].value || "",
     })
     navigation.navigate("Dashboard")
   }

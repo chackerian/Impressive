@@ -1,10 +1,12 @@
 import React, {Component, useState, useEffect, useRef, createRef, setState, ReactNode} from 'react'
 import Background from './Background'
 import {StyleSheet, SafeAreaView, ScrollView, StatusBar, Image, TextInput, Text, View, Platform, Dimensions, PanResponder, Animated, TouchableOpacity, Alert, Button, Switch } from 'react-native';
-import { Slider } from "@miblanchard/react-native-slider";
+import Slider from '@react-native-community/slider';
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
+
 import NavSwipe from './NavSwipe';
 import CardStack, { Card } from './swipe';
-import { storage, store } from "../App.js";
+import { storage, store, authenticate } from "../App.js";
 import firebase from 'firebase/app';
 // import './nobounce.js'
 import { useNavigation } from '@react-navigation/native';
@@ -14,9 +16,6 @@ import Alerts from './Alerts.js';
 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHeart, faTimesCircle, faSlidersH } from '@fortawesome/free-solid-svg-icons';
-
-const SCREEN_HEIGHT = Dimensions.get('window').height
-const SCREEN_WIDTH = Dimensions.get('window').width
 
 const styles = StyleSheet.create({
     container: {
@@ -33,46 +32,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
 });
-
-const DEFAULT_VALUE = 0;
-
-const SliderContainer = (props: {
-    caption: string;
-    children: React.ReactElement;
-    sliderValue?: Array<number>;
-}) => {
-    const {caption, sliderValue, trackMarks} = props;
-    const [value, setValue] = useState(
-        sliderValue ? sliderValue : DEFAULT_VALUE,
-    );
-    let renderTrackMarkComponent: ReactNode;
-
-    const renderChildren = () => {
-        return React.Children.map(
-            props.children,
-            (child: React.ReactElement) => {
-                if (!!child && child.type === Slider) {
-                    return React.cloneElement(child, {
-                        onValueChange: setValue,
-                        value,
-                    });
-                }
-
-                return child;
-            },
-        );
-    };
-
-    return (
-        <View style={styles.sliderContainer}>
-            <View style={styles.titleContainer}>
-                <Text>{caption}</Text>
-                <Text>{Array.isArray(value) ? value.join(' - ') : value}</Text>
-            </View>
-            {renderChildren()}
-        </View>
-    );
-};
 
 class ControlPanel extends Component {
 
@@ -93,37 +52,16 @@ class ControlPanel extends Component {
             Filters
           </Text>
           <View contentContainerStyle={styles.container}>
-              <SliderContainer
-                  caption="Miles Away"
-                  sliderValue={[1]}>
-                  <Slider maximumValue={25}
-                      minimumValue={0}
-                      step={1}
-                      minimumTrackTintColor="blue"
-                      thumbTintColor="blue" 
-                  />
-              </SliderContainer>
-              <SliderContainer
-                  caption="Age"
-                  sliderValue={[18, 60]}>
-                  <Slider
-                      animateTransitions
-                      maximumTrackTintColor="blue"
-                      maximumValue={60}
-                      minimumTrackTintColor="blue"
-                      minimumValue={18}
-                      step={2}
-                      thumbTintColor="blue"
-                  />
-              </SliderContainer>
+              <Slider
+                style={{width: 200, height: 40}}
+                minimumValue={0}
+                maximumValue={1}
+                minimumTrackTintColor="#FFFFFF"
+                maximumTrackTintColor="#000000"
+              />
           </View>
           <View>
             <Text style={styles.titleContainer}>Interests</Text>
-            <Switch
-              style={{ marginTop: 30 }}
-              onValueChange={this.toggleSwitch}
-              value={this.state.switchValue}
-            />
           </View>
         </SafeAreaView>
 
@@ -228,7 +166,10 @@ export default function SwipeScreen(props) {
   })
 
   async function cards(){
+    console.log(props.route.params.user.email)
     const user = await store.collection("users").doc(props.route.params.user.email).get()
+    var likes = user.data()
+    console.log("DATA", likes)
     const userLikes = user.data().likes || []
     const userDislikes = user.data().dislikes || []
 
@@ -272,18 +213,24 @@ export default function SwipeScreen(props) {
 
     console.log("SWIPE LIKE", data.likes)
 
-    var liked = {name: data.name, email: email}
+    const convo = String(Math.floor(Math.random()*10000000))
 
-    // Match
+    var liked = {name: data.name, email: email}
+    var otherliked = {name: props.route.params.user.name, email: props.route.params.user.email, conversation: convo }
+
     if(likes.includes(props.route.params.user.email)){
 
-           store.collection('users').doc(props.route.params.user.email).update({
+          console.log("New Match", props.route.params.user)
+          store.collection('users').doc(props.route.params.user.email).update({
               matches: firebase.firestore.FieldValue.arrayUnion(liked)
           })
 
+          store.collection('users').doc(email).update({
+              matches: firebase.firestore.FieldValue.arrayUnion(otherliked)
+          })
+
           if (Platform.OS == "web") {
-            var alert = new Alerts().slide()
-            console.log("SLIDE", alert)
+
           } else {
 
             Alert.alert(
@@ -342,7 +289,7 @@ export default function SwipeScreen(props) {
       <CardStack 
         style={styles.content}
         ref={swiper => { setSwiper(swiper) }}
-        onSwipeLeft={console.log("LEFT")}
+        onSwipeLeft={() => console.log("LEFT")}
         changeShadowColor={color => { changeShadow(color)} }
       >
        {images.map((i) => {

@@ -88,20 +88,7 @@ export default function Dashboard(props) {
       overflow: 'hidden',
       margin: 5,
     },
-  });
-
-  // const name = props.route.params.user.displayName
-
-  // Instagram API
-  // useEffect(() => {
-  //   var url = "https://api.instagram.com/oauth/authorize/?client_id=445757196713182&redirect_uri=https://google.com&response_type=code&scope=user_profile"
-  //   fetch(url)
-  //     .then(response => response.json())
-  //     .then((user) => {
-  //       console.log("INSTA", user);
-  //       setInstagram(user.data)
-  //     });
-  // },[])
+  })
 
   return (
     <Background>

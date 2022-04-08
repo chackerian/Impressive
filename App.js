@@ -8,6 +8,7 @@ import firebase from 'firebase/app';
 
 import Amplify from 'aws-amplify'
 import awsconfig from './src/aws-exports.js'
+import "./App.css";
 
 Amplify.configure(awsconfig)
 
@@ -35,7 +36,6 @@ function AuthNavigator() {
   function login(a) {
     setUser(a)
     const userRef = store.collection('users').doc(a.email);
-    console.log("EMAIL", a)
 
     userRef.get().then((doc) => {
       if (doc.exists){
@@ -53,6 +53,7 @@ function AuthNavigator() {
             conversations: [],
           })
         } else {
+          console.log("CREATE")
           userRef.set({
             name: a.name || "",
             email: a.email || "",
@@ -94,7 +95,7 @@ function MyStack(props) {
       <AuthStack.Navigator screenOptions={{
         headerShown: false
         }}>
-        <AuthStack.Screen name="StartScreen" component={StartScreen} options={{ title: 'TalkLater' }} initialParams={{login: props.login}} />
+        <AuthStack.Screen name="StartScreen" component={StartScreen} options={{ title: 'Impressive' }} initialParams={{login: props.login}} />
         <AuthStack.Screen name="LoginScreen" component={LoginScreen} initialParams={{login: props.login}} />
         <AuthStack.Screen name="RegisterScreen" component={RegisterScreen} initialParams={{login: props.login}} />
       </AuthStack.Navigator>

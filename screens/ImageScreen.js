@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import * as WebBrowser from "expo-web-browser";
 import * as ImagePicker from 'expo-image-picker';
 import { Image, StyleSheet, Text, View } from "react-native";
 import Button from './Button'
@@ -17,7 +16,7 @@ export default function ImageScreen(props) {
     const response = await fetch(uri);
     const blob = await response.blob();
 
-    var filename = "images/" + "IMG" + Math.round(Math.random()*100)
+    var filename = "images/" + "IMG" + Math.round(Math.random()*100000)
 
     var refs = firebase.storage().ref().child(filename);
     refs.put(blob).then((snapshot) => {
@@ -45,42 +44,17 @@ export default function ImageScreen(props) {
     }
   }
 
-  const setColor = (color) => {
-    setColorValue(color)
-  }
-
-  // const dropped = (event) => {
-  //   event.preventDefault();
-  //   let dataTransferItemsList = []
-  //   if (event.dataTransfer) {
-  //     console.log('pic', event.dataTransfer);
-  //     const dt = event.dataTransfer
-  //     if (dt.files && dt.files.length) {
-  //       dataTransferItemsList = dt.files
-  //     } else if (dt.items && dt.items.length) {
-  //       dataTransferItemsList = dt.items
-  //     }
-  //   } 
-
-  //   if (event.target && event.target.files) {
-  //     dataTransferItemsList = event.target.files
-  //     console.log('files', event.target.files);
-  //   }
-  // }
-
-        //   onDragEnter={(event) => dropped(event)}
-        // onDrop={(event) => dropped(event)}
-        // onDragLeave={setColor('black')}
 
   return (
       <View style={styles.container}
         onClick={openImagePicker}
-        onDragOver={setColor('blue')}
       >
       <Button
         mode="outlined"
         color="black"
-        onPress={openImagePicker}>Upload Image</Button>
+        onPress={openImagePicker}>
+        Upload Image
+      </Button>
         {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
       </View>
     )
@@ -96,4 +70,3 @@ const styles = StyleSheet.create({
     borderColor: 'black',
   }
 })
-

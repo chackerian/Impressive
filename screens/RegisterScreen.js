@@ -23,6 +23,17 @@ export default function RegisterScreen(props) {
 
   const navigation = useNavigation();
 
+  const createUser = async (email, password) => {
+    try {
+     let response = await firebase.auth().createUserWithEmailAndPassword(email, password);
+      if(response){
+        console.log("RESPONSE")
+      }
+    } catch (e) {
+      console.error(e.message);
+    }
+  }
+
   const onSignUpPressed = () => {
     const nameError = nameValidator(name.value)
     const emailError = emailValidator(email.value)
@@ -38,20 +49,8 @@ export default function RegisterScreen(props) {
         email: email.value
       }
       console.log("register", email.value, password.value, name.value)
+      createUser(email.value, password.value)
       props.route.params.login(user)
-
-    // Register
-    const createUser = async (email, password) => {
-      try {
-       let response = await firebase.auth().createUserWithEmailAndPassword(email, password);
-        if(response){
-          console.log("RESPONSE")
-        }
-      } catch (e) {
-        console.error(e.message);
-      }
-    }
-    createUser(email.value, password.value)
   }
 
   return (

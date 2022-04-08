@@ -10,33 +10,36 @@ import firebase from 'firebase/app';
 
 import { storage, store, authenticate } from "../App.js";
 
-// Random number
-const convo = String(Math.floor(Math.random()*1000000000000000))
-
 export default function ChatScreen(props) {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([])
   const [matches, setMatches] = useState([])
+  const [selectedId, setSelectedId] = useState("");
+
+  const window = useWindowDimensions();
+  const msgStyle = { maxHeight: window.height-400, overflow: 'scroll', minHeight: 200}
+  
 
   useEffect(() => {
-      store.collection('messages').doc(convo).collection('convo').orderBy('createdAt').limit(50).onSnapshot(snapshot => {
-          setMessages(snapshot.docs.map(doc => doc.data()))
+      store.collection('users').doc(props.route.params.user.email).get().then((doc) => {
+          if(doc.data()){
+            setMatches(doc.data().matches)
+          }
       })
+
   }, [])
 
    async function sendMessage(e) {
       e.preventDefault()
       const uid = authenticate.currentUser.uid
-      const avatar = authenticate.currentUser.photoURL
 
       if (message.length > 0){
-        await store.collection('messages').doc(convo).set({
+        await store.collection('messages').doc(selectedId).set({
             createdAt: firebase.firestore.FieldValue.serverTimestamp()
         })
 
-        await store.collection('messages').doc(convo).collection('convo').add({
+        await store.collection('messages').doc(selectedId).collection('convo').add({
             text: message,
-            avatar,
             uid,
             createdAt: firebase.firestore.FieldValue.serverTimestamp()
         })
@@ -44,28 +47,36 @@ export default function ChatScreen(props) {
       setMessage('')
   }
 
-  const matchSnap = store.collection('users').doc(props.route.params.user.email)
+  function chooseConvo(x){
+    console.log(selectedId, x)
+    setSelectedId(x)
+    console.log(selectedId)
+    store.collection('messages').doc(x).collection('convo').orderBy('createdAt').limit(50).onSnapshot(snapshot => {
+        setMessages(snapshot.docs.map(doc => doc.data()))
+    })
+    console.log("MESSAGES", messages)
+  }
 
-  matchSnap.get().then((doc) => {
-      setMatches(doc.data().matches)
-  })
-
-  console.log("MATCHES", matches)
-
-  // let DATA = []
-  // matches.forEach((key)=>{
-  //   DATA.push({title: key})
-  // }); 
-
-  const Item = ({ name }) => (
-    <View style={styles.item}>
-      <Text style={styles.title}>{name}</Text>
-    </View>
+  const Item = ({ item, onPress, backgroundColor, textColor }) => (
+    <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
+      <Text style={[styles.title, textColor]}>{item.name}</Text>
+    </TouchableOpacity>
   );
 
-  const renderItem = ({ item }) => (
-    <Item title={item.title} />
-  );
+  const renderItem = ({ item }) => {
+    const backgroundColor = item.conversation === selectedId ? "blue" : "white";
+    const color = item.conversation === selectedId ? 'white' : 'black';
+
+    return (
+      <Item
+        item={item}
+        style={{width: "100%"}}
+        onPress={() => chooseConvo(item.conversation)}
+        backgroundColor={{ backgroundColor }}
+        textColor={{ color }}
+      />
+    );
+  };
 
   const styles = StyleSheet.create({
     container: {
@@ -113,9 +124,6 @@ export default function ChatScreen(props) {
     }
   });
 
-  const window = useWindowDimensions();
-  const msgStyle = { maxHeight: window.height-400, overflow: 'scroll', minHeight: 200}
-
   return (
     <Background>
      <ScrollView>
@@ -125,6 +133,8 @@ export default function ChatScreen(props) {
           <FlatList
             data={matches}
             renderItem={renderItem}
+            keyExtractor={(item) => item.conversation}
+            extraData={selectedId}
           /> 
         </View>
         <View style={styles.messagesBox}>
