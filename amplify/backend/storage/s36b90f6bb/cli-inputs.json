@@ -1,0 +1,11 @@
+{
+  "resourceName": "s36b90f6bb",
+  "policyUUID": "6b90f6bb",
+  "bucketName": "impressive28f734f1f60046b5a87d808ec09dcec4",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "CREATE_AND_UPDATE"
+  ],
+  "groupAccess": {}
+}
