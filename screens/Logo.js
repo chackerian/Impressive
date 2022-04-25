@@ -1,10 +1,14 @@
-import React from 'react'
+import React, {Component, useState } from 'react'
 import { Image, StyleSheet, View } from 'react-native'
+import { useNavigation } from '@react-navigation/native';
+import image from '../assets/logo.jpg'
 
 export default function Logo({ goBack }) {
+  const navigation = useNavigation();
+
   return (
-  	<View style={styles.logo}>
-  		<Image source={require('../assets/logo.jpg')} style={styles.image} onClick={goBack} />
+  	<View style={styles.logo} onClick={() => navigation.goBack('StartScreen')}>
+  		<Image source={image} style={styles.image} />
   	</View>
   )
 }

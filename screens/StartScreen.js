@@ -6,7 +6,6 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigation } from '@react-navigation/native';
 import * as Facebook from 'expo-facebook';
 import Button from './Button'
-import * as AppleAuthentication from 'expo-apple-authentication';
 
 import firebase from 'firebase/app';
 import { storage, store } from "../App.js";
@@ -27,7 +26,7 @@ export default function StartScreen(props) {
   
   if (Platform.OS == "web") {
 
-    require('./fb')
+    // require('./fb')
 
       window.fbAsyncInit = function() {
         FB.init({

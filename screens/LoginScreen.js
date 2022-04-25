@@ -33,7 +33,6 @@ export default function LoginScreen(props) {
       .then((userCredential) => {
         // Signed in
         var user = userCredential.user;
-        console.log("logging in", user)
         props.route.params.login(user)
         // ...
       })
@@ -54,6 +53,7 @@ export default function LoginScreen(props) {
           label="Email"
           returnKeyType="next"
           theme={{ colors: { primary: 'blue',underlineColor:'transparent',}}}
+          style={{ width: 300 }}
           value={email.value}
           onChangeText={(text) => setEmail({ value: text, error: '' })}
           error={!!email.error}
@@ -67,6 +67,7 @@ export default function LoginScreen(props) {
           label="Password"
           returnKeyType="done"
           theme={{ colors: { primary: 'blue',underlineColor:'transparent',}}}
+          style={{ width: 300 }}
           value={password.value}
           onChangeText={(text) => setPassword({ value: text, error: '' })}
           error={!!password.error}
@@ -113,9 +114,13 @@ const styles = StyleSheet.create({
   },
   form: {
     alignItems: 'center',
+    padding: 0,
+    marginLeft: 20,
+    marginRight: 120
   },
   default: {
-    backgroundColor: 'black',
+    backgroundColor: 'blue',
+    width: 300
   },
   container: {
       flex: 1,

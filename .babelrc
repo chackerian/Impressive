@@ -1,0 +1,9 @@
+{
+    "presets": ["module:metro-react-native-babel-preset"],
+    "plugins": [],
+    "env": {
+        "development": {
+            "plugins": ["@babel/transform-react-jsx-source", "@babel/plugin-transform-flow-strip-types"]
+        }
+    }
+}

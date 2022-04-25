@@ -14,7 +14,7 @@ export default function EditImageButton({ nav }) {
 
 const styles = StyleSheet.create({
   container: {
-    left: 120,
+    left: 100,
     top: 100,
     position: 'absolute',
     padding: 1,

@@ -1,13 +1,14 @@
-import React from 'react'
+import React, {Component} from 'react'
 import { TouchableOpacity, Image, StyleSheet } from 'react-native'
 import { getStatusBarHeight } from 'react-native-status-bar-height'
+import arrow from '../assets/arrow_back.png'
 
 export default function BackButton({ goBack }) {
   return (
     <TouchableOpacity onPress={goBack} style={styles.container}>
       <Image
         style={styles.image}
-        source={require('../assets/arrow_back.png')}
+        source={arrow}
       />
     </TouchableOpacity>
   )

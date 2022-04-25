@@ -27,7 +27,7 @@ export default function RegisterScreen(props) {
     try {
      let response = await firebase.auth().createUserWithEmailAndPassword(email, password);
       if(response){
-        console.log("RESPONSE")
+        console.log("RESPONSE", response)
       }
     } catch (e) {
       console.error(e.message);
@@ -65,6 +65,7 @@ export default function RegisterScreen(props) {
           returnKeyType="next"
           value={name.value}
           theme={{ colors: { primary: 'blue',underlineColor:'transparent',}}}
+          style={{ width: 300 }}
           onChangeText={(text) => setName({ value: text, error: '' })}
           error={!!name.error}
           errorText={name.error}
@@ -73,6 +74,7 @@ export default function RegisterScreen(props) {
           label="Email"
           returnKeyType="next"
           theme={{ colors: { primary: 'blue',underlineColor:'transparent',}}}
+          style={{ width: 300 }}
           value={email.value}
           onChangeText={(text) => setEmail({ value: text, error: '' })}
           error={!!email.error}
@@ -86,43 +88,48 @@ export default function RegisterScreen(props) {
           label="Password"
           returnKeyType="done"
           theme={{ colors: { primary: 'blue',underlineColor:'transparent',}}}
+          style={{ width: 300 }}
           value={password.value}
           onChangeText={(text) => setPassword({ value: text, error: '' })}
           error={!!password.error}
           errorText={password.error}
           secureTextEntry
         />
-        <Button
-          mode="contained"
-          onPress={onSignUpPressed}
-          style={{ marginTop: 24 }}
-        >
-          Sign Up
-        </Button>
+        </View>
         <View style={styles.row}>
+          <Button mode="contained" onPress={onSignUpPressed} style={styles.default}>
+            Sign Up
+          </Button>
           <Text>Already have an account? </Text>
           <TouchableOpacity onPress={() => navigation.replace('LoginScreen')}>
             <Text style={styles.link}>Login</Text>
           </TouchableOpacity>
         </View>
-      </View>
     </Background>
   )
 }
 
 const styles = StyleSheet.create({
   row: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     marginTop: 4,
+    alignItems: 'center',
   },
   form: {
     alignItems: 'center',
+    padding: 0,
+    marginLeft: 20,
+    marginRight: 120
   },
   signup: {
     color: 'black',
     textAlign: 'center',
     fontSize: 20,
     fontWeight: "bold",
+  },
+  default: {
+    backgroundColor: 'blue',
+    width: 300
   },
   link: {
     fontWeight: 'bold',

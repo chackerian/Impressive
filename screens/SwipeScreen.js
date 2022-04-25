@@ -2,13 +2,11 @@ import React, {Component, useState, useEffect, useRef, createRef, setState, Reac
 import Background from './Background'
 import {StyleSheet, SafeAreaView, ScrollView, StatusBar, Image, TextInput, Text, View, Platform, Dimensions, PanResponder, Animated, TouchableOpacity, Alert, Button, Switch } from 'react-native';
 import Slider from '@react-native-community/slider';
-import PushNotificationIOS from '@react-native-community/push-notification-ios';
 
 import NavSwipe from './NavSwipe';
 import CardStack, { Card } from './swipe';
 import { storage, store, authenticate } from "../App.js";
 import firebase from 'firebase/app';
-// import './nobounce.js'
 import { useNavigation } from '@react-navigation/native';
 
 import Drawer from 'react-native-drawer';
@@ -176,24 +174,38 @@ export default function SwipeScreen(props) {
   }
 
   async function cards(){
-    console.log("DATA", user)
     const userLikes = user.likes
     const userDislikes = user.dislikes
+    const email = user.email
 
-    var interacted = userLikes.concat(userDislikes)
-    var batches = [];
-
-    interacted.push("A")
-    batches.push(interacted.slice(0, 10));
-
-    console.log("BATCHES", batches, "INTERACTED", interacted)
+    var interacted = userLikes.concat(userDislikes, email)
+    var batches = interacted.splice(0, 10)
 
     var snaps = []
-    var snapshot = await store.collection("users").where("email", "not-in", interacted).get()
-    console.log("SNAPSHOT", snapshot)
-    snaps.push(snapshot);
+    var snapshot = await store.collection("users").where("email", "not-in", batches).get()
 
-    console.log('SNAPS', snaps)
+  //  while (ids.length) {
+  //   const batch = ids.splice(0, 10);
+
+  // add the batch request to to a queue
+  //   batches.push(
+  //     collectionPath
+  //       .where(
+  //         firebase.firestore.FieldPath.documentId(),
+  //         'in',
+  //         [...batch]
+  //       )
+  //       .get()
+  //       .then(results => results.docs.map(result => ({ /* id: result.id, */ ...result.data() }) ))
+  //   )
+  // }
+
+  // return Promise.all(batches)
+  //   .then(content => content.flat());
+  // }
+
+
+    snaps.push(snapshot);
 
     const images = [];
 
@@ -220,16 +232,19 @@ export default function SwipeScreen(props) {
 
     const convo = String(Math.floor(Math.random()*10000000))
 
-    var liked = {name: data.name, email: email, conversation: convo }
-    var otherliked = {name: user.name, email: props.route.params.user.email, conversation: convo }
+    console.log("PICS", data.picture, user.picture)
+
+    var liked = {name: data.name, email: email, conversation: convo, recImage: data.picture }
+    var otherliked = {name: user.name, email: props.route.params.user.email, conversation: convo, recImage: user.picture }
 
     if(likes.includes(props.route.params.user.email)){
 
-          console.log("New Match", props.route.params.user)
+          // Your matches
           store.collection('users').doc(props.route.params.user.email).update({
               matches: firebase.firestore.FieldValue.arrayUnion(liked)
           })
 
+          // Their matches
           store.collection('users').doc(email).update({
               matches: firebase.firestore.FieldValue.arrayUnion(otherliked)
           })
