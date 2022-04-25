@@ -8,7 +8,6 @@ import firebase from 'firebase/app';
 
 import Amplify from 'aws-amplify'
 import awsconfig from './src/aws-exports.js'
-// import "./App.css";
 
 Amplify.configure(awsconfig)
 
