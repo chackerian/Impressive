@@ -6,10 +6,14 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import firebase from 'firebase/app';
 
+import { LogBox } from 'react-native';
 import Amplify from 'aws-amplify'
 import awsconfig from './src/aws-exports.js'
 
 Amplify.configure(awsconfig)
+LogBox.ignoreLogs([
+  'Non-serializable values were found in the navigation state',
+]);
 
 import 'firebase/storage';
 import 'firebase/auth';
@@ -204,6 +208,5 @@ export {
     storage,
     store,
     authenticate,
-    AuthNavigator as
-    default
+    AuthNavigator as default
 }

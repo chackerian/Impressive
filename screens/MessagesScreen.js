@@ -10,7 +10,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCaretRight } from '@fortawesome/free-solid-svg-icons';
 
 import firebase from 'firebase/app';
-
 import { storage, store, authenticate } from "../App.js";
 
 export default function MessageScreen(props) {
@@ -58,7 +57,7 @@ export default function MessageScreen(props) {
         })
 
         if (Platform.OS != "web") {
-            console.log("CHAT ID", x, props.route.params.user.email)
+            console.log("CHAT ID", x)
             navigation.navigate('ChatScreen', { chatId: x, user: props.route.params.user.email })
         }
     }
@@ -73,7 +72,6 @@ export default function MessageScreen(props) {
     const renderItem = ({ item }) => {
         const backgroundColor = item.conversation === selectedId ? "blue" : "white";
         const color = item.conversation === selectedId ? 'white' : 'black';
-        console.log("ITEM", item)
 
         return (
           <Item
@@ -123,7 +121,7 @@ export default function MessageScreen(props) {
           width: 40,
           height: 40,
           borderRadius: 50,
-          marginRight: '1em',
+          marginRight: 20,
         },
         msge: {
             flexDirection: "row",
@@ -138,6 +136,9 @@ export default function MessageScreen(props) {
             color: 'white',
             backgroundColor: 'grey',
         },
+        noMatches : {
+            padding: 100,
+        },
         sent: {
             alignSelf: "flex-end",
             margin: 10,
@@ -146,6 +147,10 @@ export default function MessageScreen(props) {
             borderColor: "blue",
             color: 'white',
             backgroundColor: 'blue',
+        },
+        empty: {
+            textAlign: "center",
+            fontSize: 30,
         },
         sendMessage: {
             display: 'flex',
@@ -156,16 +161,28 @@ export default function MessageScreen(props) {
     });
 
     if (Platform.OS != "web") {
-        return (
-          <Background>
-            <FlatList
-              data={matches}
-              renderItem={renderItem}
-              keyExtractor={(item) => item.conversation}
-              extraData={selectedId}
-            /> 
-          </Background>
-        )
+        if (matches.length > 0) {
+            return (
+              <Background>
+                <FlatList
+                  data={matches}
+                  style={{paddingTop: 40}}
+                  renderItem={renderItem}
+                  keyExtractor={(item) => item.conversation}
+                  extraData={selectedId}
+                /> 
+              </Background>
+            )
+        } else {
+            return (
+                <Background>
+                    <View style={styles.noMatches}>
+                        <Text style={styles.empty}>No Matches Yet</Text>
+                        <Text style={styles.empty} onPress={() => navigation.navigate('Swipe')}>Start Swiping </Text>
+                    </View>
+              </Background>  
+            )
+        }
     }
 
     return (

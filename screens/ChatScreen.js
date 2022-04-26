@@ -30,7 +30,6 @@ export default function ChatScreen({route}, props) {
 
   async function sendMessage(e) {
       e.preventDefault()
-      console.log("send chat")
 
       var convo = await store.collection('messages').doc(chatId)
 
@@ -97,6 +96,8 @@ export default function ChatScreen({route}, props) {
     sendMessage: {
       height: 80,
       marginBottom: 30,
+      display: "flex",
+      flexDirection: "row",
       borderTopWidth: 1,
       borderTopColor: '#e7e6e7',
     }
@@ -117,21 +118,21 @@ return(
             var senderStyle = styles.message
           }
           return(
-            <View><Text key={index} style={styles.message, senderStyle}>{text}</Text></View>
+            <View key={index}><Text style={styles.message, senderStyle}>{text}</Text></View>
           )
         })}
       </ScrollView>
       <View style={styles.sendMessage}>
         <TextInput 
-           style={{ width: '140%', fontSize: 15, marginLeft: 15, outline: 'none', height: 40}}
+           style={{ width: "170%", marginLeft: 20, fontSize: 15, outline: 'none', height: 40, display: "flex"}}
            theme={{ colors: { primary: 'blue',underlineColor:'transparent',}}}
            placeholder='Message...'
            value={message}
            onChangeText={e => setMessage(e)} 
            onSubmitEditing={(event) => sendMessage(event)}
         />
-        <TouchableOpacity onPress={(event) => sendMessage(event)}>
-          <MaterialCommunityIcons name="send" style={{marginLeft: 20, marginTop: 0}} color={"blue"} size={26} />
+        <TouchableOpacity style={{display: "flex", marginTop: 20, marginLeft: 100}} onPress={(event) => sendMessage(event)}>
+          <MaterialCommunityIcons name="send" color={"blue"} size={26} />
         </TouchableOpacity>
     </View>
     </Background>

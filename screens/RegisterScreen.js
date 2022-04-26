@@ -14,7 +14,7 @@ import { nameValidator } from './helpers/nameValidator'
 
 import firebase from 'firebase/app';
 import 'firebase/auth';
-import { authenticate } from "../App.js";
+import { authenticate } from "firebase";
 
 export default function RegisterScreen(props) {
   const [name, setName] = useState({ value: '', error: '' })

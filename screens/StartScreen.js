@@ -8,7 +8,6 @@ import * as Facebook from 'expo-facebook';
 import Button from './Button'
 
 import firebase from 'firebase/app';
-import { storage, store } from "../App.js";
 import 'firebase/auth';
 import AppleAuth from './AppleAuth.js';
 
