@@ -7,10 +7,6 @@ import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import firebase from 'firebase/app';
 
 import { LogBox } from 'react-native';
-import Amplify from 'aws-amplify'
-import awsconfig from './src/aws-exports.js'
-
-Amplify.configure(awsconfig)
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
 ]);
@@ -18,6 +14,7 @@ LogBox.ignoreLogs([
 import 'firebase/storage';
 import 'firebase/auth';
 import 'firebase/firestore';
+
 
 import StartScreen from './screens/StartScreen.js'
 import LoginScreen from './screens/LoginScreen.js'
@@ -29,6 +26,11 @@ import ChatScreen from './screens/ChatScreen.js'
 import SettingsScreen from './screens/SettingsScreen.js'
 import ImageScreen from './screens/ImageScreen.js'
 import SwipeScreen from './screens/SwipeScreen.js'
+
+import Amplify from 'aws-amplify'
+import awsconfig from './src/aws-exports.js'
+
+Amplify.configure(awsconfig)
 
 const AuthContext = createContext(null)
 // const [initialState, setInitialState] = useState();

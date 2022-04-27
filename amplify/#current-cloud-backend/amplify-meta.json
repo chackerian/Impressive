@@ -1,0 +1,107 @@
+{
+  "providers": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-impressive-prod-103337-authRole",
+      "UnauthRoleArn": "arn:aws:iam::789013330192:role/amplify-impressive-prod-103337-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::789013330192:role/amplify-impressive-prod-103337-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-impressive-prod-103337-deployment",
+      "UnauthRoleName": "amplify-impressive-prod-103337-unauthRole",
+      "StackName": "amplify-impressive-prod-103337",
+      "StackId": "arn:aws:cloudformation:us-east-1:789013330192:stack/amplify-impressive-prod-103337/079b6c50-c637-11ec-b129-0ab4693ebbcb",
+      "AmplifyAppId": "d3bl24uaj9v56r"
+    }
+  },
+  "hosting": {
+    "amplifyhosting": {
+      "service": "amplifyhosting",
+      "providerPlugin": "awscloudformation",
+      "type": "manual",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-impressive-prod-103337-deployment/amplify-cfn-templates/hosting/amplifyhosting-template.json",
+        "logicalId": "hostingamplifyhosting"
+      },
+      "lastPushTimeStamp": "2022-04-27T15:00:51.820Z",
+      "output": {},
+      "lastPushDirHash": "iRLtKwz2TISe2A3JQV+lYbCYOQQ="
+    },
+    "S3AndCloudFront": {
+      "service": "S3AndCloudFront",
+      "providerPlugin": "awscloudformation",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-impressive-prod-103337-deployment/amplify-cfn-templates/hosting/template.json",
+        "logicalId": "hostingS3AndCloudFront"
+      },
+      "lastPushTimeStamp": "2022-04-27T15:00:52.047Z",
+      "output": {
+        "CloudFrontSecureURL": "https://d3ksh82hrta934.cloudfront.net",
+        "S3BucketSecureURL": "https://mpressive-20220427105557-hostingbucket-prod.s3.amazonaws.com",
+        "CloudFrontOriginAccessIdentity": "E1VKBKH14HO51G",
+        "WebsiteURL": "http://mpressive-20220427105557-hostingbucket-prod.s3-website-us-east-1.amazonaws.com",
+        "CloudFrontDistributionID": "E3UFYMJ31D5Y2C",
+        "Region": "us-east-1",
+        "HostingBucketName": "mpressive-20220427105557-hostingbucket-prod",
+        "CloudFrontDomainName": "d3ksh82hrta934.cloudfront.net"
+      },
+      "lastPushDirHash": "BWSq92t17DJiid4XOhHVtDpQoCo="
+    }
+  },
+  "auth": {
+    "impressive816d3910": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false,
+      "frontendAuthConfig": {
+        "socialProviders": [],
+        "usernameAttributes": [],
+        "signupAttributes": [
+          "EMAIL"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyMinLength": 8,
+          "passwordPolicyCharacters": []
+        },
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
+      },
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-impressive-prod-103337-deployment/amplify-cfn-templates/auth/impressive816d3910-cloudformation-template.json",
+        "logicalId": "authimpressive816d3910"
+      },
+      "lastPushTimeStamp": "2022-04-27T15:00:51.827Z",
+      "output": {
+        "UserPoolId": "us-east-1_8qjwB2wTs",
+        "AppClientIDWeb": "2v4j40a2uhvlrhte66da1m1di1",
+        "AppClientID": "22377fu5r3d7b46bp4jcjun3g5",
+        "IdentityPoolId": "us-east-1:81d3dd2d-0ed3-4dc9-aacc-fc84b78b8701",
+        "UserPoolArn": "arn:aws:cognito-idp:us-east-1:789013330192:userpool/us-east-1_8qjwB2wTs",
+        "IdentityPoolName": "impressive816d3910_identitypool_816d3910__prod",
+        "UserPoolName": "impressive816d3910_userpool_816d3910"
+      },
+      "lastPushDirHash": "RlESSk/7dzmlECzUQeO9Xo/LrJw="
+    }
+  },
+  "storage": {
+    "s36b90f6bb": {
+      "service": "S3",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "lastPushTimeStamp": "2022-04-27T15:00:51.829Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-impressive-prod-103337-deployment/amplify-cfn-templates/storage/cloudformation-template.json",
+        "logicalId": "storages36b90f6bb"
+      },
+      "output": {
+        "BucketName": "impressive28f734f1f60046b5a87d808ec09dcec4103337-prod",
+        "Region": "us-east-1"
+      },
+      "lastPushDirHash": "O7U44aNiD9KVR1mCDNmPlto+lFM="
+    }
+  }
+}
