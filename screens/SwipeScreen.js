@@ -35,7 +35,7 @@ class ControlPanel extends Component {
 
   constructor() {
     super();
-    this.state = {switchValue: "false"};
+    this.state = {switchValue: "false", locationRange: 0, selectedInterests: []};
   }
 
   toggleSwitch = value => {
@@ -47,15 +47,15 @@ class ControlPanel extends Component {
       <View>
         <SafeAreaView style={styles.container}>
           <Text style={styles.titleContainer}>
-            Filters
+            Distance
           </Text>
           <View contentContainerStyle={styles.container}>
+              <Text>{this.state.locationRange} miles</Text>
               <Slider
                 style={{width: 200, height: 40}}
                 minimumValue={0}
-                maximumValue={1}
-                minimumTrackTintColor="#FFFFFF"
-                maximumTrackTintColor="#000000"
+                maximumValue={20}
+                onValueChange={(value) => this.setState({ locationRange: value })}
               />
           </View>
           <View>
@@ -76,6 +76,7 @@ class ControlPanel extends Component {
 
 export default function SwipeScreen(props) {
 
+  const [cardsShow, setCardsShow] = useState(false);
   const [images, setImages] = useState([]);
   const [swiper, setSwiper] = useState();
   const [drawer, setDrawer] = useState();
@@ -173,7 +174,35 @@ export default function SwipeScreen(props) {
     });
   }
 
+  async function batchInteracted(ids) {
+    const collectionPath = store.collection('users');
+    const batches = [];
+
+    while (ids.length) {
+      const batch = ids.splice(0, 10);
+
+      // add the batch request to to a queue
+      batches.push(
+        collectionPath
+          .where(
+            firebase.firestore.FieldPath.documentId(),
+            'in',
+            [...batch]
+          )
+          .get()
+          .then(results => results.docs.map(result => ({ /* id: result.id, */ ...result.data() }) ))
+      )
+    }
+
+    console.log("BATCHES", batches)
+
+    // after all of the data is fetched, return it
+    return Promise.all(batches)
+      .then(content => content.flat());
+  }
+
   async function cards(){
+    setCardsShow(true)
     const userLikes = user.likes
     const userDislikes = user.dislikes
     const email = user.email
@@ -181,29 +210,10 @@ export default function SwipeScreen(props) {
     var interacted = userLikes.concat(userDislikes, email)
     var batches = interacted.splice(0, 10)
 
+    batchInteracted(interacted)
+
     var snaps = []
     var snapshot = await store.collection("users").where("email", "not-in", batches).get()
-
-  //  while (ids.length) {
-  //   const batch = ids.splice(0, 10);
-
-  // add the batch request to to a queue
-  //   batches.push(
-  //     collectionPath
-  //       .where(
-  //         firebase.firestore.FieldPath.documentId(),
-  //         'in',
-  //         [...batch]
-  //       )
-  //       .get()
-  //       .then(results => results.docs.map(result => ({ /* id: result.id, */ ...result.data() }) ))
-  //   )
-  // }
-
-  // return Promise.all(batches)
-  //   .then(content => content.flat());
-  // }
-
 
     snaps.push(snapshot);
 
@@ -231,8 +241,6 @@ export default function SwipeScreen(props) {
     var likes = data.likes
 
     const convo = String(Math.floor(Math.random()*10000000))
-
-    console.log("PICS", data.picture, user.picture)
 
     var liked = {name: data.name, email: email, conversation: convo, recImage: data.picture }
     var otherliked = {name: user.name, email: props.route.params.user.email, conversation: convo, recImage: user.picture }
@@ -306,7 +314,7 @@ export default function SwipeScreen(props) {
           </TouchableOpacity> 
       </View>
      <View style={styles.viewport}>
-     <Button onPress={cards} title="Show Users" />
+     { cardsShow ? <Text></Text> : <Button onPress={cards} title="Show Users" /> }
       <CardStack 
         style={styles.content}
         ref={swiper => { setSwiper(swiper) }}
@@ -330,6 +338,7 @@ export default function SwipeScreen(props) {
         })}
       </CardStack>
      </View>
+     {cardsShow ? 
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={[styles.button]} onPress={() => {
           swiper.swipeLeft();
@@ -341,7 +350,8 @@ export default function SwipeScreen(props) {
         }}>
           <FontAwesomeIcon icon={ faHeart } color={ 'green' } size={ 40 } />
         </TouchableOpacity>
-      </View>
+      </View> 
+      : <Text></Text>}
     </View>
   </Drawer>
   )

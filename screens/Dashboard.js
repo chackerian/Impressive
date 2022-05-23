@@ -5,6 +5,8 @@ import Button from './Button'
 import SettingsButton from './SettingsButton'
 import EditImageButton from './EditImageButton'
 import Background from './Background'
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faCog, faLocationArrow } from '@fortawesome/free-solid-svg-icons';
 import { useNavigation } from '@react-navigation/native';
 import Navbar from './Navbar'
 
@@ -51,7 +53,7 @@ export default function Dashboard(props) {
     },
     name: {
       paddingTop: 15,
-      fontSize: 20,
+      fontSize: 30,
       fontWeight: 'bold',
     },
     image: {
@@ -67,9 +69,13 @@ export default function Dashboard(props) {
       display: 'flex',
     },
     details: {
-      paddingTop: 1,
+      marginTop: 30,
+      padding: 30,
+      width: 300,
       alignItems: 'center',
       color: 'white',
+      backgroundColor: '#0b0034',
+      borderRadius: 1,
     },
     info: {
       alignItems: 'center',
@@ -80,6 +86,21 @@ export default function Dashboard(props) {
       display: 'flex',
       marginTop: '20px',
       flexWrap: 'wrap',
+    },
+    location: {
+      color: "blue",
+      fontWeight: "bold",
+      fontSize: 20,
+    },
+    about: {
+      color: "white",
+      paddingTop: 20,
+      fontSize: 20,
+    },
+    interests: {
+      paddingTop: 20,
+      color: "white",
+      fontSize: 20,
     },
     photos: {
       width: '150px',
@@ -100,9 +121,9 @@ export default function Dashboard(props) {
         <EditImageButton nav={imagesettings}/>
         <SettingsButton nav={settings}/>
         <View style={styles.details}>
-          <Text>{city}, {state}</Text>
-          <Text>{about}</Text>
-          <Text>Interests: {interests}</Text>
+          <FontAwesomeIcon icon={ faLocationArrow } size={30} color={"blue"} /><Text style={styles.location}>{city}, {state}</Text>
+          <Text style={styles.about}>{about}</Text>
+          <Text style={styles.interests}>Interests: {interests}</Text>
         </View>
       </View>
     </View>

@@ -20,7 +20,7 @@ class NavLogout extends Component{
                 <StatusBar barStyle="light-content"/>
                 <Text style={styles.text}></Text>
                 <TouchableOpacity style={styles.slider} onPress={this.logout}>
-                    <Text>Logout</Text>
+                    <Text style={{fontWeight: "bold"}}>Logout</Text>
                 </TouchableOpacity> 
             </View>
         )

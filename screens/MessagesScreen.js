@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, Component } from 'react'
-import { View, ScrollView, Text, Button, StyleSheet, FlatList, useWindowDimensions, Platform, TouchableOpacity, Image } from 'react-native'
+import { View, ScrollView, Text, StyleSheet, FlatList, useWindowDimensions, Platform, TouchableOpacity, Image } from 'react-native'
 import Background from './Background'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import Navbar from './Navbar'
@@ -7,7 +7,9 @@ import BackButton from './BackButton'
 import TextInput from './TextInput'
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import {FontAwesomeIcon as FontAwesomeReact} from '@fortawesome/react-fontawesome';
 import { faCaretRight } from '@fortawesome/free-solid-svg-icons';
+import Button from './Button'
 
 import firebase from 'firebase/app';
 import { storage, store, authenticate } from "../App.js";
@@ -19,16 +21,17 @@ export default function MessageScreen(props) {
     const [selectedId, setSelectedId] = useState("");
     const navigation = useNavigation();
 
+    const [scrollView, setScrollView] = useState("");
     const window = useWindowDimensions();
+    const width = window.width
     const msgStyle = { maxHeight: window.height - 400, overflow: 'scroll', minHeight: 200 }
 
     useEffect(() => {
-
         var docRef = store.collection('users').doc(props.route.params.user.email)
         docRef.onSnapshot((doc) => {
             if (doc.exists) {
                 setMatches(doc.data().matches)
-            }
+            } 
         });
 
     }, [])
@@ -52,22 +55,39 @@ export default function MessageScreen(props) {
 
     function chooseConvo(x) {
         setSelectedId(x)
-        store.collection('messages').doc(x).collection('convo').orderBy('createdAt').limit(50).onSnapshot(snapshot => {
+        store.collection('messages').doc(x).collection('convo').orderBy('createdAt').onSnapshot(snapshot => {
             setMessages(snapshot.docs.map(doc => doc.data()))
         })
 
-        if (Platform.OS != "web") {
+        if (Platform.OS != "web" || width < 500) {
             console.log("CHAT ID", x)
             navigation.navigate('ChatScreen', { chatId: x, user: props.route.params.user.email })
         }
     }
 
-    const Item = ({ item, onPress, backgroundColor, textColor }) => (
-      <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
-        <Image source={{uri: item.recImage}} style={styles.image} />
-        <Text style={[styles.title, textColor]}>{item.name}</Text>
-      </TouchableOpacity>
-    );
+    const Item = ({ item, onPress, backgroundColor, textColor }) => {
+        const docRef = store.collection('users').doc(item.email)
+        const [image, setImage] = useState()
+
+        useEffect(() => {
+            let isMounted = true;
+            docRef.get().then((doc) => {
+                if (doc.exists && isMounted) {
+                    setImage(doc.data().picture)
+                }
+            })
+            return () => {
+                isMounted = false;
+            };
+
+        }, [])
+        return (
+          <TouchableOpacity key={item} onPress={onPress} style={[styles.item, backgroundColor]}>
+            <Image source={{uri: image}} style={styles.image} />
+            <Text style={[styles.title, textColor]}>{item.name}</Text>
+          </TouchableOpacity>
+        );
+    }
 
     const renderItem = ({ item }) => {
         const backgroundColor = item.conversation === selectedId ? "blue" : "white";
@@ -76,6 +96,7 @@ export default function MessageScreen(props) {
         return (
           <Item
             item={item}
+            key={item}
             style={{width: "100%"}}
             onPress={() => chooseConvo(item.conversation)}
             backgroundColor={{ backgroundColor }}
@@ -93,7 +114,14 @@ export default function MessageScreen(props) {
             marginTop: 80,
             marginLeft: 30,
             marginRight: 30,
-            minHeight: 300,
+            minHeight: 600,
+        },
+        buttons: {
+            borderRadius: 1,
+            backgroundColor: '#0b0035',
+            marginTop: 20,
+            marginLeft: 'auto',
+            marginRight: 'auto',
         },
         contacts: {
             flex: 2,
@@ -152,6 +180,13 @@ export default function MessageScreen(props) {
             textAlign: "center",
             fontSize: 30,
         },
+        swiping: {
+            backgroundColor: "blue",
+            color: "white",
+            fontSize: 25,
+            padding: 10,
+            borderRadius: 20,
+        },
         sendMessage: {
             display: 'flex',
             flexDirection: 'row',
@@ -160,8 +195,8 @@ export default function MessageScreen(props) {
         }
     });
 
-    if (Platform.OS != "web") {
-        if (matches.length > 0) {
+    if (Platform.OS != "web" || width < 500) {
+        if (typeof matches != "undefined" && matches.length > 0) {
             return (
               <Background>
                 <FlatList
@@ -178,16 +213,37 @@ export default function MessageScreen(props) {
                 <Background>
                     <View style={styles.noMatches}>
                         <Text style={styles.empty}>No Matches Yet</Text>
-                        <Text style={styles.empty} onPress={() => navigation.navigate('Swipe')}>Start Swiping </Text>
+                        <Button
+                          mode="outlined"
+                          style={styles.buttons}
+                          color='white'
+                          onPress={() => navigation.navigate('Swipe')}>Start Swiping
+                        </Button>
                     </View>
               </Background>  
             )
         }
     }
 
+    if (Platform.OS == "web" && matches.length <= 0) {
+        return (
+            <Background>
+                <View style={styles.noMatches}>
+                    <Text style={styles.empty}>No Matches Yet</Text>
+                    <Button
+                      mode="outlined"
+                      style={styles.buttons}
+                      color='white'
+                      onPress={() => navigation.navigate('Swipe')}>Start Swiping
+                    </Button>
+                </View>
+          </Background> 
+        )
+    }
+
     return (
     <Background>
-     <ScrollView>
+     <View>
       <View style={styles.container}>
         <View style={styles.contacts}>
           <FlatList
@@ -198,7 +254,7 @@ export default function MessageScreen(props) {
           /> 
         </View>
         <View style={styles.messagesBox}>
-          <View style={msgStyle}>
+          <ScrollView style={msgStyle} ref={ref => {setScrollView(ref)}} onContentSizeChange={() => scrollView.scrollToEnd({animated: true})}>
             {messages.map(({ id, text, sender, uid }) => {
               if (sender == props.route.params.user.email) {
                 var senderStyle = styles.sent
@@ -206,12 +262,12 @@ export default function MessageScreen(props) {
                 var senderStyle = styles.message
               }
               return(
-                <View key={id} style={styles.message, senderStyle}>
+                <View key={Math.random().toString(36).substr(2, 9)} style={styles.message, senderStyle}>
                     <Text style={styles.msge}>{text}</Text>
                 </View>
               )
             })}
-          </View>
+          </ScrollView>
           <View style={styles.sendMessage}>
             <TextInput 
                style={{ width: '150%', fontSize: 15, marginLeft: 15, outline: 'none' }}
@@ -226,7 +282,7 @@ export default function MessageScreen(props) {
         </View>
        </View>
       </View>
-      </ScrollView>
+      </View>
     </Background>
     )
 }

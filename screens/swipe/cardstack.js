@@ -499,7 +499,7 @@ CardStack.defaultProps = {
   secondCardZoom: 0.95,
   loop: false,
   initialIndex: 0,
-  renderNoMoreCards: () => { return (<Text>No users left</Text>) },
+  renderNoMoreCards: () => { return (<Text></Text>) },
   onSwipeStart: () => null,
   onSwipeEnd: () => null,
   onSwiped: () => { },

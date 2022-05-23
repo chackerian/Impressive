@@ -15,7 +15,7 @@ export default function SettingsButton({ nav }) {
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    left: 200,
+    left: 300,
     top: 10,
   }
 })

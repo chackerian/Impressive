@@ -25,7 +25,7 @@ export default function StartScreen(props) {
   
   if (Platform.OS == "web") {
 
-    // require('./fb')
+    require('./fb')
 
       window.fbAsyncInit = function() {
         FB.init({
@@ -40,7 +40,7 @@ export default function StartScreen(props) {
 
       FB.login(function(response) {
         if (response.authResponse) {
-         FB.api('/me?fields=email,picture.type(normal),name', function(response) {
+         FB.api('/me?fields=email,picture.type(large),name', function(response) {
            console.log("GRAPH", response)
            props.route.params.login(response)
          });

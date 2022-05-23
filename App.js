@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import firebase from 'firebase/app';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { LogBox } from 'react-native';
 LogBox.ignoreLogs([
@@ -14,7 +15,6 @@ LogBox.ignoreLogs([
 import 'firebase/storage';
 import 'firebase/auth';
 import 'firebase/firestore';
-
 
 import StartScreen from './screens/StartScreen.js'
 import LoginScreen from './screens/LoginScreen.js'
@@ -34,13 +34,41 @@ Amplify.configure(awsconfig)
 
 const AuthContext = createContext(null)
 // const [initialState, setInitialState] = useState();
-const PERSISTENCE_KEY = 'NAVIGATION_STATE';
 
 function AuthNavigator() {
-    const [user, setUser] = useState(null)
+
+  const [user, setUser] = useState(null);
+
+    const addUser = async (value) => {
+      try {
+        await AsyncStorage.setItem('user', JSON.stringify(value))
+        setUser(value)
+        const jsonValue = await AsyncStorage.getItem('user')
+        console.log("VALUE SET", JSON.parse(jsonValue))
+      } catch (e) {
+        // saving error
+      }
+    }
+
+    const getUser = async () => {
+      try {
+        AsyncStorage.getItem('user').then(value => {
+          console.log("VALUE GET", JSON.parse(value), value.email)
+          if (value != "null") {
+            setUser(JSON.parse(value))
+          }
+        })
+      } catch(e) {
+        // error reading value
+      }
+    }
+
+        useEffect(() => {
+          getUser()
+        }, [])
 
     function login(a) {
-        setUser(a)
+        addUser(a)
         const userRef = store.collection('users').doc(a.email);
 
         userRef.get().then((doc) => {
@@ -66,6 +94,7 @@ function AuthNavigator() {
                         picture: "https://www.edmundsgovtech.com/wp-content/uploads/2020/01/default-picture_0_0.png",
                         likes: ["blank"],
                         dislikes: ["blank"],
+                        matches: [],
                         conversations: [],
                     })
                 }
@@ -76,7 +105,7 @@ function AuthNavigator() {
 
     function logout() {
         firebase.auth().signOut()
-        setUser(null)
+        addUser(null)
     }
 
     return user ? (
@@ -102,8 +131,8 @@ function MyStack(props) {
         headerShown: false
         }}>
         <AuthStack.Screen name="StartScreen" component={StartScreen} options={{ title: 'Impressive' }} initialParams={{login: props.login}} />
-        <AuthStack.Screen name="LoginScreen" component={LoginScreen} initialParams={{login: props.login}} />
-        <AuthStack.Screen name="RegisterScreen" component={RegisterScreen} initialParams={{login: props.login}} />
+        <AuthStack.Screen name="LoginScreen" component={LoginScreen} options={{ title: 'Impressive - Login' }} initialParams={{login: props.login}} />
+        <AuthStack.Screen name="RegisterScreen" component={RegisterScreen} options={{ title: 'Impressive - Register' }} initialParams={{login: props.login}} />
       </AuthStack.Navigator>
     </NavigationContainer>
   );
