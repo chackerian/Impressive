@@ -53,7 +53,7 @@ function AuthNavigator() {
     const getUser = async () => {
       try {
         AsyncStorage.getItem('user').then(value => {
-          console.log("VALUE GET", JSON.parse(value), value.email)
+          console.log("VALUE GET", JSON.parse(value))
           if (value != "null") {
             setUser(JSON.parse(value))
           }

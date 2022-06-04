@@ -174,33 +174,6 @@ export default function SwipeScreen(props) {
     });
   }
 
-  async function batchInteracted(ids) {
-    const collectionPath = store.collection('users');
-    const batches = [];
-
-    while (ids.length) {
-      const batch = ids.splice(0, 10);
-
-      // add the batch request to to a queue
-      batches.push(
-        collectionPath
-          .where(
-            firebase.firestore.FieldPath.documentId(),
-            'in',
-            [...batch]
-          )
-          .get()
-          .then(results => results.docs.map(result => ({ /* id: result.id, */ ...result.data() }) ))
-      )
-    }
-
-    console.log("BATCHES", batches)
-
-    // after all of the data is fetched, return it
-    return Promise.all(batches)
-      .then(content => content.flat());
-  }
-
   async function cards(){
     setCardsShow(true)
     const userLikes = user.likes
@@ -208,20 +181,24 @@ export default function SwipeScreen(props) {
     const email = user.email
 
     var interacted = userLikes.concat(userDislikes, email)
-    var batches = interacted.splice(0, 10)
-
-    batchInteracted(interacted)
 
     var snaps = []
-    var snapshot = await store.collection("users").where("email", "not-in", batches).get()
+    var snapshot = await store.collection("users").get()
+
+    console.log(interacted)
 
     snaps.push(snapshot);
 
     const images = [];
 
     snapshot.docs.forEach((s) => {
-      images.push(s.data());
+      if(!interacted.includes(s.data().email)){
+        images.push(s.data());
+      } 
     });
+
+    console.log(images)
+
     setImages(images);
 
   }

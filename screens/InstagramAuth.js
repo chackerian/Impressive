@@ -2,6 +2,7 @@ window.open("https://www.instagram.com/oauth/authorize/?app_id=445757196713182&r
 
 if (window.opener) {
 var code = window.location.search.match(/.*code=([^&|\n|\t\s]+)/)[1] || [];
+console.log("code", code)
 window.opener.postMessage(
         {
           type: "code",
@@ -14,6 +15,7 @@ window.opener.postMessage(
 window.onmessage = function (e) {
   if (e.data) {
     var codesent = e.data.data
+    console.log(codesent)
   }
 };
 
