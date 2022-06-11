@@ -18,7 +18,7 @@ export default function Dashboard(props) {
   const [name, setName] = useState('');
   const [age, setAge] = useState('');
   const [about, setAbout] = useState('');
-  const [interests, setInterests] = useState('');
+  const [interests, setInterests] = useState([]);
   const [image, setImage] = useState('');
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
@@ -102,6 +102,10 @@ export default function Dashboard(props) {
       color: "white",
       fontSize: 20,
     },
+    interest: {
+      backgroundColor: 'blue',
+      color: 'white',
+    },
     photos: {
       width: '150px',
       height: '150px',
@@ -123,7 +127,12 @@ export default function Dashboard(props) {
         <View style={styles.details}>
           <FontAwesomeIcon icon={ faLocationArrow } size={30} color={"blue"} /><Text style={styles.location}>{city}, {state}</Text>
           <Text style={styles.about}>{about}</Text>
-          <Text style={styles.interests}>Interests: {interests}</Text>
+          <Text style={styles.interests}>Interests:</Text>
+          {interests.map((val) => {
+            return(
+            <Text style={styles.interest}>{val.text}</Text>
+            )
+          })}
         </View>
       </View>
     </View>

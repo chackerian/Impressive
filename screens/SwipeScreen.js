@@ -308,6 +308,7 @@ export default function SwipeScreen(props) {
             <Image source={{uri: i.picture}} style={styles.image} />
             <View style={styles.info}> 
              <Text style={styles.label}>{name}, {i.age}</Text>
+             <Text>{i.interests}</Text>
              <Text style={styles.description}>{i.city}, {i.state}</Text>
             </View>
           </Card>

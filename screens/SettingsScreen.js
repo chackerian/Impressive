@@ -8,6 +8,7 @@ import * as Facebook from 'expo-facebook';
 import NavLogout from './NavLogout';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import InstagramLogin from 'react-instagram-login';
+import { WithContext as ReactTags } from 'react-tag-input';
 
 import firebase from 'firebase/app';
 import { storage, store } from "../App.js";
@@ -20,6 +21,7 @@ export default function SettingsScreen(props) {
   const [name, setName] = useState('');
   const [interests, setInterests] = useState('');
   const [location, setLocation] = useState('');
+  const [tags, setTags] = useState([]);
   const [a, setA] = useState('');
   const [locationString, setLocationString] = useState('');
   const [city, setCity] = useState('');
@@ -37,6 +39,28 @@ export default function SettingsScreen(props) {
 
   const getAge = age => Math.floor((new Date() - new Date(age).getTime()) / 3.15576e+10)
 
+  const handleDelete = i => {
+    setTags(tags.filter((tag, index) => index !== i));
+  };
+
+  const handleAddition = tag => {
+    setTags([...tags, tag]);
+  };
+
+  const handleDrag = (tag, currPos, newPos) => {
+    const newTags = tags.slice();
+
+    newTags.splice(currPos, 1);
+    newTags.splice(newPos, 0, tag);
+
+    // re-render
+    setTags(newTags);
+  };
+
+  const handleTagClick = index => {
+    console.log('The tag at index ' + index + ' was clicked');
+  };
+
   function save(){
     var user = props.route.params.user.email
     var userAge = getAge(date)
@@ -44,14 +68,14 @@ export default function SettingsScreen(props) {
       setCity(location.split(",")[0])
       setState(location.split(",")[1])
     }
-    console.log("INFO", location, a)
+    console.log("INFO", tags)
     store.collection('users').doc(user).update({
       name: name,
       about: about,
       city: city,
       state: state,
       location: location,
-      interests: interests,
+      interests: tags,
       birthday: date,
       age: userAge,
     })
@@ -64,7 +88,7 @@ export default function SettingsScreen(props) {
       if (doc.exists) {
         console.log("DOC", doc.data())
         setName(doc.data().name || "");
-        setInterests(doc.data().interests || "");
+        setTags(doc.data().interests || []);
         setAbout(doc.data().about || "");
         // setDate(doc.data().birthday);
         setLocation(doc.data().location);
@@ -196,14 +220,13 @@ export default function SettingsScreen(props) {
           style={[styles.textInput]}
         />
         
-        <TextInput
-          multiline
-          numberOfLines={3}
-          label="Interests"
-          placeholderTextColor="#666666"
-          theme={{ colors: { primary: 'blue', underlineColor:'transparent',}}}
-          value={interests}
-          onChangeText={setInterests}
+        <ReactTags
+          tags={tags}
+          handleDelete={handleDelete}
+          handleAddition={handleAddition}
+          handleTagClick={handleTagClick}
+          inputFieldPosition="bottom"
+          autocomplete
         />
 
         <Button

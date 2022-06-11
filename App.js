@@ -16,6 +16,8 @@ import 'firebase/storage';
 import 'firebase/auth';
 import 'firebase/firestore';
 
+import './screens/settings.css'
+
 import StartScreen from './screens/StartScreen.js'
 import LoginScreen from './screens/LoginScreen.js'
 import RegisterScreen from './screens/RegisterScreen.js'
@@ -84,6 +86,7 @@ function AuthNavigator() {
                         likes: ["blank"],
                         dislikes: ["blank"],
                         matches: [],
+                        interests: [],
                         conversations: [],
                     })
                 } else {
@@ -95,6 +98,7 @@ function AuthNavigator() {
                         likes: ["blank"],
                         dislikes: ["blank"],
                         matches: [],
+                        interests: [],
                         conversations: [],
                     })
                 }
