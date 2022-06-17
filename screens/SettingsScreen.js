@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState, setState} from 'react'
-import {StyleSheet, Text, View, ScrollView, Platform } from 'react-native';
+import {StyleSheet, Text, View, ScrollView, Platform, TouchableOpacity } from 'react-native';
 import Button from './Button'
 import TextInput from './TextInput'
 import SearchLocationInput from './SearchLocationInput'
@@ -7,7 +7,9 @@ import { useNavigation } from '@react-navigation/native';
 import * as Facebook from 'expo-facebook';
 import NavLogout from './NavLogout';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import InstagramLogin from 'react-instagram-login';
+// import InstagramLogin from 'react-instagram-login';
+import InstagramLogin from 'react-native-instagram-login';
+// import './InstagramAuth'
 import { WithContext as ReactTags } from 'react-tag-input';
 
 import firebase from 'firebase/app';
@@ -18,6 +20,7 @@ export default function SettingsScreen(props) {
   function logIn(){}
 
   const [about, setAbout] = useState('');
+  const [insta, setInsta] = useState();
   const [name, setName] = useState('');
   const [interests, setInterests] = useState('');
   const [location, setLocation] = useState('');
@@ -232,7 +235,7 @@ export default function SettingsScreen(props) {
         <Button
           mode="outlined"
           color='black'
-          onPress={save}>Connect Instagram</Button>
+          onPress={() => insta.show()}>Connect Instagram</Button>
 
         <Button
           mode="outlined"

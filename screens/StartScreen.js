@@ -99,6 +99,10 @@ export default function StartScreen(props) {
     facebook: {
       backgroundColor: '#4267B2',
     },
+    headline: {
+      fontWeight: "bold",
+      textAlign: "center",
+    },
     container: {
       flex: 1,
       backgroundColor: 'white',
@@ -108,6 +112,7 @@ export default function StartScreen(props) {
   return (
     <View style={styles.container}>
       <Logo />
+      <Text style={styles.headline}>Make new connections based on interests</Text>
       <ScrollView>
         <View style={styles.login}>
         <Button

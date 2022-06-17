@@ -77,16 +77,17 @@ function AuthNavigator() {
             if (doc.exists) {
                 console.log("LOGIN")
             } else {
-                console.log("REGISTER")
+                console.log("REGISTER USER", userRef)
                 if (a.picture) {
                     userRef.set({
                         name: a.name || "",
                         email: a.email || "",
                         picture: a.picture.data.url,
-                        likes: ["blank"],
-                        dislikes: ["blank"],
+                        likes: [],
+                        dislikes: [],
                         matches: [],
                         interests: [],
+                        about: "",
                         conversations: [],
                     })
                 } else {
@@ -95,10 +96,11 @@ function AuthNavigator() {
                         name: a.name || "",
                         email: a.email || "",
                         picture: "https://www.edmundsgovtech.com/wp-content/uploads/2020/01/default-picture_0_0.png",
-                        likes: ["blank"],
-                        dislikes: ["blank"],
+                        likes: [],
+                        dislikes: [],
                         matches: [],
                         interests: [],
+                        about: "",
                         conversations: [],
                     })
                 }

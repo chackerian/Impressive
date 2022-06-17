@@ -165,17 +165,7 @@ export default function SwipeScreen(props) {
     },
   })
 
-  function initValues() {
-    var docRef = store.collection('users').doc(props.route.params.user.email)
-    docRef.onSnapshot((doc) => {
-      if (doc.exists) {
-        setUser(doc.data())
-      }
-    });
-  }
-
-  async function cards(){
-    setCardsShow(true)
+  async function initImages(user){
     const userLikes = user.likes
     const userDislikes = user.dislikes
     const email = user.email
@@ -184,23 +174,35 @@ export default function SwipeScreen(props) {
 
     var snaps = []
     var snapshot = await store.collection("users").get()
-
-    console.log(interacted)
-
     snaps.push(snapshot);
-
     const images = [];
 
     snapshot.docs.forEach((s) => {
       if(!interacted.includes(s.data().email)){
+        console.log(s.data());
         images.push(s.data());
       } 
     });
 
-    console.log(images)
+    console.log("IMAGES", images)
 
     setImages(images);
+  }
 
+  async function initValues() {
+    var docRef = store.collection('users').doc(props.route.params.user.email)
+    docRef.onSnapshot((doc) => {
+      if (doc.exists) {
+        setUser(doc.data())
+        console.log("USER INFO", doc.data())
+        initImages(doc.data())
+      }
+    });
+
+  }
+
+  async function cards(){
+    setCardsShow(true)
   }
   
   useEffect(() => {
@@ -291,7 +293,8 @@ export default function SwipeScreen(props) {
           </TouchableOpacity> 
       </View>
      <View style={styles.viewport}>
-     { cardsShow ? <Text></Text> : <Button onPress={cards} title="Show Users" /> }
+     {/*{ cardsShow || images.length == 0  ? <Text></Text> : <Button onPress={cards} title="Show Users" /> }*/}
+     { images.length == 0 ? <Text>No Users Left</Text> : <Text></Text> }
       <CardStack 
         style={styles.content}
         ref={swiper => { setSwiper(swiper) }}
@@ -299,7 +302,8 @@ export default function SwipeScreen(props) {
         changeShadowColor={color => { changeShadow(color)} }
       >
        {images.map((i) => {
-        var name = i.name.split(" ")[0]
+        // var name = i.name.split(" ")[0]
+        console.log("length", images.length)
         return (
           <Card style={[styles.card, styles.card1]} key={i.name} 
             onSwipedRight={(event) => addLike(i.email)} 
@@ -307,8 +311,9 @@ export default function SwipeScreen(props) {
           >
             <Image source={{uri: i.picture}} style={styles.image} />
             <View style={styles.info}> 
-             <Text style={styles.label}>{name}, {i.age}</Text>
+             <Text style={styles.label}>{i.name}, {i.age}</Text>
              <Text>{i.interests}</Text>
+             <Text>{i.about}</Text>
              <Text style={styles.description}>{i.city}, {i.state}</Text>
             </View>
           </Card>
@@ -316,7 +321,7 @@ export default function SwipeScreen(props) {
         })}
       </CardStack>
      </View>
-     {cardsShow ? 
+     {images.length > 0 ? 
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={[styles.button]} onPress={() => {
           swiper.swipeLeft();
