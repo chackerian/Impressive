@@ -101,7 +101,11 @@ export default function StartScreen(props) {
     },
     headline: {
       fontWeight: "bold",
-      textAlign: "center",
+      fontSize: 25,
+      width: 271,
+      marginRight: 'auto',
+      textAlign:'center',
+      marginLeft: 'auto',
     },
     container: {
       flex: 1,

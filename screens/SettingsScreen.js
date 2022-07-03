@@ -7,8 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as Facebook from 'expo-facebook';
 import NavLogout from './NavLogout';
 import DateTimePicker from '@react-native-community/datetimepicker';
-// import InstagramLogin from 'react-instagram-login';
-import InstagramLogin from 'react-native-instagram-login';
+import InstagramLogin from 'react-instagram-login';
 // import './InstagramAuth'
 import { WithContext as ReactTags } from 'react-tag-input';
 
@@ -83,6 +82,35 @@ export default function SettingsScreen(props) {
       age: userAge,
     })
     navigation.navigate("Dashboard")
+  }
+
+  window.onload = function(){
+      alert("test")
+    }
+
+  function instaLogin(){
+    window.onmessage = function (e) {
+      if (e.data) {
+        var codesent = e.data.data
+        console.log("CODE", codesent)
+      }
+    };
+
+    var win = window.open("https://www.instagram.com/oauth/authorize/?app_id=445757196713182&redirect_uri=https://socially-b729a.web.app/&scope=user_profile,user_media&response_type=code", 'window', 'height=500,width=500')
+    console.log("URl", win.location.href)
+    if(win.location.href.startsWith("https://socially")){
+      var code = win.location.search.match(/.*code=([^&|\n|\t\s]+)/)[1] || [];
+      console.log("CODE", code)
+      win.opener.postMessage(
+          {
+            type: "code",
+            data: "ASD"
+          },
+          "*"
+      );
+      win.close()
+    }
+    // }
   }
 
   function initValues() {
@@ -235,7 +263,7 @@ export default function SettingsScreen(props) {
         <Button
           mode="outlined"
           color='black'
-          onPress={() => insta.show()}>Connect Instagram</Button>
+          onPress={() => instaLogin()}>Connect Instagram</Button>
 
         <Button
           mode="outlined"

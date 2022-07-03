@@ -128,11 +128,6 @@ export default function Dashboard(props) {
           <FontAwesomeIcon icon={ faLocationArrow } size={30} color={"blue"} /><Text style={styles.location}>{city}, {state}</Text>
           <Text style={styles.about}>{about}</Text>
           <Text style={styles.interests}>Interests:</Text>
-          {interests.map((val) => {
-            return(
-            <Text style={styles.interest}>{val.text}</Text>
-            )
-          })}
         </View>
       </View>
     </View>
