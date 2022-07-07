@@ -1,0 +1,17 @@
+#result-list-id {
+	height: 400px;
+	width:  400px;
+}
+
+.ReactTags__remove {
+	border: none;
+    background: blue;
+    color: white;
+    cursor: pointer;
+}
+
+.tag-wrapper {
+	background: blue;
+    color: white;
+    padding: 0.2em;
+}

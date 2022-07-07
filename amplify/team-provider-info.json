@@ -1,0 +1,50 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-impressive-dev-151544-authRole",
+      "UnauthRoleArn": "arn:aws:iam::789013330192:role/amplify-impressive-dev-151544-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::789013330192:role/amplify-impressive-dev-151544-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-impressive-dev-151544-deployment",
+      "UnauthRoleName": "amplify-impressive-dev-151544-unauthRole",
+      "StackName": "amplify-impressive-dev-151544",
+      "StackId": "arn:aws:cloudformation:us-east-1:789013330192:stack/amplify-impressive-dev-151544/12ebdd00-852e-11ec-a765-12d15228996b",
+      "AmplifyAppId": "d2uhzqzz86h76t"
+    },
+    "categories": {
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d2uhzqzz86h76t",
+          "type": "manual"
+        }
+      },
+      "auth": {
+        "impressive816d3910": {}
+      }
+    }
+  },
+  "prod": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-impressive-prod-103337-authRole",
+      "UnauthRoleArn": "arn:aws:iam::789013330192:role/amplify-impressive-prod-103337-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::789013330192:role/amplify-impressive-prod-103337-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-impressive-prod-103337-deployment",
+      "UnauthRoleName": "amplify-impressive-prod-103337-unauthRole",
+      "StackName": "amplify-impressive-prod-103337",
+      "StackId": "arn:aws:cloudformation:us-east-1:789013330192:stack/amplify-impressive-prod-103337/079b6c50-c637-11ec-b129-0ab4693ebbcb",
+      "AmplifyAppId": "d3bl24uaj9v56r"
+    },
+    "categories": {
+      "auth": {
+        "impressive816d3910": {}
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d3bl24uaj9v56r",
+          "type": "manual"
+        }
+      }
+    }
+  }
+}
