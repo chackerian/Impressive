@@ -179,13 +179,9 @@ export default function SwipeScreen(props) {
 
     snapshot.docs.forEach((s) => {
       if(!interacted.includes(s.data().email)){
-        console.log(s.data());
         images.push(s.data());
       }
     });
-
-    console.log("IMAGES", images)
-
     setImages(images);
   }
 
@@ -193,9 +189,8 @@ export default function SwipeScreen(props) {
     var docRef = store.collection('users').doc(props.route.params.user.email)
     docRef.onSnapshot((doc) => {
       if (doc.exists) {
-        setUser(doc.data())
-        console.log("USER INFO", doc.data())
-        initImages(doc.data())
+        setUser(doc.data());
+        initImages(doc.data());
       }
     });
 
@@ -274,7 +269,6 @@ export default function SwipeScreen(props) {
   };
 
   const openFilter = () =>  {
-    console.log("OPEN")
     drawer.open()
   };
 
@@ -288,7 +282,7 @@ export default function SwipeScreen(props) {
       <View style={styles.topNav}>
           <StatusBar barStyle="light-content"/>
           <Text style={styles.text}></Text>
-          <TouchableOpacity style={styles.slider} onPress={() => { openFilter() }}>
+          <TouchableOpacity style={styles.slider} onPress={openFilter}>
               <FontAwesomeIcon icon={ faSlidersH } size={ 30 } />
           </TouchableOpacity>
       </View>
@@ -303,7 +297,6 @@ export default function SwipeScreen(props) {
       >
        {images.map((i) => {
         // var name = i.name.split(" ")[0]
-        console.log("length", images.length)
         return (
           <Card style={[styles.card, styles.card1]} key={i.name}
             onSwipedRight={(event) => addLike(i.email)}

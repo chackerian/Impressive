@@ -34,6 +34,7 @@ import awsconfig from './src/aws-exports.js'
 
 Amplify.configure(awsconfig)
 
+var jwt = require('jsonwebtoken');
 const AuthContext = createContext(null)
 // const [initialState, setInitialState] = useState();
 
@@ -42,22 +43,26 @@ function AuthNavigator() {
   const [user, setUser] = useState(null);
 
     const addUser = async (value) => {
-      try {
-        await AsyncStorage.setItem('user', JSON.stringify(value))
-        setUser(value)
-        const jsonValue = await AsyncStorage.getItem('user')
-        console.log("VALUE SET", JSON.parse(jsonValue))
-      } catch (e) {
-        // saving error
-      }
+        try {
+          let token = jwt.sign({ email: value.email }, "pass")
+
+          await AsyncStorage.setItem('user', token)
+          setUser({ email: value.email })
+        } catch (e) {
+          // saving error
+        }
     }
 
     const getUser = async () => {
       try {
         AsyncStorage.getItem('user').then(value => {
-          console.log("VALUE GET", JSON.parse(value))
-          if (value != "null") {
-            setUser(JSON.parse(value))
+          if(value) {
+          jwt.verify(value, "pass", (err, result) => {
+             if (err) return logout();
+
+            setUser(result)
+            })
+
           }
         })
       } catch(e) {
@@ -75,9 +80,9 @@ function AuthNavigator() {
 
         userRef.get().then((doc) => {
             if (doc.exists) {
-                console.log("LOGIN")
+
             } else {
-                console.log("REGISTER USER", userRef)
+
                 if (a.picture) {
                     userRef.set({
                         name: a.name || "",
@@ -91,7 +96,7 @@ function AuthNavigator() {
                         conversations: [],
                     })
                 } else {
-                    console.log("CREATE")
+
                     userRef.set({
                         name: a.name || "",
                         email: a.email || "",
@@ -109,9 +114,10 @@ function AuthNavigator() {
 
     }
 
-    function logout() {
+    async function logout() {
         firebase.auth().signOut()
-        addUser(null)
+        await AsyncStorage.removeItem("user");
+        setUser(null)
     }
 
     return user ? (
@@ -119,7 +125,7 @@ function AuthNavigator() {
       user={user}
       logout={logout}
       onStateChange={(state) =>
-        console.log("CHANGED", state)
+        console.log(state)
       }
      />
   ) : (
@@ -151,6 +157,7 @@ function MyTabs(props) {
     return (
       <NavigationContainer>
         <AppStack.Navigator
+          lazy={true}
           initialRouteName="Swipe"
           tabBarOptions={{
             style: {

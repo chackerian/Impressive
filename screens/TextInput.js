@@ -22,8 +22,9 @@ export default function TextInput({ errorText, description, ...props }) {
 const styles = StyleSheet.create({
   container: {
     marginVertical: 12,
-    width: 200,
+    width: "100%",
     color: 'black',
+    alignItems: "center"
   },
   description: {
     fontSize: 13,

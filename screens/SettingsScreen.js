@@ -7,40 +7,33 @@ import { useNavigation } from '@react-navigation/native';
 import * as Facebook from 'expo-facebook';
 import NavLogout from './NavLogout';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import InstagramLogin from 'react-instagram-login';
-// import './InstagramAuth'
 import { WithContext as ReactTags } from 'react-tag-input';
-const request = require('request');
 
 import firebase from 'firebase/app';
 import { storage, store } from "../App.js";
 
 export default function SettingsScreen(props) {
 
-  function logIn(){}
-
-  const [about, setAbout] = useState('');
-  const [insta, setInsta] = useState();
-  const [name, setName] = useState('');
-  const [interests, setInterests] = useState('');
-  const [location, setLocation] = useState('');
-  const [tags, setTags] = useState([]);
-  const [a, setA] = useState('');
-  const [locationString, setLocationString] = useState('');
-  const [city, setCity] = useState('');
-  const [state, setState] = useState('');
-  const [date, setDate] = useState(new Date());
-  const [show, setShow] = useState(true);
-  const [instaDialog, setInstaDialog] = useState();
-
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setDate(currentDate);
-  };
+  const [userData, setUserData] = useState({
+    name: '',
+    age: '',
+    city: '',
+    location: '',
+    state: '',
+    about: '',
+    interests: [],
+    date: '',
+  });
+  const [tags, setTags] = useState([])
 
   const navigation = useNavigation();
 
-  const getAge = age => Math.floor((new Date() - new Date(age).getTime()) / 3.15576e+10)
+  function logIn(){}
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || userData.date;
+    setUserData({...userData, date: currentDate});
+  };
 
   const handleDelete = i => {
     setTags(tags.filter((tag, index) => index !== i));
@@ -61,26 +54,26 @@ export default function SettingsScreen(props) {
   };
 
   const handleTagClick = index => {
-    console.log('The tag at index ' + index + ' was clicked');
+
   };
 
   function save(){
     var user = props.route.params.user.email
-    var userAge = getAge(date)
-    if (location){
-      setCity(location.split(",")[0])
-      setState(location.split(",")[1])
+    if (userData.location){
+      setUserData({...userData, city: userData.location.split(",")[0]})
+      setUserData({...userData, state: userData.location.split(",")[1]})
     }
-    console.log("INFO", tags)
+
+    console.log("userinfo", userData)
     store.collection('users').doc(user).update({
-      name: name,
-      about: about,
-      city: city,
-      state: state,
-      location: location,
+      name: userData.name,
+      about: userData.about,
+      city: userData.city,
+      state: userData.state,
+      location: userData.location,
       interests: tags,
-      birthday: date,
-      age: userAge,
+      birthday: "",
+      age: userData.age,
     })
     navigation.navigate("Dashboard")
   }
@@ -93,18 +86,13 @@ export default function SettingsScreen(props) {
     var docRef = store.collection('users').doc(props.route.params.user.email)
     docRef.onSnapshot((doc) => {
       if (doc.exists) {
-        console.log("DOC", doc.data())
-        setName(doc.data().name || "");
-        setTags(doc.data().interests || []);
-        setAbout(doc.data().about || "");
-        // setDate(doc.data().birthday);
-        setLocation(doc.data().location);
+        setUserData(doc.data());
       }
     });
   }
 
     if (Platform.OS == "web") {
-      console.log("WEB")
+
     require('./fb')
 
       window.fbAsyncInit = function() {
@@ -121,7 +109,7 @@ export default function SettingsScreen(props) {
       FB.login(function(response) {
         if (response.authResponse) {
          FB.api('/me?fields=email,picture.type(normal),name', function(response) {
-           console.log("GRAPH", response)
+
          });
         }
     }, {scope: 'public_profile,email'});
@@ -147,7 +135,7 @@ export default function SettingsScreen(props) {
         if (type === 'success') {
           // Get the user's name using Facebook's Graph API
           const response = await fetch(`https://graph.facebook.com/me?fields=email,picture.type(large),name&access_token=${token}`);
-          console.log(response)
+
           var user = (await response.json())
         } else {
           // type === 'cancel'
@@ -159,13 +147,10 @@ export default function SettingsScreen(props) {
 
   }
 
-  const authHandler = (err, data) => {
-    console.log("INSTA", err, data);
-  };
 
   useEffect(() => {
     initValues()
-    setTimeout(function() {console.log("INSTA DIALOG", instaDialog)}, 4000)
+    setTimeout(function() {}, 4000)
     // instaDialog.showDialog();
   },[])
 
@@ -189,10 +174,6 @@ export default function SettingsScreen(props) {
     }
   });
 
-  const responseInstagram = (response) => {
-    console.log("INSTA RESP", response);
-  }
-
   return (
     <ScrollView keyboardShouldPersistTaps={'handled'}>
     <NavLogout logout={props.route.params.logout}/>
@@ -201,16 +182,16 @@ export default function SettingsScreen(props) {
           label="Name"
           placeholderTextColor="#666666"
           theme={{ colors: { primary: 'blue',underlineColor:'transparent',}}}
-          value={name}
-          onChangeText={setName}
+          value={userData.name}
+          onChangeText={(val) => { setUserData({...userData, name: val}) }}
         />
         <View style={styles.container}>
-        <SearchLocationInput location={location} city={setCity} state={setState} setLocation={setLocation}/>
+        <SearchLocationInput location={userData.location} city={(val) => { setUserData({...userData, city: val})}} state={(val) => { setUserData({...userData, state: val})}} setLocation={(val) => { setUserData({...userData, location: val})}}/>
         </View>
 
         <DateTimePicker
           style={{width: 200, height: 30}}
-          value={date}
+          value={userData.date}
           mode="date"
           placeholder="select date"
           onChange={onChange}
@@ -222,8 +203,8 @@ export default function SettingsScreen(props) {
           label="About Me"
           placeholderTextColor="#666666"
           theme={{ colors: { primary: 'blue', underlineColor:'transparent',}}}
-          value={about}
-          onChangeText={setAbout}
+          value={userData.about}
+          onChangeText={(val) => { setUserData({...userData, about: val}) }}
           style={[styles.textInput]}
         />
 
@@ -239,7 +220,7 @@ export default function SettingsScreen(props) {
         <Button
           mode="outlined"
           color='black'
-          onPress={() => instaLogin()}>Connect Instagram</Button>
+          onPress={instaLogin}>Connect Instagram</Button>
 
         <Button
           mode="outlined"
