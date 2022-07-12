@@ -14,11 +14,15 @@ import { store } from "../App.js";
 export default function Dashboard(props) {
   const navigation = useNavigation();
   const [ userData, setUserData ] = useState({});
+  const [ interests, setInterests ] = useState([]);
 
     var docRef = store.collection('users').doc(props.route.params.user.email)
     docRef.onSnapshot((doc) => {
       if (doc.exists) {
         setUserData(doc.data());
+        if(doc.data().interests){
+          setInterests(doc.data().interests)
+        }
       }
     });
 
@@ -113,6 +117,11 @@ export default function Dashboard(props) {
           <FontAwesomeIcon icon={ faLocationArrow } size={30} color={"blue"} /><Text style={styles.location}>{userData.city}, {userData.state}</Text>
           <Text style={styles.about}>{userData.about}</Text>
           <Text style={styles.interests}>Interests:</Text>
+          {interests.map((i) => {
+            return (
+              <Text>{i.text}</Text>
+            )
+          })}
         </View>
       </View>
     </View>

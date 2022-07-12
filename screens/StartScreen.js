@@ -1,4 +1,4 @@
-import React, { useState} from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, Text, View, Alert, Platform, TouchableOpacity } from "react-native";
 import Logo from './Logo'
 import { useNavigation } from '@react-navigation/native';

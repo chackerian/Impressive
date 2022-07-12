@@ -64,16 +64,16 @@ export default function SettingsScreen(props) {
       setUserData({...userData, state: userData.location.split(",")[1]})
     }
 
-    console.log("userinfo", userData)
+    console.log("userinfo", tags)
     store.collection('users').doc(user).update({
       name: userData.name,
       about: userData.about,
-      city: userData.city,
-      state: userData.state,
-      location: userData.location,
+      city: userData.city || "",
+      state: userData.state || "",
+      location: userData.location || "",
       interests: tags,
       birthday: "",
-      age: userData.age,
+      age: userData.age || "",
     })
     navigation.navigate("Dashboard")
   }
@@ -151,7 +151,6 @@ export default function SettingsScreen(props) {
   useEffect(() => {
     initValues()
     setTimeout(function() {}, 4000)
-    // instaDialog.showDialog();
   },[])
 
   const styles = StyleSheet.create({
