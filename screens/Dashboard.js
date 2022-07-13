@@ -102,6 +102,13 @@ export default function Dashboard(props) {
       overflow: 'hidden',
       margin: 5,
     },
+    tag: {
+      backgroundColor: "blue",
+      color: "white",
+      width: "fit-content",
+      borderRadius: 7,
+      padding: "5px 10px",
+    },
   })
 
   return (
@@ -119,7 +126,7 @@ export default function Dashboard(props) {
           <Text style={styles.interests}>Interests:</Text>
           {interests.map((i) => {
             return (
-              <Text>{i.text}</Text>
+              <Text style={styles.tag}>{i.text}</Text>
             )
           })}
         </View>

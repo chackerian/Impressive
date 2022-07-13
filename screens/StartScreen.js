@@ -167,7 +167,7 @@ export default function StartScreen(props) {
     headline: {
       fontWeight: "bold",
       fontSize: 25,
-      width: 271,
+      width: 300,
       marginRight: 'auto',
       textAlign:'center',
       marginLeft: 'auto',
@@ -254,7 +254,7 @@ export default function StartScreen(props) {
                 </TouchableOpacity>
               </View>
             <Text>Don’t have an account? </Text>
-                <TouchableOpacity onPress={() => navigation.replace('RegisterScreen')}>
+                <TouchableOpacity onPress={() => navigation.navigate('RegisterScreen')}>
                   <Text style={styles.link}>Sign up</Text>
                 </TouchableOpacity>
             <Button

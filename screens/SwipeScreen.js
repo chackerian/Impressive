@@ -89,19 +89,26 @@ export default function SwipeScreen(props) {
   const styles = StyleSheet.create({
     image: {
       opacity: 1,
-      height: 420,
+      height: 350,
+    },
+    about: {
+      fontSize: 14,
+      padding: "1em",
+      color: 'white',
     },
     info: {
       padding: 20,
       color: 'white',
       fontWeight: "bold",
       backgroundColor: "#313174",
+      height: "14em",
     },
     description: {
-      fontSize: 20,
+      fontSize: 16,
       fontWeight: 'bold',
       color: 'white',
       marginLeft: 12,
+      padding: "1em",
     },
     viewport: {
       height: 250,
@@ -158,7 +165,14 @@ export default function SwipeScreen(props) {
         paddingRight: 20,
         alignItems: "flex-end",
     },
-    text:{
+    tag: {
+      backgroundColor: "blue",
+      color: "white",
+      width: "fit-content",
+      borderRadius: 7,
+      padding: "5px 10px",
+    },
+    text: {
         color:'rgb(255,255,255)',
         alignSelf: 'center',
         fontSize: 30
@@ -305,8 +319,13 @@ export default function SwipeScreen(props) {
             <Image source={{uri: i.picture}} style={styles.image} />
             <View style={styles.info}>
              <Text style={styles.label}>{i.name}, {i.age}</Text>
-             <Text>{i.about}</Text>
+             <Text style={styles.about}>{i.about}</Text>
              <Text style={styles.description}>{i.city}, {i.state}</Text>
+             {i.interests.map((interest) => {
+              return (
+                <Text style={styles.tag}>{interest.text}</Text>
+              )
+             })}
             </View>
           </Card>
           )

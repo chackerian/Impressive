@@ -118,10 +118,10 @@ export default function RegisterScreen(props) {
       <View style={styles.box}></View>
       <View style={styles.container}>
         <View style={styles.leftContainer}>
-          <Logo goBack={navigation.goBack}/>
+          <Logo goBack={() => navigation.goBack()}/>
           <Text style={styles.headline}>Make new connections based on interests</Text>
         </View>
-        <BackButton />
+        <BackButton onPress={() => navigation.goBack()} goBack={navigation.goBack} />
         <View style={styles.rightContainer}>
             <View style={styles.login}>
               <View style={styles.form}>
@@ -238,7 +238,7 @@ export default function RegisterScreen(props) {
     headline: {
       fontWeight: "bold",
       fontSize: 25,
-      width: 271,
+      width: 300,
       marginRight: 'auto',
       textAlign:'center',
       marginLeft: 'auto',
