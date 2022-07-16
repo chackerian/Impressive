@@ -5,6 +5,9 @@ import Slider from '@react-native-community/slider';
 
 import NavSwipe from './NavSwipe';
 import CardStack, { Card } from './swipe';
+
+// import CardStack, { Card } from 'react-native-card-stack-swiper';
+
 import { storage, store, authenticate } from "../App.js";
 import firebase from 'firebase/app';
 import { useNavigation } from '@react-navigation/native';
@@ -214,8 +217,9 @@ export default function SwipeScreen(props) {
     setCardsShow(true)
   }
 
+  initValues()
+
   useEffect(() => {
-    initValues()
   }, [])
 
   async function addLike(email){
@@ -309,24 +313,24 @@ export default function SwipeScreen(props) {
         onSwipeLeft={() => console.log("LEFT")}
         changeShadowColor={color => { changeShadow(color)} }
       >
-       {images.map((i) => {
+       {images.map((i, index) => {
         // var name = i.name.split(" ")[0]
         return (
-          <Card style={[styles.card, styles.card1]} key={i.name}
+          <Card style={[styles.card, styles.info]}
             onSwipedRight={(event) => addLike(i.email)}
             onSwipedLeft={(event) => addDislike(i.email)}
           >
-            <Image source={{uri: i.picture}} style={styles.image} />
-            <View style={styles.info}>
-             <Text style={styles.label}>{i.name}, {i.age}</Text>
-             <Text style={styles.about}>{i.about}</Text>
-             <Text style={styles.description}>{i.city}, {i.state}</Text>
-             {i.interests.map((interest) => {
-              return (
-                <Text style={styles.tag}>{interest.text}</Text>
-              )
-             })}
-            </View>
+          <Image source={{uri: i.picture}} style={styles.image} />
+          <View style={styles.info}>
+          <Text style={styles.label}>{i.name}, {i.age}</Text>
+         <Text style={styles.about}>{i.about}</Text>
+         <Text style={styles.description}>{i.city}, {i.state}</Text>
+         {i.interests.map((interest) => {
+          return (
+            <Text style={styles.tag}>{interest.text}</Text>
+          )
+         })}
+         </View>
           </Card>
           )
         })}

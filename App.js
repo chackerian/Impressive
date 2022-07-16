@@ -143,7 +143,6 @@ function MyStack(props) {
         headerShown: false
         }}>
         <AuthStack.Screen name="StartScreen" component={StartScreen} options={{ title: 'Impressive' }} initialParams={{login: props.login}} />
-        <AuthStack.Screen name="LoginScreen" component={LoginScreen} options={{ title: 'Impressive - Login' }} initialParams={{login: props.login}} />
         <AuthStack.Screen name="RegisterScreen" component={RegisterScreen} options={{ title: 'Impressive - Register' }} initialParams={{login: props.login}} />
       </AuthStack.Navigator>
     </NavigationContainer>

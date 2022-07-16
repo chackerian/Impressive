@@ -28,7 +28,6 @@ class CardStack extends Component {
       cardA: null,
       cardB: null,
       topCard: 'cardA',
-      shadowColor: 'green',
       cards: [],
       touchStart: 0,
     };
@@ -200,7 +199,7 @@ class CardStack extends Component {
 
     this.setState({ shadowColor: 'black' })
     this.changeShadowColor('black');
-    console.log("back")
+    console.log("reset")
 
     Animated.timing(
       this.state.dragDistance,
