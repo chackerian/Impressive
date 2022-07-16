@@ -174,7 +174,7 @@ export default function SettingsScreen(props) {
   });
 
   return (
-    <ScrollView keyboardShouldPersistTaps={'handled'}>
+    <View>
     <NavLogout logout={props.route.params.logout}/>
       <View style={styles.containers}>
         <TextInput
@@ -231,6 +231,6 @@ export default function SettingsScreen(props) {
           color='black'
           onPress={save}>Save</Button>
         </View>
-    </ScrollView>
+      </View>
   )
 }

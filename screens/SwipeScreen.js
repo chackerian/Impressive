@@ -1,6 +1,6 @@
 import React, {Component, useState, useEffect, useRef, createRef, setState, ReactNode} from 'react'
 import Background from './Background'
-import {StyleSheet, SafeAreaView, ScrollView, StatusBar, Image, TextInput, Text, View, Platform, Dimensions, PanResponder, Animated, TouchableOpacity, Alert, Button, Switch } from 'react-native';
+import {StyleSheet, SafeAreaView, StatusBar, Image, TextInput, Text, View, Platform, Dimensions, PanResponder, Animated, TouchableOpacity, Alert, Button, Switch } from 'react-native';
 import Slider from '@react-native-community/slider';
 
 import NavSwipe from './NavSwipe';
@@ -82,7 +82,6 @@ export default function SwipeScreen(props) {
   const [drawer, setDrawer] = useState();
   const [user, setUser] = useState();
   const [shadowColor, setShadowColor] = useState("");
-  const [slide, setSlide] = useState(createRef());
   const navigation = useNavigation();
   const alertRef = React.createRef();
 
@@ -214,9 +213,9 @@ export default function SwipeScreen(props) {
     setCardsShow(true)
   }
 
-  useEffect(() => {
-    initValues()
-  }, [])
+
+initValues()
+
 
   async function addLike(email){
 
@@ -310,7 +309,6 @@ export default function SwipeScreen(props) {
         changeShadowColor={color => { changeShadow(color)} }
       >
        {images.map((i) => {
-        // var name = i.name.split(" ")[0]
         return (
           <Card style={[styles.card, styles.card1]} key={i.name}
             onSwipedRight={(event) => addLike(i.email)}

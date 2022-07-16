@@ -7,7 +7,7 @@ import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import firebase from 'firebase/app';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { LogBox } from 'react-native';
+import { LogBox, View } from 'react-native';
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
 ]);
@@ -18,7 +18,6 @@ import 'firebase/firestore';
 
 import './screens/settings.css'
 
-import StartScreen from './screens/StartScreen.js'
 import LoginScreen from './screens/LoginScreen.js'
 import RegisterScreen from './screens/RegisterScreen.js'
 
@@ -142,7 +141,6 @@ function MyStack(props) {
       <AuthStack.Navigator screenOptions={{
         headerShown: false
         }}>
-        <AuthStack.Screen name="StartScreen" component={StartScreen} options={{ title: 'Impressive' }} initialParams={{login: props.login}} />
         <AuthStack.Screen name="LoginScreen" component={LoginScreen} options={{ title: 'Impressive - Login' }} initialParams={{login: props.login}} />
         <AuthStack.Screen name="RegisterScreen" component={RegisterScreen} options={{ title: 'Impressive - Register' }} initialParams={{login: props.login}} />
       </AuthStack.Navigator>
@@ -157,7 +155,6 @@ function MyTabs(props) {
     return (
       <NavigationContainer>
         <AppStack.Navigator
-          lazy={true}
           initialRouteName="Swipe"
           tabBarOptions={{
             style: {
