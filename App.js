@@ -16,7 +16,7 @@ import 'firebase/storage';
 import 'firebase/auth';
 import 'firebase/firestore';
 
-// import './screens/settings.css'
+import './screens/settings.css'
 import './screens/nobounce.js'
 
 import LoginScreen from './screens/LoginScreen.js'

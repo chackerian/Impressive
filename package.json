@@ -38,6 +38,7 @@
     "babel-preset-expo": "^9.0.2",
     "cookie-parser": "^1.4.6",
     "cors-anywhere": "^0.4.4",
+    "crypto": "^1.0.1",
     "expo": "^44.0.6",
     "expo-apple-authentication": "~4.1.0",
     "expo-auth-session": "~3.5.0",
@@ -81,7 +82,9 @@
     "react-swing": "^3.0.0",
     "react-tag-input": "^6.8.0",
     "realm": "^10.12.0",
+    "stream": "^0.0.2",
     "traverse": "^0.6.6",
+    "util": "^0.12.4",
     "watchman": "^1.0.0"
   },
   "devDependencies": {

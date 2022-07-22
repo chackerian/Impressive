@@ -21,6 +21,7 @@ function data(){
     docRef.onSnapshot((doc) => {
       if (doc.exists) {
         setUserData(doc.data());
+        console.log(doc.data().picture)
         if(doc.data().interests){
           setInterests(doc.data().interests)
         }
@@ -66,7 +67,7 @@ function data(){
     details: {
       marginTop: 30,
       padding: 30,
-      width: 300,
+      width: 350,
       alignItems: 'center',
       color: 'white',
       backgroundColor: '#0b0034',
@@ -90,6 +91,7 @@ function data(){
     about: {
       color: "white",
       paddingTop: 20,
+      paddingBottom: 20,
       fontSize: 20,
     },
     interests: {
@@ -109,12 +111,22 @@ function data(){
       margin: 5,
     },
     tag: {
-      backgroundColor: "blue",
+      backgroundColor: "green",
       color: "white",
       width: "fit-content",
       borderRadius: 7,
-      padding: "5px 10px",
+      paddingVertical: 5,
+      paddingHorizontal: 2,
+      marginRight: 2,
     },
+    interestContainer: {
+      display: "flex",
+      flexDirection: "row",
+    },
+    locationContainer: {
+      display: "flex",
+      flexDirection: "row",
+    }
   })
 
   return (
@@ -122,19 +134,22 @@ function data(){
     <View style={styles.container}>
     <Navbar />
       <View style={styles.info}>
-        <Image source={{uri: userData.image}} style={styles.image} />
+        <Image source={{uri: userData.picture}} style={styles.image} />
         <Text style={styles.name}>{userData.name}</Text>
         <EditImageButton nav={imagesettings}/>
         <SettingsButton nav={settings}/>
         <View style={styles.details}>
-          <HiLocationMarker /><Text style={styles.location}>{userData.city}, {userData.state}</Text>
+          <View style={styles.locationContainer}>
+            <Text style={styles.location}>{userData.location}</Text><HiLocationMarker />
+          </View>
           <Text style={styles.about}>{userData.about}</Text>
-          <Text style={styles.interests}>Interests:</Text>
+          <View style={styles.interestContainer}>
           {interests.map((i) => {
             return (
               <Text style={styles.tag}>{i.text}</Text>
             )
           })}
+          </View>
         </View>
       </View>
     </View>

@@ -14,4 +14,12 @@
 	background: blue;
     color: white;
     padding: 0.2em;
+    font-family: system-ui;
+}
+
+.ReactTags__tagInputField {
+	padding: 0.6em;
+    border: none;
+    width: 14.5em;
+    outline: none;
 }

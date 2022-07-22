@@ -27,8 +27,6 @@ export default function StartScreen(props) {
       setPassword({ ...password, error: passwordError })
       return
     }
-
-    console.log(email, password)
     firebase.auth().signInWithEmailAndPassword(email.value, password.value)
       .then((userCredential) => {
         // Signed in
@@ -39,6 +37,7 @@ export default function StartScreen(props) {
       .catch((error) => {
         var errorCode = error.code;
         var errorMessage = error.message;
+        console.log(error)
       });
 
   }

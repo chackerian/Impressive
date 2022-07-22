@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState, setState} from 'react'
-import {StyleSheet, Text, View, ScrollView, Platform, TouchableOpacity } from 'react-native';
+import {StyleSheet, Text, View, ScrollView, Platform, TouchableOpacity, Share } from 'react-native';
 import Button from './Button'
 import TextInput from './TextInput'
 import SearchLocationInput from './SearchLocationInput'
@@ -29,6 +29,26 @@ export default function SettingsScreen(props) {
   const navigation = useNavigation();
 
   function logIn(){}
+
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message:
+          'React Native | A framework for building native apps using React',
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || userData.date;
@@ -214,6 +234,7 @@ export default function SettingsScreen(props) {
           handleAddition={handleAddition}
           handleTagClick={handleTagClick}
           inputFieldPosition="bottom"
+          placeholder="Enter Interests"
           autocomplete
         />
 
@@ -226,6 +247,11 @@ export default function SettingsScreen(props) {
           mode="outlined"
           color='black'
           onPress={logIn}>Connect Facebook</Button>
+
+        <Button
+          mode="outlined"
+          color='black'
+          onPress={onShare}>Share</Button>
 
         <Button
           mode="outlined"
