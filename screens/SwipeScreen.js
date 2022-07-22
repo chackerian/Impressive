@@ -1,18 +1,14 @@
-import React, {Component, useState, useEffect, useRef, createRef, setState, ReactNode} from 'react'
-import Background from './Background'
-import {StyleSheet, SafeAreaView, ScrollView, StatusBar, Image, TextInput, Text, View, Platform, Dimensions, PanResponder, Animated, TouchableOpacity, Alert, Button, Switch } from 'react-native';
+import React, { Component, useState, useEffect } from 'react'
+import {StyleSheet, SafeAreaView, StatusBar, Image, Text, View, Platform, TouchableOpacity, Alert, Button } from 'react-native';
 import Slider from '@react-native-community/slider';
 
-import NavSwipe from './NavSwipe';
 import CardStack, { Card } from './swipe';
-
-// import CardStack, { Card } from 'react-native-card-stack-swiper';
-
-import { storage, store, authenticate } from "../App.js";
+import { store } from "../App.js";
 import firebase from 'firebase/app';
+import TextInput from './TextInput'
 import { useNavigation } from '@react-navigation/native';
+import { WithContext as ReactTags } from 'react-tag-input';
 
-import Drawer from 'react-native-drawer';
 import Alerts from './Alerts.js';
 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
@@ -38,31 +34,55 @@ class ControlPanel extends Component {
 
   constructor() {
     super();
-    this.state = {switchValue: "false", locationRange: 0, selectedInterests: []};
+    this.state = {locationRange: 0, location: 0, tags: []};
   }
 
-  toggleSwitch = value => {
-    this.setState({ switchValue: value });
+  handleDelete = i => {
+    this.setState({tags: this.state.tags.filter((tag, index) => index !== i)});
+    this.props.setFilter({tags: this.state.tags.filter((tag, index) => index !== i), locationRange: this.state.locationRange})
   };
+
+  handleAddition = tag => {
+    this.setState({tags: [...this.state.tags, tag]});
+    this.props.setFilter({tags: [...this.state.tags, tag], locationRange: this.state.locationRange})
+  };
+
+  handleLocation = (value) => {
+    this.setState({ locationRange: value })
+    this.props.setFilter(this.state)
+  }
+
+  slide = (value) => {
+    this.setState({location: value})
+  }
 
   render() {
     return (
-      <View>
+      <View style={styles.test}>
         <SafeAreaView style={styles.container}>
           <Text style={styles.titleContainer}>
             Distance
           </Text>
           <View contentContainerStyle={styles.container}>
-              <Text>{this.state.locationRange} miles</Text>
+              <Text>{this.state.location} miles</Text>
               <Slider
                 style={{width: 200, height: 40}}
                 minimumValue={0}
                 maximumValue={20}
-                onValueChange={(value) => this.setState({ locationRange: value })}
+                onSlidingComplete={this.handleLocation}
+                onValueChange={this.slide}
               />
           </View>
           <View>
             <Text style={styles.titleContainer}>Interests</Text>
+            <ReactTags
+              tags={this.state.tags}
+              handleDelete={this.handleDelete}
+              handleAddition={this.handleAddition}
+              handleTagClick={this.handleTagClick}
+              inputFieldPosition="bottom"
+              autocomplete
+            />
           </View>
         </SafeAreaView>
 
@@ -84,12 +104,18 @@ export default function SwipeScreen(props) {
   const [swiper, setSwiper] = useState();
   const [drawer, setDrawer] = useState();
   const [user, setUser] = useState();
+  const [filter, setFilter] = useState({});
   const [shadowColor, setShadowColor] = useState("");
-  const [slide, setSlide] = useState(createRef());
   const navigation = useNavigation();
   const alertRef = React.createRef();
 
   const styles = StyleSheet.create({
+    body: {
+      transition: 'all .5s'
+    },
+    sideContainer: {
+      transition: 'all .5s'
+    },
     image: {
       opacity: 1,
       height: 350,
@@ -190,12 +216,20 @@ export default function SwipeScreen(props) {
     var interacted = userLikes.concat(userDislikes, email)
 
     var snaps = []
-    var snapshot = await store.collection("users").get()
+    console.log("FILTER", filter)
+    if (filter.tags && filter.tags.length > 0){
+      var snapshot = await store.collection("users").where("interests", "array-contains", filter.tags[0]).get()
+    } else {
+      var snapshot = await store.collection("users").get()
+    }
     snaps.push(snapshot);
     const images = [];
 
     snapshot.docs.forEach((s) => {
       if(!interacted.includes(s.data().email)){
+        // if (s.data().interests.some(e => e.id == filter.tags[0].id )){
+
+        // }
         images.push(s.data());
       }
     });
@@ -203,6 +237,7 @@ export default function SwipeScreen(props) {
   }
 
   async function initValues() {
+    console.log('i fire once');
     var docRef = store.collection('users').doc(props.route.params.user.email)
     docRef.onSnapshot((doc) => {
       if (doc.exists) {
@@ -217,10 +252,9 @@ export default function SwipeScreen(props) {
     setCardsShow(true)
   }
 
-  initValues()
-
   useEffect(() => {
-  }, [])
+    initValues()
+  }, [filter])
 
   async function addLike(email){
 
@@ -282,20 +316,32 @@ export default function SwipeScreen(props) {
     setShadowColor('red')
   }
 
-  const closeFilter = () =>  {
-    drawer.close()
-  };
+  const [isOpened, setisOpened] = useState(false)
+  const [style, setStyle] = useState({backgroundColor: "white", width: "0", height: "0", bottom: 0, overflow: "hidden", display: "none", position: "absolute"})
+  const [mainStyle, setMainStyle] = useState({marginLeft: 0})
 
-  const openFilter = () =>  {
-    drawer.open()
-  };
+ const openFilter = () => {
+    if(!isOpened) {
+      setisOpened(true)
+     setMainStyle({marginLeft: "25vw"})
+     setStyle({zIndex: 5, backgroundColor: "white", left: '0', width: "25vw", height: "calc(100vh - 49px)", bottom: 0, overflow: "hidden", display: "block", position: "absolute"})
+    } else {
+      setisOpened(false)
+      setMainStyle({marginLeft: "0"})
+      setStyle({backgroundColor: "white", left: '-25vw', width: "25vw", height: "calc(100vh - 49px)", bottom: 0, overflow: "hidden", display: "block", position: "absolute"})
+    }
+  }
+
+  const closeFilter = () => {
+    setisOpened(false)
+    setMainStyle({marginLeft: "0"})
+    setStyle({backgroundColor: "white", left: '-25vw', width: "25vw", height: "calc(100vh - 49px)", bottom: 0, overflow: "hidden", display: "block", position: "absolute"})
+  }
 
   return (
-    <Drawer
-      ref={(ref) => setDrawer(ref)}
-      content={<ControlPanel closeDrawer={closeFilter} />}
-    >
-    <View style={styles.body} id="main">
+    <>
+    <View style={[ styles.sideContainer, style ]}><ControlPanel closeDrawer={closeFilter} setFilter={setFilter}/></View>
+    <View style={[ styles.body, mainStyle ]} id="main">
      <Alerts ref={alertRef}/>
       <View style={styles.topNav}>
           <StatusBar barStyle="light-content"/>
@@ -313,24 +359,23 @@ export default function SwipeScreen(props) {
         onSwipeLeft={() => console.log("LEFT")}
         changeShadowColor={color => { changeShadow(color)} }
       >
-       {images.map((i, index) => {
-        // var name = i.name.split(" ")[0]
+       {images.map((i) => {
         return (
-          <Card style={[styles.card, styles.info]}
-            onSwipedRight={(event) => addLike(i.email)}
-            onSwipedLeft={(event) => addDislike(i.email)}
+          <Card style={[styles.card, styles.card1]} key={i.name}
+            onSwipedRight={(event) =>{ addLike(i.email)}}
+            onSwipedLeft={(event) => { addDislike(i.email) }}
           >
-          <Image source={{uri: i.picture}} style={styles.image} />
-          <View style={styles.info}>
-          <Text style={styles.label}>{i.name}, {i.age}</Text>
-         <Text style={styles.about}>{i.about}</Text>
-         <Text style={styles.description}>{i.city}, {i.state}</Text>
-         {i.interests.map((interest) => {
-          return (
-            <Text style={styles.tag}>{interest.text}</Text>
-          )
-         })}
-         </View>
+            <Image source={{uri: i.picture}} style={styles.image} />
+            <View style={styles.info}>
+             <Text style={styles.label}>{i.name}, {i.age}</Text>
+             <Text style={styles.about}>{i.about}</Text>
+             <Text style={styles.description}>{i.city}, {i.state}</Text>
+             {i.interests.map((interest) => {
+              return (
+                <Text style={styles.tag}>{interest.text}</Text>
+              )
+             })}
+            </View>
           </Card>
           )
         })}
@@ -351,6 +396,6 @@ export default function SwipeScreen(props) {
       </View>
       : <Text></Text>}
     </View>
-  </Drawer>
+    </>
   )
 }

@@ -67,7 +67,7 @@ class CardStack extends Component {
         if (x < 0){
           this.setState({ shadowColor: 'red' })
           this.changeShadowColor('red');
-        } 
+        }
 
         else if (x > 30) {
           this.setState({ shadowColor: 'green' })
@@ -99,12 +99,15 @@ class CardStack extends Component {
 
           const swipeDirection = (gestureState.dx < 0) ? width * -1.5 : width * 1.5;
           if (swipeDirection < 0 && !disableLeftSwipe) {
+            console.log("VAIBHAV left")
             this._nextCard('left', swipeDirection, gestureState.dy, this.props.duration);
           }
           else if (swipeDirection > 0 && !disableRightSwipe) {
+            console.log("VAIBHAV right")
             this._nextCard('right', swipeDirection, gestureState.dy, this.props.duration);
           }
           else {
+            console.log("VAIBHAV reset")
             this._resetCard();
           }
         } else if (((Math.abs(gestureState.dy) > verticalThreshold) ||
@@ -155,7 +158,7 @@ class CardStack extends Component {
   }
 
   _getIndex(index, cards){
-    return this.props.loop ? 
+    return this.props.loop ?
       this.mod(index, cards):
       index;
   }

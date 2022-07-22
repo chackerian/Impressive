@@ -130,7 +130,7 @@ return(
         </ScrollView>
         <View style={styles.sendMessage}>
           <TextInput 
-             style={{ width: "170%", marginLeft: 20, fontSize: 15, outline: 'none', height: 40, display: "flex"}}
+             style={{ width: "40%", marginLeft: 20, fontSize: 15, outline: 'none', height: 40, display: "flex"}}
              theme={{ colors: { primary: 'blue',underlineColor:'transparent',}}}
              placeholder='Message...'
              value={message}

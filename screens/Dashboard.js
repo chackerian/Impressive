@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Image, StyleSheet, Text, View } from "react-native";
 
 import SettingsButton from './SettingsButton'
 import EditImageButton from './EditImageButton'
 import Background from './Background'
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faLocationArrow } from '@fortawesome/free-solid-svg-icons';
+
+import { HiLocationMarker } from 'react-icons/hi'
 import { useNavigation } from '@react-navigation/native';
 import Navbar from './Navbar'
 
@@ -16,6 +16,7 @@ export default function Dashboard(props) {
   const [ userData, setUserData ] = useState({});
   const [ interests, setInterests ] = useState([]);
 
+function data(){
     var docRef = store.collection('users').doc(props.route.params.user.email)
     docRef.onSnapshot((doc) => {
       if (doc.exists) {
@@ -25,6 +26,11 @@ export default function Dashboard(props) {
         }
       }
     });
+}
+
+  useEffect(() => {
+    data()
+  }, [])
 
   function settings () {
     navigation.navigate('Settings')
@@ -121,7 +127,7 @@ export default function Dashboard(props) {
         <EditImageButton nav={imagesettings}/>
         <SettingsButton nav={settings}/>
         <View style={styles.details}>
-          <FontAwesomeIcon icon={ faLocationArrow } size={30} color={"blue"} /><Text style={styles.location}>{userData.city}, {userData.state}</Text>
+          <HiLocationMarker /><Text style={styles.location}>{userData.city}, {userData.state}</Text>
           <Text style={styles.about}>{userData.about}</Text>
           <Text style={styles.interests}>Interests:</Text>
           {interests.map((i) => {

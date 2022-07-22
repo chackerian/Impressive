@@ -270,7 +270,7 @@ export default function MessageScreen(props) {
           </ScrollView>
           <View style={styles.sendMessage}>
             <TextInput 
-               style={{ width: '150%', fontSize: 15, marginLeft: 15, outline: 'none' }}
+               style={{ width: '90%', fontSize: 15, marginLeft: 15, outline: 'none' }}
                placeholder='Message...'
                value={message}
                onChangeText={e => setMessage(e)} 
