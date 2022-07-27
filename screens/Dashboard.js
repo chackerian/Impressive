@@ -33,12 +33,16 @@ function data(){
     data()
   }, [])
 
-  function settings () {
+  function settings() {
     navigation.navigate('Settings')
   }
 
-  function imagesettings () {
+  function imagesettings() {
     navigation.navigate('Image')
+  }
+
+  function addFilter() {
+    navigation.navigate("Swipe")
   }
 
   const styles = StyleSheet.create({
@@ -68,10 +72,10 @@ function data(){
       marginTop: 30,
       padding: 30,
       width: 350,
-      alignItems: 'center',
+      alignItems: 'baseline',
       color: 'white',
       backgroundColor: '#0b0034',
-      borderRadius: 1,
+      borderRadius: 25,
     },
     info: {
       alignItems: 'center',
@@ -118,6 +122,8 @@ function data(){
       paddingVertical: 5,
       paddingHorizontal: 2,
       marginRight: 2,
+      cursor: "pointer",
+      textTransform: "capitalize"
     },
     interestContainer: {
       display: "flex",
@@ -146,7 +152,7 @@ function data(){
           <View style={styles.interestContainer}>
           {interests.map((i) => {
             return (
-              <Text style={styles.tag}>{i.text}</Text>
+              <Text onClick={addFilter} style={styles.tag}>{i.text}</Text>
             )
           })}
           </View>

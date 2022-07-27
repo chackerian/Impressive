@@ -118,7 +118,7 @@ export default function SwipeScreen(props) {
     },
     image: {
       opacity: 1,
-      height: 350,
+      height: 310,
     },
     about: {
       fontSize: 14,
@@ -140,7 +140,7 @@ export default function SwipeScreen(props) {
       padding: "1em",
     },
     viewport: {
-      height: 250,
+      height: 190,
       marginTop: 200,
       marginLeft: 'auto',
       marginRight: 'auto',
@@ -195,11 +195,19 @@ export default function SwipeScreen(props) {
         alignItems: "flex-end",
     },
     tag: {
-      backgroundColor: "blue",
+      backgroundColor: "green",
       color: "white",
       width: "fit-content",
       borderRadius: 7,
-      padding: "5px 10px",
+      paddingVertical: 5,
+      paddingHorizontal: 2,
+      marginRight: 2,
+      cursor: "pointer",
+      textTransform: "capitalize"
+    },
+    interestContainer: {
+      display: "flex",
+      flexDirection: "row",
     },
     text: {
         color:'rgb(255,255,255)',
@@ -209,6 +217,7 @@ export default function SwipeScreen(props) {
   })
 
   async function initImages(user){
+    console.log("INIT IMAGES")
     const userLikes = user.likes
     const userDislikes = user.dislikes
     const email = user.email
@@ -227,19 +236,17 @@ export default function SwipeScreen(props) {
 
     snapshot.docs.forEach((s) => {
       if(!interacted.includes(s.data().email)){
-        // if (s.data().interests.some(e => e.id == filter.tags[0].id )){
-
-        // }
         images.push(s.data());
       }
     });
+    console.log("USERS", images)
     setImages(images);
   }
 
   async function initValues() {
-    console.log('i fire once');
     var docRef = store.collection('users').doc(props.route.params.user.email)
-    docRef.onSnapshot((doc) => {
+    console.log("init values")
+    docRef.get().then((doc) => {
       if (doc.exists) {
         setUser(doc.data());
         initImages(doc.data());
@@ -257,6 +264,21 @@ export default function SwipeScreen(props) {
   }, [filter])
 
   async function addLike(email){
+
+    console.log("LIKED", email)
+
+            Alert.alert(
+              "New Match",
+              "",
+              [
+                {
+                  text: "Cancel",
+                  onPress: () => console.log("Cancel Pressed"),
+                  style: "cancel"
+                },
+                { text: "Go to match", onPress: () => navigation.navigate('Messages') }
+              ]
+            );
 
     store.collection('users').doc(props.route.params.user.email).update({
       likes: firebase.firestore.FieldValue.arrayUnion(email)
@@ -370,11 +392,13 @@ export default function SwipeScreen(props) {
              <Text style={styles.label}>{i.name}, {i.age}</Text>
              <Text style={styles.about}>{i.about}</Text>
              <Text style={styles.description}>{i.city}, {i.state}</Text>
+             <View style={styles.interestContainer}>
              {i.interests.map((interest) => {
               return (
                 <Text style={styles.tag}>{interest.text}</Text>
               )
              })}
+             </View>
             </View>
           </Card>
           )

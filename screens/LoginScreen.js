@@ -7,6 +7,8 @@ import Button from './Button';
 import TextInput from './TextInput';
 import { emailValidator } from './helpers/emailValidator';
 import { passwordValidator } from './helpers/passwordValidator';
+import "@expo/match-media";
+import { useMediaQuery } from "react-responsive";
 
 import firebase from 'firebase/app';
 import 'firebase/auth';
@@ -18,6 +20,10 @@ export default function StartScreen(props) {
   const [password, setPassword] = useState({ value: '', error: '' })
 
   const navigation = useNavigation();
+
+   const isDeviceMobile = useMediaQuery({
+        query: "(max-width: 1224px)",
+    });
 
   const onLoginPressed = () => {
     const emailError = emailValidator(email.value)
@@ -65,17 +71,15 @@ export default function StartScreen(props) {
       };
 
       logIn = function() {
+          FB.login(function(response) {
+            if (response.authResponse) {
+             FB.api('/me?fields=email,picture.type(large),name', function(response) {
 
-      FB.login(function(response) {
-        if (response.authResponse) {
-         FB.api('/me?fields=email,picture.type(large),name', function(response) {
-
-           props.route.params.login(response)
-         });
-        }
-    }, {scope: 'public_profile,email'});
-
-  }
+               props.route.params.login(response)
+             });
+            }
+          }, {scope: 'public_profile,email'});
+      }
 
   } else {
 
@@ -172,6 +176,13 @@ export default function StartScreen(props) {
       marginLeft: 'auto',
       color: "white"
     },
+    headline2: {
+      fontWeight: "bold",
+      fontSize: 25,
+      width: 271,
+      textAlign:'center',
+      color: "black"
+    },
     container: {
       flex: 1,
       width: "85%",
@@ -188,10 +199,19 @@ export default function StartScreen(props) {
       textAlign:'center',
       justifyContent: 'center'
     },
+    topContainer : {
+      backgroundColor: "#018002",
+    },
     rightContainer: {
       justifyContent:'center',
       alignContent: 'center',
       width: "60%",
+      alignItems: "center"
+    },
+    mainContainer: {
+      justifyContent:'center',
+      alignContent: 'center',
+      width: "100%",
       alignItems: "center"
     },
     box: {
@@ -199,8 +219,81 @@ export default function StartScreen(props) {
       height: "100%",
       backgroundColor: "#018002",
       position: "absolute",
-    }
+    },
+    box2: {
+      width: "50%",
+      height: "100%",
+      backgroundColor: "#018002",
+      position: "absolute",
+    },
   })
+
+  if (isDeviceMobile){
+    return (
+    <View style={{ height: "100%" }}>
+      <View style={styles.box2}></View>
+      <View style={styles.container}>
+        <View style={styles.mainContainer}>
+          <Logo />
+          <Text style={styles.headline2}>Make new connections based on interests</Text>
+            <View style={styles.login}>
+              <View style={styles.form}>
+                <TextInput
+                  label="Email"
+                  returnKeyType="next"
+                  theme={{ colors: { primary: '#018002', underlineColor:'transparent' }}}
+                  style={{ width: "80%" }}
+                  value={email.value}
+                  onChangeText={(text) => setEmail({ value: text, error: '' })}
+                  error={!!email.error}
+                  errorText={email.error}
+                  autoCapitalize="none"
+                  autoCompleteType="email"
+                  textContentType="emailAddress"
+                  keyboardType="email-address"
+                />
+                <TextInput
+                  label="Password"
+                  returnKeyType="done"
+                  theme={{ colors: { primary: '#018002',underlineColor:'transparent',}}}
+                  style={{ width: "80%" }}
+                  value={password.value}
+                  onChangeText={(text) => setPassword({ value: text, error: '' })}
+                  error={!!password.error}
+                  errorText={password.error}
+                  secureTextEntry
+                />
+              </View>
+            <Button
+              mode="outlined"
+              color='white'
+              width="100vh"
+              style={styles.button}
+              onPress={onLoginPressed}>Login
+            </Button>
+            <View style={styles.forgotPassword}>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('ResetPasswordScreen')}>
+                  <Text style={styles.forgot}>Forgot your password?</Text>
+                </TouchableOpacity>
+              </View>
+            <Text>Don’t have an account? </Text>
+                <TouchableOpacity onPress={() => navigation.navigate('RegisterScreen')}>
+                  <Text style={styles.link}>Sign up</Text>
+                </TouchableOpacity>
+            <Button
+              mode="outlined"
+              style={styles.buttons}
+              color='white'
+              onPress={logIn}>Facebook Sign In
+            </Button>
+            <AppleAuth login={props.route.params.login}/>
+          </View>
+        </View>
+      </View>
+    </View>
+    )
+  } else {
 
   return (
     <View style={{ height: "100%" }}>
@@ -268,4 +361,5 @@ export default function StartScreen(props) {
       </View>
     </View>
   )
+}
 }

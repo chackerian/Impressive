@@ -7,7 +7,7 @@ import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import firebase from 'firebase/app';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { LogBox, View } from 'react-native';
+import { LogBox, View, StyleSheet } from 'react-native';
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
 ]);
@@ -149,8 +149,14 @@ const AppStack = createBottomTabNavigator();
 
 function MyTabs(props) {
 
+    const styles = StyleSheet.create({
+      navbar: {
+        backgroundColor: '#0b0034 !important',
+      },
+    })
+
     return (
-      <NavigationContainer>
+      <NavigationContainer style={styles.navbar}>
         <AppStack.Navigator
           initialRouteName="Swipe"
           tabBarOptions={{

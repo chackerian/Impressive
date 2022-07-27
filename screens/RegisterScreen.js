@@ -11,6 +11,8 @@ import { useNavigation } from '@react-navigation/native';
 import { emailValidator } from './helpers/emailValidator'
 import { passwordValidator } from './helpers/passwordValidator'
 import { nameValidator } from './helpers/nameValidator'
+import "@expo/match-media";
+import { useMediaQuery } from "react-responsive";
 
 import firebase from 'firebase/app';
 import 'firebase/auth';
@@ -20,6 +22,10 @@ export default function RegisterScreen(props) {
   const [name, setName] = useState({ value: '', error: '' })
   const [email, setEmail] = useState({ value: '', error: '' })
   const [password, setPassword] = useState({ value: '', error: '' })
+
+  const isDeviceMobile = useMediaQuery({
+      query: "(max-width: 1224px)",
+  });
 
   const navigation = useNavigation();
 
@@ -113,6 +119,75 @@ export default function RegisterScreen(props) {
 
   }
 
+  if (isDeviceMobile){
+
+      return (
+    <View style={{ height: "100%" }}>
+      <View style={styles.box2}></View>
+      <View style={styles.container}>
+        <View style={styles.mainContainer}>
+          <BackButton onPress={() => navigation.goBack()} goBack={navigation.goBack} />
+          <Logo goBack={() => navigation.goBack()}/>
+          <Text style={styles.headline2}>Make new connections based on interests</Text>
+            <View style={styles.login}>
+              <View style={styles.form}>
+                <TextInput
+                  label="Name"
+                  returnKeyType="next"
+                  value={name.value}
+                  theme={{ colors: { primary: 'blue',underlineColor:'transparent',}}}
+                  style={{ width: "80%" }}
+                  onChangeText={(text) => setName({ value: text, error: '' })}
+                  error={!!name.error}
+                  errorText={name.error}
+                />
+                <TextInput
+                  label="Email"
+                  returnKeyType="next"
+                  theme={{ colors: { primary: 'blue',underlineColor:'transparent',}}}
+                  style={{ width: "80%" }}
+                  value={email.value}
+                  onChangeText={(text) => setEmail({ value: text, error: '' })}
+                  error={!!email.error}
+                  errorText={email.error}
+                  autoCapitalize="none"
+                  autoCompleteType="email"
+                  textContentType="emailAddress"
+                  keyboardType="email-address"
+                />
+                <TextInput
+                  label="Password"
+                  returnKeyType="done"
+                  theme={{ colors: { primary: 'blue',underlineColor:'transparent',}}}
+                  style={{ width: "80%" }}
+                  value={password.value}
+                  onChangeText={(text) => setPassword({ value: text, error: '' })}
+                  error={!!password.error}
+                  errorText={password.error}
+                  secureTextEntry
+                />
+              </View>
+            <Button
+              mode="outlined"
+              color='white'
+              width="100vh"
+              style={styles.button}
+              onPress={onSignUpPressed}>Register
+            </Button>
+            <Button
+              mode="outlined"
+              style={styles.buttons}
+              color='white'
+              onPress={logIn}>Facebook Sign Up
+            </Button>
+          </View>
+        </View>
+      </View>
+    </View>
+  )
+
+  } else {
+
   return (
     <View style={{ height: "100%" }}>
       <View style={styles.box}></View>
@@ -179,6 +254,7 @@ export default function RegisterScreen(props) {
       </View>
     </View>
   )
+  }
 }
 
   const styles = StyleSheet.create({
@@ -244,6 +320,13 @@ export default function RegisterScreen(props) {
       marginLeft: 'auto',
       color: "white"
     },
+    headline2: {
+      fontWeight: "bold",
+      fontSize: 25,
+      width: 271,
+      textAlign:'center',
+      color: "black"
+    },
     container: {
       flex: 1,
       width: "85%",
@@ -266,10 +349,22 @@ export default function RegisterScreen(props) {
       width: "60%",
       alignItems: "center"
     },
+    mainContainer: {
+      justifyContent:'center',
+      alignContent: 'center',
+      width: "100%",
+      alignItems: "center"
+    },
     box: {
       width: "41.5%",
       height: "100%",
       backgroundColor: "#018002",
       position: "absolute",
-    }
+    },
+    box2: {
+      width: "50%",
+      height: "100%",
+      backgroundColor: "#018002",
+      position: "absolute",
+    },
   })

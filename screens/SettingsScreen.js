@@ -34,7 +34,7 @@ export default function SettingsScreen(props) {
     try {
       const result = await Share.share({
         message:
-          'React Native | A framework for building native apps using React',
+          'Impressive - Make New Connections Through Interests - https://socially-b729a.web.app/',
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -171,7 +171,6 @@ export default function SettingsScreen(props) {
 
   useEffect(() => {
     initValues()
-    setTimeout(function() {}, 4000)
   },[])
 
   const styles = StyleSheet.create({
