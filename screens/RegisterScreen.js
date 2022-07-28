@@ -31,15 +31,22 @@ export default function RegisterScreen(props) {
 
   function logIn(){}
 
-  const createUser = async (email, password) => {
-    try {
-     let response = await firebase.auth().createUserWithEmailAndPassword(email, password);
-      if(response){
-        console.log("RESPONSE", response)
-      }
-    } catch (e) {
-      console.error(e.message);
-    }
+  const createUser = async (email, password, name) => {
+     firebase.auth().createUserWithEmailAndPassword(email, password)
+     .then((userCredential) => {
+       const user = userCredential.user;
+       if(user) {
+        var newUser = {
+          name: name,
+          email: email
+        }
+        props.route.params.login(newUser)
+       }
+      console.log("userCredential", user)
+     })
+     .catch((e) => {
+      console.log(" error happened ", e)
+     })
   }
 
   const onSignUpPressed = () => {
@@ -52,13 +59,9 @@ export default function RegisterScreen(props) {
       setPassword({ ...password, error: passwordError })
       console.log("ERROR", emailError, passwordError, nameError)
     }
-      var user = {
-        name: name.value,
-        email: email.value
-      }
-      console.log("register", "EMAIL", email.value, "PASSWORD", password.value, "NAME", name.value)
-      createUser(email.value, password.value)
-      props.route.params.login(user)
+    console.log("register", "EMAIL", email.value, "PASSWORD", password.value, "NAME", name.value)
+    createUser(email.value, password.value, name.value)
+      
   }
 
   if (Platform.OS == "web") {
@@ -127,7 +130,7 @@ export default function RegisterScreen(props) {
       <View style={styles.container}>
         <View style={styles.mainContainer}>
           <BackButton onPress={() => navigation.goBack()} goBack={navigation.goBack} />
-          <Logo goBack={() => navigation.goBack()}/>
+          <Logo goBack={() => navigation.goBack()} style={styles.mobilelogo} />
           <Text style={styles.headline2}>Make new connections based on interests</Text>
             <View style={styles.login}>
               <View style={styles.form}>
@@ -302,6 +305,8 @@ export default function RegisterScreen(props) {
     buttons: {
       borderRadius: "5px",
       borderWidth: "0",
+      width: "80%",
+      minWidth: "80%",
       backgroundColor: '#4267B2',
     },
     login: {
@@ -323,9 +328,10 @@ export default function RegisterScreen(props) {
     headline2: {
       fontWeight: "bold",
       fontSize: 25,
-      width: 271,
+      width: 273,
       textAlign:'center',
-      color: "black"
+      color: "black",
+      fontFamily: ""
     },
     container: {
       flex: 1,
@@ -366,5 +372,10 @@ export default function RegisterScreen(props) {
       height: "100%",
       backgroundColor: "#018002",
       position: "absolute",
+    },
+    mobilelogo: {
+      marginTop: "0 !important",
+      backgroundColor: "red",
+      marginBottom: 0
     },
   })

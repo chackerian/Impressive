@@ -70,6 +70,7 @@ function AuthNavigator() {
         }, [])
 
     function login(a) {
+      console.log("test fire", a)
         addUser(a)
         const userRef = store.collection('users').doc(a.email);
 

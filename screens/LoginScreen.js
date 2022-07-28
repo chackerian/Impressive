@@ -158,6 +158,8 @@ export default function StartScreen(props) {
     buttons: {
       borderRadius: "5px",
       borderWidth: "0",
+      width: "80%",
+      minWidth: "80%",
       backgroundColor: '#4267B2',
     },
     login: {
@@ -271,6 +273,12 @@ export default function StartScreen(props) {
               style={styles.button}
               onPress={onLoginPressed}>Login
             </Button>
+            <Button
+              mode="outlined"
+              style={styles.buttons}
+              color='white'
+              onPress={logIn}>Facebook Sign In
+            </Button>
             <View style={styles.forgotPassword}>
                 <TouchableOpacity
                   onPress={() => navigation.navigate('ResetPasswordScreen')}>
@@ -281,12 +289,6 @@ export default function StartScreen(props) {
                 <TouchableOpacity onPress={() => navigation.navigate('RegisterScreen')}>
                   <Text style={styles.link}>Sign up</Text>
                 </TouchableOpacity>
-            <Button
-              mode="outlined"
-              style={styles.buttons}
-              color='white'
-              onPress={logIn}>Facebook Sign In
-            </Button>
             <AppleAuth login={props.route.params.login}/>
           </View>
         </View>

@@ -249,7 +249,6 @@ export default function SwipeScreen(props) {
     docRef.get().then((doc) => {
       if (doc.exists) {
         setUser(doc.data());
-        initImages(doc.data());
       }
     });
 
@@ -260,8 +259,15 @@ export default function SwipeScreen(props) {
   }
 
   useEffect(() => {
+    console.log("USER DATA", user, props.route.params.user)
+    if(user) {
+      initImages(user);
+    }
+  }, [filter, user])
+
+  useEffect(() => {
     initValues()
-  }, [filter])
+  }, [])
 
   async function addLike(email){
 
