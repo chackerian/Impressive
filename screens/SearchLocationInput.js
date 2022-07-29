@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
+import TextInput from './TextInput'
+import { View, StyleSheet, Text } from 'react-native';
+import axios from 'axios';
 
 let autoComplete;
 
@@ -24,7 +27,7 @@ const loadScript = (url, callback) => {
 function handleScriptLoad(updateQuery, autoCompleteRef, props) {
   autoComplete = new window.google.maps.places.Autocomplete(
     autoCompleteRef.current,
-    { types: ["(cities)"], componentRestrictions: { country: "us" } }
+    { types: ["(cities)"] }
   );
   autoComplete.setFields(["address_components", "formatted_address"]);
   autoComplete.addListener("place_changed", () =>
@@ -56,14 +59,47 @@ function SearchLocationInput(props) {
     );
   }, []);
 
+  function getLocations() {
+    var config = {
+      method: 'get',
+      url: `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${query}&types=(cities)&language=pt_BR&key=AIzaSyDKZXVS2f74ntKveM2VAr0ReLdpKxkWkDc`,
+      headers: {}
+    };
+    axios(config)
+    .then(function (response) {
+      document.getElementById("select").innerHTML = ""
+      response.data.predictions.forEach(element => {
+        var option = document.createElement("option");
+        option.text = element.description;
+        option.value = element.description;
+
+        let select = document.getElementById("select")
+        select.appendChild(option)
+      })
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
+  useEffect(() => {
+    getLocations()
+  }, [query])
+
+  function onchange(event) {
+    setQuery(event.target.value)
+  }
+
   return (
     <div className="search-location-input">
-      <input
-        ref={autoCompleteRef}
+      <TextInput
         onChange={event => setQuery(event.target.value)}
         placeholder="Enter a City"
-        value={props.location}
+        value={query}
       />
+      <select id="select" onChange={onchange}>
+
+      </select>
     </div>
   );
 }

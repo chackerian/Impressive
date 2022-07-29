@@ -8,6 +8,7 @@ import firebase from 'firebase/app';
 import TextInput from './TextInput'
 import { useNavigation } from '@react-navigation/native';
 import { WithContext as ReactTags } from 'react-tag-input';
+import { useMediaQuery } from "react-responsive";
 
 import Alerts from './Alerts.js';
 
@@ -245,12 +246,16 @@ export default function SwipeScreen(props) {
 
   async function initValues() {
     var docRef = store.collection('users').doc(props.route.params.user.email)
-    console.log("init values")
-    docRef.get().then((doc) => {
+    docRef.get()
+    .then((doc) => {
+      console.log(doc.exists)
       if (doc.exists) {
         setUser(doc.data());
       }
-    });
+    })
+    .catch((err) => {
+      console.log(err)
+    })
 
   }
 
@@ -259,15 +264,14 @@ export default function SwipeScreen(props) {
   }
 
   useEffect(() => {
-    console.log("USER DATA", user, props.route.params.user)
+    setTimeout(initValues, 1000);
+  }, [])
+
+  useEffect(() => {
     if(user) {
       initImages(user);
     }
   }, [filter, user])
-
-  useEffect(() => {
-    initValues()
-  }, [])
 
   async function addLike(email){
 
@@ -345,16 +349,29 @@ export default function SwipeScreen(props) {
   }
 
   const [isOpened, setisOpened] = useState(false)
-  const [style, setStyle] = useState({backgroundColor: "white", width: "0", height: "0", bottom: 0, overflow: "hidden", display: "none", position: "absolute"})
+  const [style, setStyle] = useState({backgroundColor: "white",left: '-25vw', width: "25vw", height: "calc(100vh - 49px)", bottom: 0, overflow: "hidden", display: "block", position: "absolute"})
   const [mainStyle, setMainStyle] = useState({marginLeft: 0})
+
+  const isDeviceMobile = useMediaQuery({
+      query: "(max-width: 1224px)",
+  });
 
  const openFilter = () => {
     if(!isOpened) {
       setisOpened(true)
-     setMainStyle({marginLeft: "25vw"})
-     setStyle({zIndex: 5, backgroundColor: "white", left: '0', width: "25vw", height: "calc(100vh - 49px)", bottom: 0, overflow: "hidden", display: "block", position: "absolute"})
+      if(isDeviceMobile) {
+        setMainStyle({marginLeft: "100vw"})
+        setStyle({zIndex: 5, backgroundColor: "white", left: '0', width: "100vw", height: "calc(100vh - 49px)", bottom: 0, overflow: "hidden", display: "block", position: "absolute"})
+      } else {
+        setMainStyle({marginLeft: "25vw"})
+        setStyle({zIndex: 5, backgroundColor: "white", left: '0', width: "25vw", height: "calc(100vh - 49px)", bottom: 0, overflow: "hidden", display: "block", position: "absolute"})
+      }
     } else {
       setisOpened(false)
+      if(isDeviceMobile) {
+        setMainStyle({marginLeft: "0"})
+        setStyle({zIndex: 5, backgroundColor: "white", left: '-100vw', width: "100vw", height: "calc(100vh - 49px)", bottom: 0, overflow: "hidden", display: "block", position: "absolute"})
+      }
       setMainStyle({marginLeft: "0"})
       setStyle({backgroundColor: "white", left: '-25vw', width: "25vw", height: "calc(100vh - 49px)", bottom: 0, overflow: "hidden", display: "block", position: "absolute"})
     }
@@ -362,8 +379,13 @@ export default function SwipeScreen(props) {
 
   const closeFilter = () => {
     setisOpened(false)
-    setMainStyle({marginLeft: "0"})
-    setStyle({backgroundColor: "white", left: '-25vw', width: "25vw", height: "calc(100vh - 49px)", bottom: 0, overflow: "hidden", display: "block", position: "absolute"})
+    if(isDeviceMobile) {
+        setMainStyle({marginLeft: "0"})
+        setStyle({zIndex: 5, backgroundColor: "white", left: '-100vw', width: "100vw", height: "calc(100vh - 49px)", bottom: 0, overflow: "hidden", display: "block", position: "absolute"})
+    } else {
+      setMainStyle({marginLeft: "0"})
+      setStyle({backgroundColor: "white", left: '-25vw', width: "25vw", height: "calc(100vh - 49px)", bottom: 0, overflow: "hidden", display: "block", position: "absolute"})
+    }
   }
 
   return (

@@ -13,6 +13,7 @@ import { passwordValidator } from './helpers/passwordValidator'
 import { nameValidator } from './helpers/nameValidator'
 import "@expo/match-media";
 import { useMediaQuery } from "react-responsive";
+import SearchLocationInput from './SearchLocationInput'
 
 import firebase from 'firebase/app';
 import 'firebase/auth';
@@ -22,6 +23,9 @@ export default function RegisterScreen(props) {
   const [name, setName] = useState({ value: '', error: '' })
   const [email, setEmail] = useState({ value: '', error: '' })
   const [password, setPassword] = useState({ value: '', error: '' })
+  const [location, setLocation] = useState('');
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
 
   const isDeviceMobile = useMediaQuery({
       query: "(max-width: 1224px)",
@@ -40,9 +44,9 @@ export default function RegisterScreen(props) {
           name: name,
           email: email
         }
-        props.route.params.login(newUser)
+        props.route.params.login(newUser);
        }
-      console.log("userCredential", user)
+
      })
      .catch((e) => {
       console.log(" error happened ", e)
@@ -59,9 +63,8 @@ export default function RegisterScreen(props) {
       setPassword({ ...password, error: passwordError })
       console.log("ERROR", emailError, passwordError, nameError)
     }
-    console.log("register", "EMAIL", email.value, "PASSWORD", password.value, "NAME", name.value)
     createUser(email.value, password.value, name.value)
-      
+
   }
 
   if (Platform.OS == "web") {
@@ -131,7 +134,6 @@ export default function RegisterScreen(props) {
         <View style={styles.mainContainer}>
           <BackButton onPress={() => navigation.goBack()} goBack={navigation.goBack} />
           <Logo goBack={() => navigation.goBack()} style={styles.mobilelogo} />
-          <Text style={styles.headline2}>Make new connections based on interests</Text>
             <View style={styles.login}>
               <View style={styles.form}>
                 <TextInput
@@ -139,7 +141,7 @@ export default function RegisterScreen(props) {
                   returnKeyType="next"
                   value={name.value}
                   theme={{ colors: { primary: 'blue',underlineColor:'transparent',}}}
-                  style={{ width: "80%" }}
+                  style={{ width: "80%", height: 40 }}
                   onChangeText={(text) => setName({ value: text, error: '' })}
                   error={!!name.error}
                   errorText={name.error}
@@ -148,7 +150,7 @@ export default function RegisterScreen(props) {
                   label="Email"
                   returnKeyType="next"
                   theme={{ colors: { primary: 'blue',underlineColor:'transparent',}}}
-                  style={{ width: "80%" }}
+                  style={{ width: "80%", height: 40 }}
                   value={email.value}
                   onChangeText={(text) => setEmail({ value: text, error: '' })}
                   error={!!email.error}
@@ -162,13 +164,14 @@ export default function RegisterScreen(props) {
                   label="Password"
                   returnKeyType="done"
                   theme={{ colors: { primary: 'blue',underlineColor:'transparent',}}}
-                  style={{ width: "80%" }}
+                  style={{ width: "80%", height: 40 }}
                   value={password.value}
                   onChangeText={(text) => setPassword({ value: text, error: '' })}
                   error={!!password.error}
                   errorText={password.error}
                   secureTextEntry
                 />
+                <SearchLocationInput style={{ width: "80%", height: 40 }} location={location} city={setCity} state={setState} setLocation={setLocation} />
               </View>
             <Button
               mode="outlined"
@@ -238,6 +241,7 @@ export default function RegisterScreen(props) {
                   errorText={password.error}
                   secureTextEntry
                 />
+              <SearchLocationInput location={location} city={setCity} state={setState} setLocation={setLocation} />
               </View>
             <Button
               mode="outlined"
@@ -374,7 +378,7 @@ export default function RegisterScreen(props) {
       position: "absolute",
     },
     mobilelogo: {
-      marginTop: "0 !important",
+      marginTop: "0",
       backgroundColor: "red",
       marginBottom: 0
     },

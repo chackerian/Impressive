@@ -152,7 +152,7 @@ function MyTabs(props) {
 
     const styles = StyleSheet.create({
       navbar: {
-        backgroundColor: '#0b0034 !important',
+        backgroundColor: '#0b0034',
       },
     })
 
@@ -170,7 +170,7 @@ function MyTabs(props) {
         <AppStack.Screen
           name="Swipe"
           component={SwipeScreen}
-          initialParams={{user: props.user}}
+          initialParams={{user: props.user, setUser: props.setUser}}
           options={{
             tabBarLabel: '',
             tabBarIcon: ({ color }) => (
