@@ -97,6 +97,7 @@ function AuthNavigator() {
                         name: a.name || "",
                         email: a.email || "",
                         picture: "https://firebasestorage.googleapis.com/v0/b/socially-b729a.appspot.com/o/images%2F360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpeg?alt=media&token=cab38221-25b5-49a8-a0d7-8d22ddf8ef85",
+                        location: a.location,
                         likes: [],
                         dislikes: [],
                         matches: [],

@@ -18,12 +18,12 @@ export default function SettingsScreen(props) {
     name: '',
     age: '',
     city: '',
-    location: '',
     state: '',
     about: '',
     interests: [],
     date: '',
   });
+  const [location, setLocation] = useState("")
   const [tags, setTags] = useState([])
 
   const navigation = useNavigation();
@@ -84,13 +84,13 @@ export default function SettingsScreen(props) {
       setUserData({...userData, state: userData.location.split(",")[1]})
     }
 
-    console.log("userinfo", tags)
+    console.log("userinfo", location)
     store.collection('users').doc(user).update({
       name: userData.name,
       about: userData.about,
       city: userData.city || "",
       state: userData.state || "",
-      location: userData.location || "",
+      location: location || "",
       interests: tags,
       birthday: "",
       age: userData.age || "",
@@ -108,6 +108,7 @@ export default function SettingsScreen(props) {
       if (doc.exists) {
         setTags(doc.data().interests)
         setUserData(doc.data());
+        setLocation(doc.data().location)
       }
     });
   }
@@ -205,7 +206,7 @@ export default function SettingsScreen(props) {
           onChangeText={(val) => { setUserData({...userData, name: val}) }}
         />
         <View style={styles.container}>
-        <SearchLocationInput location={userData.location} city={(val) => { setUserData({...userData, city: val})}} state={(val) => { setUserData({...userData, state: val})}} setLocation={(val) => { setUserData({...userData, location: val})}}/>
+        <SearchLocationInput location={location} setLocation={(val) => {setLocation(val)}}/>
         </View>
 
         <DateTimePicker

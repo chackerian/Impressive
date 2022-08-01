@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import TextInput from './TextInput'
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, TextInput } from 'react-native';
 import axios from 'axios';
 
 let autoComplete;
@@ -41,11 +40,11 @@ async function handlePlaceSelect(updateQuery, props) {
   updateQuery(query);
   var city = query.split(",")[0]
   var state = query.split(",")[1].replace(/[0-9]/g, '').replace(/\s/g, "");
-  props.city(city)
-  props.state(state)
+  // props.city(city)
+  // props.state(state)
+  console.log(query);
   props.setLocation(query)
-  console.log(city, state)
-  console.log(addressObject);
+  // console.log(city, state)
 }
 
 function SearchLocationInput(props) {
@@ -59,49 +58,38 @@ function SearchLocationInput(props) {
     );
   }, []);
 
-  function getLocations() {
-    var config = {
-      method: 'get',
-      url: `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${query}&types=(cities)&language=pt_BR&key=AIzaSyDKZXVS2f74ntKveM2VAr0ReLdpKxkWkDc`,
-      headers: {}
-    };
-    axios(config)
-    .then(function (response) {
-      document.getElementById("select").innerHTML = ""
-      response.data.predictions.forEach(element => {
-        var option = document.createElement("option");
-        option.text = element.description;
-        option.value = element.description;
-
-        let select = document.getElementById("select")
-        select.appendChild(option)
-      })
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-  }
-
-  useEffect(() => {
-    getLocations()
-  }, [query])
-
   function onchange(event) {
     setQuery(event.target.value)
   }
 
   return (
-    <div className="search-location-input">
+    <View style={styles.inputdiv}>
       <TextInput
+        style={styles.input}
+        ref={autoCompleteRef}
         onChange={event => setQuery(event.target.value)}
         placeholder="Enter a City"
         value={query}
       />
-      <select id="select" onChange={onchange}>
-
-      </select>
-    </div>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  input: {
+    backgroundColor: "#e7e7e7",
+    border: "none",
+    paddingLeft: 10,
+    paddingTop: 20,
+    paddingBottom: 20,
+    width: "26em",
+    fontSize: "1em",
+    outlineStyle: "none",
+  },
+  inputdiv: {
+    marginBottom: 12,
+    marginTop: 12,
+  },
+})
 
 export default SearchLocationInput;

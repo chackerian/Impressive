@@ -7,14 +7,11 @@ export default function TextInput({ errorText, description, ...props }) {
     <View style={styles.container}>
       <Input
         style={styles.input}
+        id="searchField"
         selectionColor="blue"
         underlineColor="transparent"
         {...props}
       />
-      {description && !errorText ? (
-        <Text style={styles.description}>{description}</Text>
-      ) : null}
-      {errorText ? <Text style={styles.error}>{errorText}</Text> : null}
     </View>
   )
 }

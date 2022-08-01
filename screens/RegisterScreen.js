@@ -35,14 +35,15 @@ export default function RegisterScreen(props) {
 
   function logIn(){}
 
-  const createUser = async (email, password, name) => {
+  const createUser = async (email, password, name, location) => {
      firebase.auth().createUserWithEmailAndPassword(email, password)
      .then((userCredential) => {
        const user = userCredential.user;
        if(user) {
         var newUser = {
           name: name,
-          email: email
+          email: email,
+          location: location
         }
         props.route.params.login(newUser);
        }
@@ -57,13 +58,15 @@ export default function RegisterScreen(props) {
     const nameError = nameValidator(name.value)
     const emailError = emailValidator(email.value)
     const passwordError = passwordValidator(password.value)
-    if (emailError || passwordError || nameError) {
+    const locationError = nameValidator(location)
+    if (emailError || passwordError || nameError || locationError) {
       setName({ ...name, error: nameError })
       setEmail({ ...email, error: emailError })
       setPassword({ ...password, error: passwordError })
       console.log("ERROR", emailError, passwordError, nameError)
+    } else {
+        createUser(email.value, password.value, name.value, location)
     }
-    createUser(email.value, password.value, name.value)
 
   }
 
@@ -171,7 +174,7 @@ export default function RegisterScreen(props) {
                   errorText={password.error}
                   secureTextEntry
                 />
-                <SearchLocationInput style={{ width: "80%", height: 40 }} location={location} city={setCity} state={setState} setLocation={setLocation} />
+                <SearchLocationInput location={location} setLocation={setLocation} />
               </View>
             <Button
               mode="outlined"
@@ -241,7 +244,7 @@ export default function RegisterScreen(props) {
                   errorText={password.error}
                   secureTextEntry
                 />
-              <SearchLocationInput location={location} city={setCity} state={setState} setLocation={setLocation} />
+              <SearchLocationInput location={location} setLocation={setLocation} />
               </View>
             <Button
               mode="outlined"
