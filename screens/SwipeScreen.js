@@ -21,24 +21,24 @@ import { faHeart, faTimesCircle, faSlidersH } from '@fortawesome/free-solid-svg-
 
 // console.log("ISMOBILE", isDeviceMobile)
 
-//   const styles = StyleSheet.create({
-//     test: {
-//       paddingTop: 40,
-//     },
-//     container: {
-//         alignItems: 'stretch',
-//         justifyContent: 'flex-start',
-//         margin: 16,
-//         paddingBottom: 32,
-//     },
-//     sliderContainer: {
-//         paddingVertical: 16,
-//     },
-//     titleContainer: {
-//         alignItems: 'center',
-//         justifyContent: 'center',
-//     },
-// });
+  const styles = StyleSheet.create({
+    test: {
+      paddingTop: 40,
+    },
+    container: {
+        alignItems: 'stretch',
+        justifyContent: 'flex-start',
+        margin: 16,
+        paddingBottom: 32,
+    },
+    sliderContainer: {
+        paddingVertical: 16,
+    },
+    titleContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+});
 
 class ControlPanel extends Component {
 
@@ -65,25 +65,6 @@ class ControlPanel extends Component {
   slide = (value) => {
     this.setState({location: value})
   }
-
-  styles = {
-    test: {
-      paddingTop: 120,
-    },
-    container: {
-        alignItems: 'stretch',
-        justifyContent: 'flex-start',
-        margin: 16,
-        paddingBottom: 32,
-    },
-    sliderContainer: {
-        paddingVertical: 16,
-    },
-    titleContainer: {
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-  };
 
   render() {
     return (
