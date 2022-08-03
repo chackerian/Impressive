@@ -4,7 +4,7 @@ import Background from './Background'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import Navbar from './Navbar'
 import BackButton from './BackButton'
-import TextInput from './TextInput'
+import ChatInput from './ChatInput'
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {FontAwesomeIcon as FontAwesomeReact} from '@fortawesome/react-fontawesome';
@@ -103,6 +103,7 @@ export default function ChatScreen({route}, props) {
       marginBottom: 30,
       display: "flex",
       flexDirection: "row",
+      alignItems: "flex-start",
       borderTopWidth: 1,
       borderTopColor: '#e7e6e7',
     }
@@ -116,6 +117,7 @@ return(
     <Background>
      <Navbar />
      <View>
+     <BackButton onPress={() => navigation.goBack()} goBack={navigation.goBack} />
        <ScrollView bounces={false} style={styles.container} ref={ref => {setScrollView(ref)}} onContentSizeChange={() => scrollView.scrollToEnd({animated: true})}>
           {messages.map(({ id, text, sender, uid }, index) => {
             if (sender == user) {
@@ -129,15 +131,15 @@ return(
           })}
         </ScrollView>
         <View style={styles.sendMessage}>
-          <TextInput 
-             style={{ width: "40%", marginLeft: 20, fontSize: 15, outline: 'none', height: 40, display: "flex"}}
+          <ChatInput 
+             style={{ width: "90%", marginLeft: 20, fontSize: 15, outline: 'none', height: 40, display: "flex"}}
              theme={{ colors: { primary: 'blue',underlineColor:'transparent',}}}
              placeholder='Message...'
              value={message}
              onChangeText={e => setMessage(e)} 
              onSubmitEditing={(event) => sendMessage(event)}
           />
-          <TouchableOpacity style={{display: "flex", marginTop: 20, marginLeft: 100}} onPress={(event) => sendMessage(event)}>
+          <TouchableOpacity style={{display: "flex", marginTop: 20, marginLeft: 0}} onPress={(event) => sendMessage(event)}>
             <FontAwesomeIcon icon={ faCaretRight } size={ 26 } />
           </TouchableOpacity>
       </View>

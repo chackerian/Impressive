@@ -16,11 +16,11 @@ import 'firebase/storage';
 import 'firebase/auth';
 import 'firebase/firestore';
 
-import './screens/settings.css'
-import './screens/nobounce.js'
+// import './screens/settings.css'
 
 import LoginScreen from './screens/LoginScreen.js'
 import RegisterScreen from './screens/RegisterScreen.js'
+import AddInterestsScreen from './screens/AddInterestsScreen.js'
 
 import Dashboard from './screens/Dashboard.js'
 import MessagesScreen from './screens/MessagesScreen.js'
@@ -31,7 +31,6 @@ import SwipeScreen from './screens/SwipeScreen.js'
 
 var jwt = require('jsonwebtoken');
 const AuthContext = createContext(null)
-// const [initialState, setInitialState] = useState();
 
 function AuthNavigator() {
 
@@ -87,7 +86,7 @@ function AuthNavigator() {
                         likes: [],
                         dislikes: [],
                         matches: [],
-                        interests: [],
+                        interests: a.interests,
                         about: "",
                         conversations: [],
                     })
@@ -101,7 +100,7 @@ function AuthNavigator() {
                         likes: [],
                         dislikes: [],
                         matches: [],
-                        interests: [],
+                        interests: a.interests,
                         about: "",
                         conversations: [],
                     })
@@ -142,6 +141,7 @@ function MyStack(props) {
         }}>
         <AuthStack.Screen name="LoginScreen" component={LoginScreen} options={{ title: 'Impressive' }} initialParams={{login: props.login}} />
         <AuthStack.Screen name="RegisterScreen" component={RegisterScreen} options={{ title: 'Impressive - Register' }} initialParams={{login: props.login}} />
+        <AuthStack.Screen name="AddInterestsScreen" component={AddInterestsScreen} options={{ title: 'Impressive - Register' }} initialParams={{login: props.login}} />
       </AuthStack.Navigator>
     </NavigationContainer>
   );
@@ -173,6 +173,7 @@ function MyTabs(props) {
           component={SwipeScreen}
           initialParams={{user: props.user, setUser: props.setUser}}
           options={{
+            title: 'Home',
             tabBarLabel: '',
             tabBarIcon: ({ color }) => (
               <MaterialCommunityIcons name="home" color={color} size={26} />
@@ -184,6 +185,7 @@ function MyTabs(props) {
           component={MessagesScreen}
           initialParams={{user: props.user}}
           options={{
+            title: 'Chat',
             tabBarLabel: '',
             tabBarIcon: ({ color }) => (
               <MaterialCommunityIcons name="chat" color={color} size={26} />
@@ -195,6 +197,7 @@ function MyTabs(props) {
           component={ChatScreen}
           initialParams={{user: props.user}}
           options={{
+            title: 'Chat',
             tabBarButton: () => null,
           }}
         />
@@ -203,6 +206,7 @@ function MyTabs(props) {
           component={Dashboard}
           initialParams={{user: props.user}}
           options={{
+            title: 'Dashboard',
             tabBarLabel: '',
             tabBarIcon: ({ color }) => (
               <MaterialCommunityIcons name="account-circle" color={color} size={26} />
@@ -214,6 +218,7 @@ function MyTabs(props) {
           component={SettingsScreen}
           initialParams={{user: props.user, logout: props.logout}}
           options={{
+            title: 'Settings',
             tabBarButton: () => null,
           }}
         />

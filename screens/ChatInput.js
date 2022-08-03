@@ -2,7 +2,7 @@ import React from 'react'
 import { View, StyleSheet, Text } from 'react-native'
 import { TextInput as Input } from 'react-native-paper'
 
-export default function TextInput({ errorText, description, ...props }) {
+export default function ChatInput({ errorText, description, ...props }) {
   return (
     <View style={styles.container}>
       <Input
@@ -23,9 +23,9 @@ export default function TextInput({ errorText, description, ...props }) {
 const styles = StyleSheet.create({
   container: {
     marginVertical: 12,
-    width: "100%",
+    width: "80%",
     color: 'black',
-    alignItems: "center"
+    alignItems: "flex-start"
   },
   description: {
     fontSize: 13,

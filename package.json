@@ -61,6 +61,7 @@
     "react-native": "^0.64.3",
     "react-native-async-storage": "^0.0.1",
     "react-native-card-stack-swiper": "^1.2.5",
+    "react-native-crypto": "^2.2.0",
     "react-native-datepicker": "^1.7.2",
     "react-native-drawer": "^2.5.1",
     "react-native-facebook-keyframes": "^1.0.1",
@@ -72,6 +73,7 @@
     "react-native-interactable": "github:wix/react-native-interactable#master",
     "react-native-linear-gradient": "^2.6.2",
     "react-native-paper": "^4.9.1",
+    "react-native-randombytes": "^3.6.1",
     "react-native-reanimated": "~2.3.1",
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "~3.10.1",
@@ -98,5 +100,5 @@
   },
   "private": true,
   "name": "Impressive",
-  "version": "4.2.1"
+  "version": "4.2.2"
 }

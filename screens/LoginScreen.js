@@ -7,7 +7,6 @@ import Button from './Button';
 import TextInput from './TextInput';
 import { emailValidator } from './helpers/emailValidator';
 import { passwordValidator } from './helpers/passwordValidator';
-import "@expo/match-media";
 import { useMediaQuery } from "react-responsive";
 
 import firebase from 'firebase/app';
@@ -144,27 +143,20 @@ export default function StartScreen(props) {
       backgroundColor: 'blue',
       width: 300
     },
-    container: {
-        flex: 1,
-        backgroundColor: 'white',
-      },
     button: {
-      borderRadius: "5px",
-      borderWidth: "0",
+      borderRadius: 5,
+      borderWidth: 0,
       backgroundColor: '#018002',
-      width: "80%",
-      minWidth: "80%",
+      width: 200,
     },
     buttons: {
-      borderRadius: "5px",
-      borderWidth: "0",
-      width: "80%",
-      minWidth: "80%",
+      borderRadius: 5,
+      borderWidth: 0,
+      width: 200,
       backgroundColor: '#4267B2',
     },
     login: {
       alignItems: 'center',
-      width: "inherit",
     },
     facebook: {
       backgroundColor: '#4267B2',
@@ -186,13 +178,16 @@ export default function StartScreen(props) {
       color: "black"
     },
     container: {
-      flex: 1,
       width: "85%",
+      height: 460,
       maxHeight: "85%",
-      margin: "auto",
+      marginTop: "auto",
+      marginLeft: "auto",
+      marginRight: "auto",
+      marginBottom: "auto",
       display: "flex",
       flexDirection: "row",
-      boxShadow: "0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22)",
+      shadowColor: "rgba(0,0,0,0.30)",
       backgroundColor: "white"
     },
     leftContainer: {
@@ -230,7 +225,7 @@ export default function StartScreen(props) {
     },
   })
 
-  if (isDeviceMobile){
+  if (isDeviceMobile || Platform.OS == "ios"){
     return (
     <View style={{ height: "100%" }}>
       <View style={styles.box2}></View>
@@ -244,7 +239,7 @@ export default function StartScreen(props) {
                   label="Email"
                   returnKeyType="next"
                   theme={{ colors: { primary: '#018002', underlineColor:'transparent' }}}
-                  style={{ width: "80%" }}
+                  style={{ width: 200 }}
                   value={email.value}
                   onChangeText={(text) => setEmail({ value: text, error: '' })}
                   error={!!email.error}
@@ -258,7 +253,7 @@ export default function StartScreen(props) {
                   label="Password"
                   returnKeyType="done"
                   theme={{ colors: { primary: '#018002',underlineColor:'transparent',}}}
-                  style={{ width: "80%" }}
+                  style={{ width: 200 }}
                   value={password.value}
                   onChangeText={(text) => setPassword({ value: text, error: '' })}
                   error={!!password.error}
@@ -269,7 +264,6 @@ export default function StartScreen(props) {
             <Button
               mode="outlined"
               color='white'
-              width="100vh"
               style={styles.button}
               onPress={onLoginPressed}>Login
             </Button>
@@ -312,7 +306,7 @@ export default function StartScreen(props) {
                   label="Email"
                   returnKeyType="next"
                   theme={{ colors: { primary: '#018002', underlineColor:'transparent' }}}
-                  style={{ width: "80%" }}
+                  style={{ width: 200 }}
                   value={email.value}
                   onChangeText={(text) => setEmail({ value: text, error: '' })}
                   error={!!email.error}
@@ -326,7 +320,7 @@ export default function StartScreen(props) {
                   label="Password"
                   returnKeyType="done"
                   theme={{ colors: { primary: '#018002',underlineColor:'transparent',}}}
-                  style={{ width: "80%" }}
+                  style={{ width: 200 }}
                   value={password.value}
                   onChangeText={(text) => setPassword({ value: text, error: '' })}
                   error={!!password.error}

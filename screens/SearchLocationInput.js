@@ -1,26 +1,28 @@
 import React, { useState, useEffect, useRef } from "react";
-import { View, StyleSheet, Text, TextInput } from 'react-native';
+import { View, StyleSheet, Text, TextInput, Platform } from 'react-native';
 import axios from 'axios';
 
 let autoComplete;
 
 const loadScript = (url, callback) => {
-  let script = document.createElement("script");
-  script.type = "text/javascript";
+  if (Platform.OS == "web"){
+    let script = document.createElement("script");
+    script.type = "text/javascript";
 
-  if (script.readyState) {
-    script.onreadystatechange = function() {
-      if (script.readyState === "loaded" || script.readyState === "complete") {
-        script.onreadystatechange = null;
-        callback();
-      }
-    };
-  } else {
-    script.onload = () => callback();
+    if (script.readyState) {
+      script.onreadystatechange = function() {
+        if (script.readyState === "loaded" || script.readyState === "complete") {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else {
+      script.onload = () => callback();
+    }
+
+    script.src = url;
+    document.getElementsByTagName("head")[0].appendChild(script);
   }
-
-  script.src = url;
-  document.getElementsByTagName("head")[0].appendChild(script);
 };
 
 function handleScriptLoad(updateQuery, autoCompleteRef, props) {
@@ -40,11 +42,8 @@ async function handlePlaceSelect(updateQuery, props) {
   updateQuery(query);
   var city = query.split(",")[0]
   var state = query.split(",")[1].replace(/[0-9]/g, '').replace(/\s/g, "");
-  // props.city(city)
-  // props.state(state)
   console.log(query);
   props.setLocation(query)
-  // console.log(city, state)
 }
 
 function SearchLocationInput(props) {
@@ -58,33 +57,32 @@ function SearchLocationInput(props) {
     );
   }, []);
 
+  useEffect(() => {
+    setQuery(props.location)
+  }, [props.location]);
+
   function onchange(event) {
     setQuery(event.target.value)
   }
 
   return (
-    <View style={styles.inputdiv}>
       <TextInput
-        style={styles.input}
+        style={[styles.input, props.style]}
         ref={autoCompleteRef}
         onChange={event => setQuery(event.target.value)}
         placeholder="Enter a City"
         value={query}
       />
-    </View>
   );
 }
 
 const styles = StyleSheet.create({
   input: {
     backgroundColor: "#e7e7e7",
-    border: "none",
     paddingLeft: 10,
     paddingTop: 20,
     paddingBottom: 20,
-    width: "26em",
-    fontSize: "1em",
-    outlineStyle: "none",
+    fontSize: 20,
   },
   inputdiv: {
     marginBottom: 12,

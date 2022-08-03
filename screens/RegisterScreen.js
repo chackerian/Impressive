@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, StyleSheet, Platform, TouchableOpacity } from 'react-native'
+import { Alert, View, StyleSheet, Platform, TouchableOpacity } from 'react-native'
 import { Text } from 'react-native-paper'
 import Background from './Background'
 import Logo from './Logo'
@@ -11,7 +11,6 @@ import { useNavigation } from '@react-navigation/native';
 import { emailValidator } from './helpers/emailValidator'
 import { passwordValidator } from './helpers/passwordValidator'
 import { nameValidator } from './helpers/nameValidator'
-import "@expo/match-media";
 import { useMediaQuery } from "react-responsive";
 import SearchLocationInput from './SearchLocationInput'
 
@@ -34,26 +33,6 @@ export default function RegisterScreen(props) {
   const navigation = useNavigation();
 
   function logIn(){}
-
-  const createUser = async (email, password, name, location) => {
-     firebase.auth().createUserWithEmailAndPassword(email, password)
-     .then((userCredential) => {
-       const user = userCredential.user;
-       if(user) {
-        var newUser = {
-          name: name,
-          email: email,
-          location: location
-        }
-        props.route.params.login(newUser);
-       }
-
-     })
-     .catch((e) => {
-      console.log(" error happened ", e)
-     })
-  }
-
   const onSignUpPressed = () => {
     const nameError = nameValidator(name.value)
     const emailError = emailValidator(email.value)
@@ -128,9 +107,28 @@ export default function RegisterScreen(props) {
 
   }
 
-  if (isDeviceMobile){
+  function InterestsNavigate() {
+    const nameError = nameValidator(name.value)
+    const emailError = emailValidator(email.value)
+    const passwordError = passwordValidator(password.value)
+    const locationError = nameValidator(location)
+      var data = {
+          name: name.value,
+          email: email.value,
+          password: password.value,
+          location: location,
+        }
+    console.log(data)
+    if (emailError || passwordError || nameError || locationError) {
+      console.log("ERROR", emailError, passwordError, nameError)
+    } else {
+      navigation.navigate("AddInterestsScreen", data)
+    }
+  }
 
-      return (
+  if (isDeviceMobile || Platform.OS == "ios"){
+
+    return (
     <View style={{ height: "100%" }}>
       <View style={styles.box2}></View>
       <View style={styles.container}>
@@ -144,7 +142,7 @@ export default function RegisterScreen(props) {
                   returnKeyType="next"
                   value={name.value}
                   theme={{ colors: { primary: 'blue',underlineColor:'transparent',}}}
-                  style={{ width: "80%", height: 40 }}
+                  style={{ width: 200, height: 60 }}
                   onChangeText={(text) => setName({ value: text, error: '' })}
                   error={!!name.error}
                   errorText={name.error}
@@ -153,7 +151,7 @@ export default function RegisterScreen(props) {
                   label="Email"
                   returnKeyType="next"
                   theme={{ colors: { primary: 'blue',underlineColor:'transparent',}}}
-                  style={{ width: "80%", height: 40 }}
+                  style={{ width: 200, height: 60 }}
                   value={email.value}
                   onChangeText={(text) => setEmail({ value: text, error: '' })}
                   error={!!email.error}
@@ -167,21 +165,21 @@ export default function RegisterScreen(props) {
                   label="Password"
                   returnKeyType="done"
                   theme={{ colors: { primary: 'blue',underlineColor:'transparent',}}}
-                  style={{ width: "80%", height: 40 }}
+                  style={{ width: 200, height: 60 }}
                   value={password.value}
                   onChangeText={(text) => setPassword({ value: text, error: '' })}
                   error={!!password.error}
                   errorText={password.error}
                   secureTextEntry
                 />
-                <SearchLocationInput location={location} setLocation={setLocation} />
+                <SearchLocationInput style={{width: 260, height: 60}} location={location} setLocation={setLocation} />
               </View>
             <Button
               mode="outlined"
               color='white'
               width="100vh"
               style={styles.button}
-              onPress={onSignUpPressed}>Register
+              onPress={() => InterestsNavigate()}>Next
             </Button>
             <Button
               mode="outlined"
@@ -244,14 +242,14 @@ export default function RegisterScreen(props) {
                   errorText={password.error}
                   secureTextEntry
                 />
-              <SearchLocationInput location={location} setLocation={setLocation} />
+              <SearchLocationInput location={location} setLocation={setLocation} style={{ width: "80%" }} />
               </View>
             <Button
               mode="outlined"
               color='white'
               width="100vh"
               style={styles.button}
-              onPress={onSignUpPressed}>Register
+              onPress={() => InterestsNavigate()}>Next
             </Button>
             <Button
               mode="outlined"
@@ -298,27 +296,20 @@ export default function RegisterScreen(props) {
       backgroundColor: 'blue',
       width: 300
     },
-    container: {
-        flex: 1,
-        backgroundColor: 'white',
-      },
     button: {
-      borderRadius: "5px",
-      borderWidth: "0",
+      borderRadius: 5,
+      borderWidth: 0,
       backgroundColor: '#018002',
-      width: "80%",
-      minWidth: "80%",
+      width: 200,
     },
     buttons: {
-      borderRadius: "5px",
-      borderWidth: "0",
-      width: "80%",
-      minWidth: "80%",
+      borderRadius: 5,
+      borderWidth: 0,
+      width: 200,
       backgroundColor: '#4267B2',
     },
     login: {
       alignItems: 'center',
-      width: "inherit",
     },
     facebook: {
       backgroundColor: '#4267B2',
@@ -341,13 +332,12 @@ export default function RegisterScreen(props) {
       fontFamily: ""
     },
     container: {
-      flex: 1,
-      width: "85%",
       maxHeight: "85%",
       margin: "auto",
       display: "flex",
       flexDirection: "row",
-      boxShadow: "0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22)",
+      justifyContent: "center",
+      shadowColor: "rgba(0,0,0,0.30)",
       backgroundColor: "white"
     },
     leftContainer: {

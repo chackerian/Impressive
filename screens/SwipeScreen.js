@@ -1,5 +1,5 @@
 import React, { Component, useState, useEffect } from 'react'
-import {StyleSheet, SafeAreaView, StatusBar, Image, Text, View, Platform, TouchableOpacity, Alert, Button } from 'react-native';
+import {StyleSheet, SafeAreaView, StatusBar, Image, Text, View, ScrollView, Platform, TouchableOpacity, Alert, Button } from 'react-native';
 import Slider from '@react-native-community/slider';
 
 import CardStack, { Card } from './swipe';
@@ -11,6 +11,7 @@ import { WithContext as ReactTags } from 'react-tag-input';
 import { useMediaQuery } from "react-responsive";
 
 import Alerts from './Alerts.js';
+// import './nobounce.js'
 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHeart, faTimesCircle, faSlidersH } from '@fortawesome/free-solid-svg-icons';
@@ -68,12 +69,11 @@ class ControlPanel extends Component {
 
   render() {
     return (
-      <View style={styles.test}>
-        <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.test}>
+        <View style={styles.container}>
           <Text style={styles.titleContainer}>
             Distance
           </Text>
-          <View contentContainerStyle={styles.container}>
               <Text>{this.state.location} miles</Text>
               <Slider
                 style={{width: 200, height: 40}}
@@ -82,7 +82,6 @@ class ControlPanel extends Component {
                 onSlidingComplete={this.handleLocation}
                 onValueChange={this.slide}
               />
-          </View>
           <View>
             <Text style={styles.titleContainer}>Interests</Text>
             <ReactTags
@@ -94,7 +93,7 @@ class ControlPanel extends Component {
               autocomplete
             />
           </View>
-        </SafeAreaView>
+        </View>
 
         <Button
           onPress={() => {
@@ -102,7 +101,7 @@ class ControlPanel extends Component {
           }}
           title="Back to Swipe"
         />
-      </View>
+      </SafeAreaView>
     )
   }
 }
@@ -116,6 +115,7 @@ export default function SwipeScreen(props) {
   const [user, setUser] = useState();
   const [filter, setFilter] = useState({});
   const [shadowColor, setShadowColor] = useState("");
+  const [trigger, setTrigger] = useState(false);
   const navigation = useNavigation();
   const alertRef = React.createRef();
 
@@ -325,6 +325,8 @@ export default function SwipeScreen(props) {
           })
 
           if (Platform.OS == "web") {
+
+            alertRef.current.slide()
 
           } else {
 

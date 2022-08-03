@@ -169,29 +169,24 @@ export default function SettingsScreen(props) {
 
   }
 
-
   useEffect(() => {
     initValues()
   },[])
 
   const styles = StyleSheet.create({
     containers: {
+      paddingTop: 20,
       alignItems: 'center',
       height: '90%',
     },
-    buttons: {
-      color: 'black',
-       height: 10,
-    },
-    locations: {
-      width: 300,
-      height: 10,
-    },
-    container: {
-      flex: 1,
-      padding: 10,
-      width: 220,
-    }
+    input: {
+      backgroundColor: "#e7e7e7",
+      paddingLeft: 10,
+      paddingTop: 20,
+      paddingBottom: 20,
+      width: "26em",
+      fontSize: 20,
+  },
   });
 
   return (
@@ -202,20 +197,11 @@ export default function SettingsScreen(props) {
           label="Name"
           placeholderTextColor="#666666"
           theme={{ colors: { primary: 'blue',underlineColor:'transparent',}}}
+          style={{ width: 300}}
           value={userData.name}
           onChangeText={(val) => { setUserData({...userData, name: val}) }}
         />
-        <View style={styles.container}>
-        <SearchLocationInput location={location} setLocation={(val) => {setLocation(val)}}/>
-        </View>
-
-        <DateTimePicker
-          style={{width: 200, height: 30}}
-          value={userData.date}
-          mode="date"
-          placeholder="select date"
-          onChange={onChange}
-        />
+        <SearchLocationInput style={{ width: 300}} location={location} setLocation={(val) => {setLocation(val)}}/>
 
         <TextInput
           multiline
@@ -223,9 +209,9 @@ export default function SettingsScreen(props) {
           label="About Me"
           placeholderTextColor="#666666"
           theme={{ colors: { primary: 'blue', underlineColor:'transparent',}}}
+          style={{ width: 300}}
           value={userData.about}
           onChangeText={(val) => { setUserData({...userData, about: val}) }}
-          style={[styles.textInput]}
         />
 
         <ReactTags
@@ -234,6 +220,7 @@ export default function SettingsScreen(props) {
           handleAddition={handleAddition}
           handleTagClick={handleTagClick}
           inputFieldPosition="bottom"
+          style={{ width: 300}}
           placeholder="Enter Interests"
           autocomplete
         />

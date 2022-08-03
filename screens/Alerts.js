@@ -1,5 +1,5 @@
-import React, { Component, setState, useState} from "react";
-import { Animated, Text, View, StyleSheet, Button, SafeAreaView } from "react-native";
+import React, { Component, setState, useState, useEffect} from "react";
+import { Animated, Text, View, StyleSheet, Button, SafeAreaView, Dimensions } from "react-native";
 
 export default class Alerts extends Component {
 
@@ -11,21 +11,14 @@ export default class Alerts extends Component {
       }
   }
 
-  slide = () => {
-    Animated.spring(this.state.x, {
-      toValue: -100,
-    }).start();
-    this.setState({
-      visibility: 'block',
-    });
 
-   Animated.spring(this.state.x, {
-      toValue: 200,
-      delay: 900,
+  slide = () => {
+    const windowWidth = Dimensions.get('window').width;
+    this.setState({visibility: "block"})
+    Animated.spring(this.state.x, {
+      toValue: windowWidth-200,
+      delay: 100,
     }).start();
-    this.setState({
-      visibility: 'none',
-    });
 
   };
 
@@ -46,8 +39,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'blue',
     padding: 20,
     top: 100,
-    right: 30,
+    right: 'auto',
     bottom: 'auto',
-    left: 'auto',
+    left: 30,
   }
 })
