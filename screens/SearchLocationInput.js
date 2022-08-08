@@ -83,6 +83,9 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingBottom: 20,
     fontSize: 20,
+    outlineColor: "#fff",
+    outlineStyle: "none",
+    outlineWidth: 0,
   },
   inputdiv: {
     marginBottom: 12,

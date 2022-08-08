@@ -332,11 +332,15 @@ export default function RegisterScreen(props) {
       fontFamily: ""
     },
     container: {
+      width: "85%",
+      height: 460,
       maxHeight: "85%",
-      margin: "auto",
+      marginTop: "auto",
+      marginLeft: "auto",
+      marginRight: "auto",
+      marginBottom: "auto",
       display: "flex",
       flexDirection: "row",
-      justifyContent: "center",
       shadowColor: "rgba(0,0,0,0.30)",
       backgroundColor: "white"
     },
