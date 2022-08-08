@@ -85,7 +85,7 @@ class ControlPanel extends Component {
               />
           <View>
             <Text style={styles.titleContainer}>Interests</Text>
-            <TagInput tags={[]}/>
+            <TagInput tags={this.state.tags} handleAddition={this.handleAddition} handleDelete={this.handleDelete}/>
           </View>
         </View>
 
@@ -231,7 +231,8 @@ export default function SwipeScreen(props) {
     var snaps = []
     console.log("FILTER", filter)
     if (filter.tags && filter.tags.length > 0){
-      var snapshot = await store.collection("users").where("interests", "array-contains", filter.tags[0]).get()
+      let newTags = filter.tags.map(element => element.toLowerCase())
+      var snapshot = await store.collection("users").where("interests", "array-contains-any", newTags).get()
     } else {
       var snapshot = await store.collection("users").get()
     }
