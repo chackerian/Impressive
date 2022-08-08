@@ -8,10 +8,11 @@ import firebase from 'firebase/app';
 import TextInput from './TextInput'
 import { useNavigation } from '@react-navigation/native';
 import { WithContext as ReactTags } from 'react-tag-input';
+import TagInput from './TagInput.js';
 import { useMediaQuery } from "react-responsive";
 
 import Alerts from './Alerts.js';
-// import './nobounce.js'
+import './nobounce.js'
 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHeart, faTimesCircle, faSlidersH } from '@fortawesome/free-solid-svg-icons';
@@ -24,11 +25,11 @@ import { faHeart, faTimesCircle, faSlidersH } from '@fortawesome/free-solid-svg-
 
   const styles = StyleSheet.create({
     test: {
-      paddingTop: 40,
+      paddingTop: 100,
     },
     container: {
-        alignItems: 'stretch',
-        justifyContent: 'flex-start',
+        // alignItems: 'stretch',
+        // justifyContent: 'flex-start',
         margin: 16,
         paddingBottom: 32,
     },
@@ -69,7 +70,7 @@ class ControlPanel extends Component {
 
   render() {
     return (
-      <SafeAreaView style={styles.test}>
+      <View style={styles.test}>
         <View style={styles.container}>
           <Text style={styles.titleContainer}>
             Distance
@@ -84,14 +85,7 @@ class ControlPanel extends Component {
               />
           <View>
             <Text style={styles.titleContainer}>Interests</Text>
-            <ReactTags
-              tags={this.state.tags}
-              handleDelete={this.handleDelete}
-              handleAddition={this.handleAddition}
-              handleTagClick={this.handleTagClick}
-              inputFieldPosition="bottom"
-              autocomplete
-            />
+            <TagInput tags={[]}/>
           </View>
         </View>
 
@@ -101,7 +95,7 @@ class ControlPanel extends Component {
           }}
           title="Back to Swipe"
         />
-      </SafeAreaView>
+      </View>
     )
   }
 }
@@ -360,7 +354,7 @@ export default function SwipeScreen(props) {
   }
 
   const [isOpened, setisOpened] = useState(false)
-  const [style, setStyle] = useState({backgroundColor: "white",left: '-25vw', width: "25vw", height: "calc(100vh - 49px)", bottom: 0, overflow: "hidden", display: "block", position: "absolute"})
+  const [style, setStyle] = useState({backgroundColor: "white", left: '0', width: "25vw", height: "calc(100vh - 49px)", bottom: 0, overflow: "hidden", display: "none", position: "absolute"})
   const [mainStyle, setMainStyle] = useState({marginLeft: 0})
 
   const isDeviceMobile = useMediaQuery({

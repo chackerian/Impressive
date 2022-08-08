@@ -28,7 +28,7 @@ export default function MessageScreen(props) {
 
     useEffect(() => {
         var docRef = store.collection('users').doc(props.route.params.user.email)
-        docRef.onSnapshot((doc) => {
+        docRef.get().then((doc) => {
             if (doc.exists) {
                 setMatches(doc.data().matches)
             } 
@@ -68,22 +68,14 @@ export default function MessageScreen(props) {
     const Item = ({ item, onPress, backgroundColor, textColor }) => {
         const docRef = store.collection('users').doc(item.email)
         const [image, setImage] = useState()
-
-        useEffect(() => {
-            let isMounted = true;
-            docRef.get().then((doc) => {
-                if (doc.exists && isMounted) {
-                    setImage(doc.data().picture)
-                }
-            })
-            return () => {
-                isMounted = false;
-            };
-
-        }, [])
+        docRef.get().then((doc) => {
+            if (doc.exists) {
+                setImage(doc.data().picture)
+            }
+        })
         return (
           <TouchableOpacity key={item} onPress={onPress} style={[styles.item, backgroundColor]}>
-            <Image source={{uri: image}} style={styles.image} />
+            <Image source={{uri: item.recImage}} style={styles.image} />
             <Text style={[styles.title, textColor]}>{item.name}</Text>
           </TouchableOpacity>
         );
@@ -111,6 +103,7 @@ export default function MessageScreen(props) {
             flexDirection: "row",
             borderWidth: 1,
             borderColor: '#e7e6e7',
+            height: 600,
             marginTop: 80,
             marginLeft: 30,
             marginRight: 30,
@@ -126,6 +119,7 @@ export default function MessageScreen(props) {
         contacts: {
             flex: 2,
             backgroundColor: 'white',
+            height: 600,
             borderRightWidth: 1,
             borderRightColor: '#e7e6e7',
         },
@@ -245,14 +239,14 @@ export default function MessageScreen(props) {
     <Background>
      <View>
       <View style={styles.container}>
-        <View style={styles.contacts}>
+        <ScrollView style={styles.contacts}>
           <FlatList
             data={matches}
             renderItem={renderItem}
             keyExtractor={(item) => item.conversation}
             extraData={selectedId}
           /> 
-        </View>
+        </ScrollView>
         <View style={styles.messagesBox}>
           <ScrollView style={msgStyle} ref={ref => {setScrollView(ref)}} onContentSizeChange={() => scrollView.scrollToEnd({animated: true})}>
             {messages.map(({ id, text, sender, uid }) => {
