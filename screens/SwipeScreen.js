@@ -85,7 +85,15 @@ class ControlPanel extends Component {
               />
           <View>
             <Text style={styles.titleContainer}>Interests</Text>
+<<<<<<< HEAD
             <TagInput tags={this.state.tags} handleAddition={this.handleAddition} handleDelete={this.handleDelete}/>
+=======
+            <TagInput 
+              tags={[]}
+              handleDelete={this.handleDelete}
+              handleAddition={this.handleAddition}
+            />
+>>>>>>> refs/remotes/origin/master
           </View>
         </View>
 

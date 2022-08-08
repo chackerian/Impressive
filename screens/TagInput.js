@@ -17,6 +17,7 @@ const TagInput = ({ tags, handleDelete, handleAddition }) => {
       setTagData([...tagData, event.target.value]);
       handleAddition(event.target.value)
       event.target.value = '';
+      handleAddition(event.target.value)
     }
   };
   return (
