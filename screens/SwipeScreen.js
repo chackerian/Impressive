@@ -85,7 +85,11 @@ class ControlPanel extends Component {
               />
           <View>
             <Text style={styles.titleContainer}>Interests</Text>
-            <TagInput tags={[]}/>
+            <TagInput 
+              tags={[]}
+              handleDelete={this.handleDelete}
+              handleAddition={this.handleAddition}
+            />
           </View>
         </View>
 

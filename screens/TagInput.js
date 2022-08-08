@@ -6,15 +6,17 @@ import { GrFormClose } from 'react-icons/gr'
 
 import './settings.css'
 
-const TagInput = ({ tags }) => {
+const TagInput = ({ tags, handleDelete, handleAddition }) => {
   const [tagData, setTagData] = useState(tags);
   const removeTagData = indexToRemove => {
     setTagData([...tagData.filter((_, index) => index !== indexToRemove)]);
+    handleDelete(indexToRemove)
   };
   const addTagData = event => {
     if (event.target.value !== '') {
       setTagData([...tagData, event.target.value]);
       event.target.value = '';
+      handleAddition(event.target.value)
     }
   };
   return (
