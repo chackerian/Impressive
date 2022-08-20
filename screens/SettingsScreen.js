@@ -8,6 +8,7 @@ import * as Facebook from 'expo-facebook';
 import NavLogout from './NavLogout';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { WithContext as ReactTags } from 'react-tag-input';
+import TagInput from './TagInput.js';
 
 import firebase from 'firebase/app';
 import { storage, store } from "../App.js";
@@ -24,8 +25,8 @@ export default function SettingsScreen(props) {
     date: '',
   });
   const [location, setLocation] = useState("")
+  const [LatLng, setLatLng] = useState({})
   const [tags, setTags] = useState([])
-
   const navigation = useNavigation();
 
   function logIn(){}
@@ -63,19 +64,6 @@ export default function SettingsScreen(props) {
     setTags([...tags, tag]);
   };
 
-  const handleDrag = (tag, currPos, newPos) => {
-    const newTags = tags.slice();
-
-    newTags.splice(currPos, 1);
-    newTags.splice(newPos, 0, tag);
-
-    // re-render
-    setTags(newTags);
-  };
-
-  const handleTagClick = index => {
-
-  };
 
   function save(){
     var user = props.route.params.user.email
@@ -91,6 +79,8 @@ export default function SettingsScreen(props) {
       city: userData.city || "",
       state: userData.state || "",
       location: location || "",
+      lat: LatLng.lat,
+      lng: LatLng.lng,
       interests: tags,
       birthday: "",
       age: userData.age || "",
@@ -107,8 +97,10 @@ export default function SettingsScreen(props) {
     docRef.onSnapshot((doc) => {
       if (doc.exists) {
         setTags(doc.data().interests)
+        console.log("TAGS", doc.data().interests)
         setUserData(doc.data());
         setLocation(doc.data().location)
+        setLatLng({lat: doc.data().lat, lng: doc.data().lng})
       }
     });
   }
@@ -201,7 +193,7 @@ export default function SettingsScreen(props) {
           value={userData.name}
           onChangeText={(val) => { setUserData({...userData, name: val}) }}
         />
-        <SearchLocationInput style={{ width: 300}} location={location} setLocation={(val) => {setLocation(val)}}/>
+        <SearchLocationInput style={{ width: 300}} location={location} setLatLng={(val) => {setLatLng(val)}} setLocation={(val) => {setLocation(val)}}/>
 
         <TextInput
           multiline
@@ -214,15 +206,10 @@ export default function SettingsScreen(props) {
           onChangeText={(val) => { setUserData({...userData, about: val}) }}
         />
 
-        <ReactTags
+        <TagInput 
           tags={tags}
           handleDelete={handleDelete}
           handleAddition={handleAddition}
-          handleTagClick={handleTagClick}
-          inputFieldPosition="bottom"
-          style={{ width: 300}}
-          placeholder="Enter Interests"
-          autocomplete
         />
 
         <Button

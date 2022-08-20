@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import { View, StyleSheet, Text, TextInput, Platform } from 'react-native';
-import axios from 'axios';
 
 let autoComplete;
 
@@ -30,7 +29,7 @@ function handleScriptLoad(updateQuery, autoCompleteRef, props) {
     autoCompleteRef.current,
     { types: ["(cities)"] }
   );
-  autoComplete.setFields(["address_components", "formatted_address"]);
+  autoComplete.setFields(["address_components", "formatted_address", "geometry"]);
   autoComplete.addListener("place_changed", () =>
     handlePlaceSelect(updateQuery, props)
   );
@@ -40,10 +39,11 @@ async function handlePlaceSelect(updateQuery, props) {
   const addressObject = autoComplete.getPlace();
   const query = addressObject.formatted_address;
   updateQuery(query);
-  var city = query.split(",")[0]
-  var state = query.split(",")[1].replace(/[0-9]/g, '').replace(/\s/g, "");
-  console.log(query);
+  var lat = addressObject.geometry.location.lat();
+  var lng = addressObject.geometry.location.lng();
   props.setLocation(query)
+  console.log("query", query.split(" "))
+  props.setLatLng({lat: lat, lng: lng})
 }
 
 function SearchLocationInput(props) {
@@ -52,7 +52,7 @@ function SearchLocationInput(props) {
 
   useEffect(() => {
     loadScript(
-      `https://maps.googleapis.com/maps/api/js?key=AIzaSyDKZXVS2f74ntKveM2VAr0ReLdpKxkWkDc&libraries=places`,
+      `https://maps.googleapis.com/maps/api/js?key=AIzaSyDKZXVS2f74ntKveM2VAr0ReLdpKxkWkDc&libraries=places,geometry`,
       () => handleScriptLoad(setQuery, autoCompleteRef, props)
     );
   }, []);
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingTop: 20,
     paddingBottom: 20,
-    fontSize: 20,
+    fontSize: 16,
     outlineColor: "#fff",
     outlineStyle: "none",
     outlineWidth: 0,

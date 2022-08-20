@@ -179,7 +179,7 @@ export default function StartScreen(props) {
     },
     container: {
       width: "85%",
-      height: 460,
+      height: 570,
       maxHeight: "85%",
       marginTop: "auto",
       marginLeft: "auto",

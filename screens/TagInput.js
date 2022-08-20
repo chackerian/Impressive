@@ -4,20 +4,29 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCamera } from '@fortawesome/free-solid-svg-icons';
 import { GrFormClose } from 'react-icons/gr'
 
-import './settings.css'
+// import './settings.css'
 
 const TagInput = ({ tags, handleDelete, handleAddition }) => {
   const [tagData, setTagData] = useState(tags);
+
+  useEffect(() => {
+    setTagData(tags)
+  }, [tags])
+
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
   const removeTagData = indexToRemove => {
     setTagData([...tagData.filter((_, index) => index !== indexToRemove)]);
     handleDelete(indexToRemove)
   };
   const addTagData = event => {
     if (event.target.value !== '') {
-      setTagData([...tagData, event.target.value]);
-      handleAddition(event.target.value)
+      var value = capitalizeFirstLetter(event.target.value)
+      setTagData([...tagData, value]);
+      handleAddition(value)
       event.target.value = '';
-      handleAddition(event.target.value)
     }
   };
   return (

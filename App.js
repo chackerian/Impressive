@@ -69,7 +69,7 @@ function AuthNavigator() {
         }, [])
 
     function login(a) {
-      console.log("test fire", a)
+      console.log("LOGIN", a)
         addUser(a)
         const userRef = store.collection('users').doc(a.email);
 
@@ -86,17 +86,19 @@ function AuthNavigator() {
                         likes: [],
                         dislikes: [],
                         matches: [],
-                        interests: a.interests,
+                        interests: [],
                         about: "",
                         conversations: [],
                     })
                 } else {
-
                     userRef.set({
                         name: a.name || "",
+                        age: a.age,
                         email: a.email || "",
                         picture: "https://firebasestorage.googleapis.com/v0/b/socially-b729a.appspot.com/o/images%2F360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpeg?alt=media&token=cab38221-25b5-49a8-a0d7-8d22ddf8ef85",
                         location: a.location,
+                        lat: a.lat,
+                        lng: a.lng,
                         likes: [],
                         dislikes: [],
                         matches: [],

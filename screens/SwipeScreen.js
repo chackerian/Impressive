@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from 'react'
+import React, { Component, useState, useEffect, useRef } from 'react'
 import {StyleSheet, SafeAreaView, StatusBar, Image, Text, View, ScrollView, Platform, TouchableOpacity, Alert, Button } from 'react-native';
 import Slider from '@react-native-community/slider';
 
@@ -6,10 +6,11 @@ import CardStack, { Card } from './swipe';
 import { store } from "../App.js";
 import firebase from 'firebase/app';
 import TextInput from './TextInput'
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { WithContext as ReactTags } from 'react-tag-input';
 import TagInput from './TagInput.js';
 import { useMediaQuery } from "react-responsive";
+import { HiLocationMarker } from 'react-icons/hi'
 
 import Alerts from './Alerts.js';
 import './nobounce.js'
@@ -17,19 +18,11 @@ import './nobounce.js'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHeart, faTimesCircle, faSlidersH } from '@fortawesome/free-solid-svg-icons';
 
-// const isDeviceMobile = useMediaQuery({
-//     query: "(max-width: 1224px)",
-// });
-
-// console.log("ISMOBILE", isDeviceMobile)
-
   const styles = StyleSheet.create({
     test: {
       paddingTop: 100,
     },
     container: {
-        // alignItems: 'stretch',
-        // justifyContent: 'flex-start',
         margin: 16,
         paddingBottom: 32,
     },
@@ -85,15 +78,11 @@ class ControlPanel extends Component {
               />
           <View>
             <Text style={styles.titleContainer}>Interests</Text>
-<<<<<<< HEAD
-            <TagInput tags={this.state.tags} handleAddition={this.handleAddition} handleDelete={this.handleDelete}/>
-=======
             <TagInput 
-              tags={[]}
+              tags={this.state.tags}
               handleDelete={this.handleDelete}
               handleAddition={this.handleAddition}
             />
->>>>>>> refs/remotes/origin/master
           </View>
         </View>
 
@@ -119,7 +108,13 @@ export default function SwipeScreen(props) {
   const [shadowColor, setShadowColor] = useState("");
   const [trigger, setTrigger] = useState(false);
   const navigation = useNavigation();
+  const route = useRoute();
   const alertRef = React.createRef();
+  const [query, setQuery] = useState("");
+
+  let autoComplete;
+
+  const autoCompleteRef = useRef(null);
 
   const styles = StyleSheet.create({
     body: {
@@ -147,9 +142,8 @@ export default function SwipeScreen(props) {
     description: {
       fontSize: 16,
       fontWeight: 'bold',
-      color: 'white',
+      color: 'blue',
       marginLeft: 12,
-      padding: "1em",
     },
     viewport: {
       height: 190,
@@ -215,9 +209,13 @@ export default function SwipeScreen(props) {
       paddingHorizontal: 2,
       marginRight: 2,
       cursor: "pointer",
-      textTransform: "capitalize"
     },
     interestContainer: {
+      display: "flex",
+      flexDirection: "row",
+      padding: 20,
+    },
+    locationContainer: {
       display: "flex",
       flexDirection: "row",
     },
@@ -228,6 +226,31 @@ export default function SwipeScreen(props) {
     },
   })
 
+  const loadScript = (url, callback) => {
+    if (Platform.OS == "web"){
+      let script = document.createElement("script");
+      script.type = "text/javascript";
+
+      if (script.readyState) {
+        script.onreadystatechange = function() {
+          if (script.readyState === "loaded" || script.readyState === "complete") {
+            script.onreadystatechange = null;
+            callback();
+          }
+        };
+      } else {
+        script.onload = () => callback();
+      }
+
+      script.src = url;
+      document.getElementsByTagName("head")[0].appendChild(script);
+    }
+  };
+
+  function handleScriptLoad(updateQuery, autoCompleteRef, props) {
+    
+  }
+
   async function initImages(user){
     console.log("INIT IMAGES")
     const userLikes = user.likes
@@ -236,24 +259,61 @@ export default function SwipeScreen(props) {
 
     var interacted = userLikes.concat(userDislikes, email)
 
-    var snaps = []
-    console.log("FILTER", filter)
-    if (filter.tags && filter.tags.length > 0){
-      let newTags = filter.tags.map(element => element.toLowerCase())
-      var snapshot = await store.collection("users").where("interests", "array-contains-any", newTags).get()
+    console.log("FILTER", filter, route.params)
+    if (filter.location) {
+      console.log("location filter")
+      var snapshot = await store.collection("users").get()
+      const users = [];
+      snapshot.docs.forEach((s) => {
+        var lat = s.data().lat
+        var lng = s.data().lng
+        var location1 = new window.google.maps.LatLng(user.lat,user.lng)
+        var location2 = new window.google.maps.LatLng(lat,lng)
+        console.log(lat, lng, s.data().name)
+        var distance = window.google.maps.geometry.spherical.computeDistanceBetween(location1, location2) / 1609
+        if (distance <= filter.location && s.data().email != user.email){
+          users.push(s.data());
+        }
+      });
+      console.log("USERS", users)
+      setImages(users);
+    } 
+
+    else if (route.params.filter){
+      var filters = [route.params.filter]
+      var snapshot = await store.collection("users").where("interests", "array-contains-any", [route.params.filter]).get()
+      const users = [];
+      snapshot.docs.forEach((s) => {
+        if(!interacted.includes(s.data().email)){
+          users.push(s.data());
+        }
+      });
+      console.log("USERS LOCATION", images)
+      setImages(users);
+    }
+
+    else if (filter.tags && filter.tags.length > 0){
+      console.log("FILTER", filter.tags)
+      var snapshot = await store.collection("users").where("interests", "array-contains-any", filter.tags).get()
+      const users = [];
+      snapshot.docs.forEach((s) => {
+        if(!interacted.includes(s.data().email)){
+          users.push(s.data());
+        }
+      });
+      console.log("USERS", images)
+      setImages(users);
     } else {
       var snapshot = await store.collection("users").get()
+      const users = [];
+      snapshot.docs.forEach((s) => {
+        if(!interacted.includes(s.data().email)){
+          users.push(s.data());
+        }
+      });
+      console.log("USERS MAIN", images)
+      setImages(users);
     }
-    snaps.push(snapshot);
-    const images = [];
-
-    snapshot.docs.forEach((s) => {
-      if(!interacted.includes(s.data().email)){
-        images.push(s.data());
-      }
-    });
-    console.log("USERS", images)
-    setImages(images);
   }
 
   async function initValues() {
@@ -276,6 +336,10 @@ export default function SwipeScreen(props) {
   }
 
   useEffect(() => {
+    loadScript(
+      `https://maps.googleapis.com/maps/api/js?key=AIzaSyDKZXVS2f74ntKveM2VAr0ReLdpKxkWkDc&libraries=places,geometry`,
+      () => handleScriptLoad(setQuery, autoCompleteRef, props)
+    );
     setTimeout(initValues, 1000);
   }, [])
 
@@ -283,7 +347,7 @@ export default function SwipeScreen(props) {
     if(user) {
       initImages(user);
     }
-  }, [filter, user])
+  }, [filter, user, route.params.filter])
 
   async function addLike(email){
 
@@ -402,6 +466,11 @@ export default function SwipeScreen(props) {
     }
   }
 
+  function addFilter(tag) {
+    console.log("SET FILTER", tag)
+    setFilter({tags: [tag]})
+  }
+
   return (
     <>
     <View style={[ styles.sideContainer, style ]}><ControlPanel closeDrawer={closeFilter} setFilter={setFilter}/></View>
@@ -423,21 +492,30 @@ export default function SwipeScreen(props) {
         onSwipeLeft={() => console.log("LEFT")}
         changeShadowColor={color => { changeShadow(color)} }
       >
-       {images.map((i) => {
+       {images.map((i, index) => {
+        if (i.location){
+          var city = i.location.split(",")[0]
+          var state = i.location.split(",")[1]
+        } else {
+          var city = ""
+          var state = ""
+        }
         return (
-          <Card style={[styles.card, styles.card1]} key={i.name}
+          <Card style={[styles.card, styles.card1]} key={index}
             onSwipedRight={(event) =>{ addLike(i.email)}}
             onSwipedLeft={(event) => { addDislike(i.email) }}
           >
             <Image source={{uri: i.picture}} style={styles.image} />
             <View style={styles.info}>
-             <Text style={styles.label}>{i.name}, {i.age}</Text>
+             <Text style={styles.label}>{i.name}</Text>
              <Text style={styles.about}>{i.about}</Text>
-             <Text style={styles.description}>{i.city}, {i.state}</Text>
+             <View style={styles.locationContainer}>
+              <Text style={styles.description}>{city}, {state}</Text><HiLocationMarker />
+             </View>
              <View style={styles.interestContainer}>
-             {i.interests.map((interest) => {
+             {i.interests.map((interest, index) => {
               return (
-                <Text style={styles.tag}>{interest.text}</Text>
+                <Text onClick={() => addFilter(interest)} style={styles.tag} key={index}>{interest}</Text>
               )
              })}
              </View>
