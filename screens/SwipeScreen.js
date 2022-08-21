@@ -78,7 +78,7 @@ class ControlPanel extends Component {
               />
           <View>
             <Text style={styles.titleContainer}>Interests</Text>
-            <TagInput 
+            <TagInput
               tags={this.state.tags}
               handleDelete={this.handleDelete}
               handleAddition={this.handleAddition}
@@ -136,13 +136,12 @@ export default function SwipeScreen(props) {
       padding: 20,
       color: 'white',
       fontWeight: "bold",
-      backgroundColor: "#313174",
+      backgroundColor: "#2a2a2a",
       height: "14em",
     },
     description: {
-      fontSize: 16,
-      fontWeight: 'bold',
-      color: 'blue',
+      fontSize: 13,
+      color: '#ffffffa8',
       marginLeft: 12,
     },
     viewport: {
@@ -179,6 +178,7 @@ export default function SwipeScreen(props) {
         height: 1
       },
       shadowOpacity:0.5,
+      userSelect: "none"
     },
     label: {
       marginLeft: 12,
@@ -206,14 +206,16 @@ export default function SwipeScreen(props) {
       width: "fit-content",
       borderRadius: 7,
       paddingVertical: 5,
-      paddingHorizontal: 2,
+      paddingHorizontal: 10,
       marginRight: 2,
       cursor: "pointer",
     },
     interestContainer: {
       display: "flex",
       flexDirection: "row",
-      padding: 20,
+      paddingHorizontal: 10,
+      paddingVertical: 20,
+      marginTop: "auto"
     },
     locationContainer: {
       display: "flex",
@@ -248,7 +250,7 @@ export default function SwipeScreen(props) {
   };
 
   function handleScriptLoad(updateQuery, autoCompleteRef, props) {
-    
+
   }
 
   async function initImages(user){
@@ -277,7 +279,7 @@ export default function SwipeScreen(props) {
       });
       console.log("USERS", users)
       setImages(users);
-    } 
+    }
 
     else if (route.params.filter){
       var filters = [route.params.filter]
@@ -508,12 +510,13 @@ export default function SwipeScreen(props) {
             <Image source={{uri: i.picture}} style={styles.image} />
             <View style={styles.info}>
              <Text style={styles.label}>{i.name}</Text>
-             <Text style={styles.about}>{i.about}</Text>
              <View style={styles.locationContainer}>
-              <Text style={styles.description}>{city}, {state}</Text><HiLocationMarker />
+              <Text style={styles.description}>{city}, {state}</Text><HiLocationMarker style={{ height: "100%"}}/>
              </View>
+             <Text style={styles.about}>{i.about || "User doesnt have an about"}</Text>
              <View style={styles.interestContainer}>
              {i.interests.map((interest, index) => {
+              console.log("test 5", interest)
               return (
                 <Text onClick={() => addFilter(interest)} style={styles.tag} key={index}>{interest}</Text>
               )
