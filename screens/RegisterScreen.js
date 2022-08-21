@@ -160,7 +160,7 @@ export default function RegisterScreen(props) {
                   errorText={password.error}
                   secureTextEntry
                 />
-                <SearchLocationInput style={{width: 200, height: 60}} location={location} setlatLng={(val) => {setLatLng(val)}} setLocation={setLocation} />
+                <SearchLocationInput style={{width: 200, height: 60}} location={location} setLatLng={(val) => {setLatLng(val)}} setLocation={setLocation} />
               </View>
             <Button
               mode="outlined"

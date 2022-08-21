@@ -122,7 +122,7 @@ function data(){
       width: "fit-content",
       borderRadius: 7,
       paddingVertical: 5,
-      paddingHorizontal: 2,
+      paddingHorizontal: 10,
       marginRight: 2,
       cursor: "pointer",
       textTransform: "capitalize"
