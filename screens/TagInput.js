@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCamera } from '@fortawesome/free-solid-svg-icons';
 import { GrFormClose } from 'react-icons/gr'
 
-// import './settings.css'
+import './settings.css'
 
 const TagInput = ({ tags, handleDelete, handleAddition }) => {
   const [tagData, setTagData] = useState(tags);
