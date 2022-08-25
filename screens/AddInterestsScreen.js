@@ -9,7 +9,7 @@ import Navbar from './Navbar'
 import BackButton from './BackButton'
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMediaQuery } from "react-responsive";
-import { WithContext as ReactTags } from 'react-tag-input';
+import TagInput from './TagInput.js';
 
 import firebase from 'firebase/app';
 import 'firebase/auth';
@@ -24,6 +24,7 @@ export default function AddInterestsScreen(props) {
   const navigation = useNavigation();
   const route = useRoute();
   const [tags, setTags] = useState([])
+  const [age, setAge] = useState({ value: '', error: '' })
 
   const handleDelete = i => {
     setTags(tags.filter((tag, index) => index !== i));
@@ -43,13 +44,7 @@ export default function AddInterestsScreen(props) {
     setTags(newTags);
   };
 
-  const handleTagClick = index => {
-
-  };
-
-  function logIn(){}
-
-  const createUser = async (email, password, name, location) => {
+  const createUser = async (email, password, name, location, tags, lat, lng, age) => {
      firebase.auth().createUserWithEmailAndPassword(email, password)
      .then((userCredential) => {
        const user = userCredential.user;
@@ -58,7 +53,10 @@ export default function AddInterestsScreen(props) {
           name: name,
           email: email,
           location: location,
-          interests: tags
+          lat: lat,
+          lng: lng,
+          interests: tags,
+          age: age
         }
         props.route.params.login(newUser);
        }
@@ -74,71 +72,14 @@ export default function AddInterestsScreen(props) {
     const password = route.params.password
     const name = route.params.name
     const location = route.params.location
-    console.log(email, password, name, location)
-    createUser(email, password, name, location, tags)
-  }
-
-  if (Platform.OS == "web") {
-
-    require('./fb')
-
-      window.fbAsyncInit = function() {
-        FB.init({
-          appId            : '603428947262435',
-          autoLogAppEvents : true,
-          xfbml            : true,
-          version          : 'v10.0'
-        });
-      };
-
-      logIn = function() {
-
-      FB.login(function(response) {
-        if (response.authResponse) {
-         FB.api('/me?fields=email,picture.type(large),name', function(response) {
-
-           props.route.params.login(response)
-         });
-        }
-    }, {scope: 'public_profile,email'});
-
-  }
-
-  } else {
-
-  logIn = async function() {
-      try {
-        await Facebook.initializeAsync({
-          appId: '603428947262435',
-        });
-        const {
-          type,
-          token,
-          expirationDate,
-          permissions,
-          declinedPermissions,
-        } = await Facebook.logInWithReadPermissionsAsync({
-          permissions: ['public_profile', 'email'],
-        });
-        if (type === 'success') {
-          // Get the user's name using Facebook's Graph API
-          const response = await fetch(`https://graph.facebook.com/me?fields=email,picture.type(large),name&access_token=${token}`);
-
-          var user = (await response.json())
-          props.route.params.login(user)
-        } else {
-          // type === 'cancel'
-        }
-      } catch ({ message }) {
-        Alert.alert(`Facebook Login Error: ${message}`);
-      }
-    }
-
+    const lat = route.params.lat
+    const lng = route.params.lng
+    createUser(email, password, name, location, tags, lat, lng, age.value)
   }
 
   if (isDeviceMobile){
 
-      return (
+    return (
     <View style={{ height: "100%" }}>
       <View style={styles.box2}></View>
       <View style={styles.container}>
@@ -146,22 +87,27 @@ export default function AddInterestsScreen(props) {
           <BackButton onPress={() => navigation.goBack()} goBack={navigation.goBack} />
           <Logo goBack={() => navigation.goBack()} style={styles.mobilelogo} />
             <View style={styles.login}>
+              <TextInput
+                  label="Age"
+                  returnKeyType="next"
+                  theme={{ colors: { primary: 'blue',underlineColor:'transparent',}}}
+                  style={{ width: 100 }}
+                  value={age.value}
+                  onChangeText={(text) => setAge({ value: text, error: '' })}
+                  error={!!age.error}
+                  errorText={age.error}
+                />
               <View style={styles.form}>
-                <ReactTags
+                <TagInput 
                   tags={tags}
                   handleDelete={handleDelete}
                   handleAddition={handleAddition}
-                  handleTagClick={handleTagClick}
-                  inputFieldPosition="bottom"
-                  style={styles.input}
-                  placeholder="Enter Interests"
-                  autocomplete
                 />
               </View>
             <Button
               mode="outlined"
               color='white'
-              width="100vh"
+              style={{ width: 100 }}
               style={styles.button}
               onPress={onSignUpPressed}>Register
             </Button>
@@ -184,22 +130,27 @@ export default function AddInterestsScreen(props) {
         <BackButton onPress={() => navigation.goBack()} goBack={navigation.goBack} />
         <View style={styles.rightContainer}>
             <View style={styles.login}>
+                <TextInput
+                  label="Age"
+                  returnKeyType="next"
+                  theme={{ colors: { primary: 'blue',underlineColor:'transparent',}}}
+                  style={{ width: 100 }}
+                  value={age.value}
+                  onChangeText={(text) => setAge({ value: text, error: '' })}
+                  error={!!age.error}
+                  errorText={age.error}
+                />
               <View style={styles.form}>
-                <ReactTags
+               <TagInput 
                   tags={tags}
                   handleDelete={handleDelete}
                   handleAddition={handleAddition}
-                  handleTagClick={handleTagClick}
-                  inputFieldPosition="bottom"
-                  style={styles.input}
-                  placeholder="Enter Interests"
-                  autocomplete
                 />
             </View>
             <Button
               mode="outlined"
               color='white'
-              width="100vh"
+              style={{ width: 100 }}
               style={styles.button}
               onPress={onSignUpPressed}>Register
             </Button>
@@ -212,10 +163,6 @@ export default function AddInterestsScreen(props) {
 }
 
   const styles = StyleSheet.create({
-    body: {
-      width: "100%",
-      height: "100%"
-    },
     forgotPassword: {
       width: '100%',
       alignItems: 'center',
@@ -242,23 +189,11 @@ export default function AddInterestsScreen(props) {
       backgroundColor: 'blue',
       width: 300
     },
-    container: {
-        flex: 1,
-        backgroundColor: 'white',
-      },
     button: {
       borderRadius: 5,
       borderWidth: 0,
       backgroundColor: '#018002',
-      width: "80%",
-      minWidth: "80%",
-    },
-    buttons: {
-      borderRadius: 5,
-      borderWidth: 0,
-      width: "80%",
-      minWidth: "80%",
-      backgroundColor: '#4267B2',
+      width: 200,
     },
     login: {
       alignItems: 'center',
@@ -284,10 +219,13 @@ export default function AddInterestsScreen(props) {
       fontFamily: ""
     },
     container: {
-      flex: 1,
       width: "85%",
+      height: 570,
       maxHeight: "85%",
-      margin: "auto",
+      marginTop: "auto",
+      marginLeft: "auto",
+      marginRight: "auto",
+      marginBottom: "auto",
       display: "flex",
       flexDirection: "row",
       shadowColor: "rgba(0,0,0,0.30)",

@@ -41,8 +41,10 @@ function data(){
     navigation.navigate('Image')
   }
 
-  function addFilter() {
-    navigation.navigate("Swipe")
+  function addFilter(tag) {
+    console.log("addFilter")
+    var data = {filter: tag}
+    navigation.navigate("Swipe", data)
   }
 
   const styles = StyleSheet.create({
@@ -150,9 +152,9 @@ function data(){
           </View>
           <Text style={styles.about}>{userData.about}</Text>
           <View style={styles.interestContainer}>
-          {interests.map((i) => {
+          {interests.map((i, index) => {
             return (
-              <Text onClick={addFilter} style={styles.tag}>{i.text}</Text>
+              <Text onClick={() => addFilter(i)} style={styles.tag} key={index}>{i}</Text>
             )
           })}
           </View>

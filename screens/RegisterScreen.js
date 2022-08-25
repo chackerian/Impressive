@@ -25,29 +25,15 @@ export default function RegisterScreen(props) {
   const [location, setLocation] = useState('');
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
+  const [LatLng, setLatLng] = useState({})
 
   const isDeviceMobile = useMediaQuery({
       query: "(max-width: 1224px)",
   });
 
-  const navigation = useNavigation();
-
   function logIn(){}
-  const onSignUpPressed = () => {
-    const nameError = nameValidator(name.value)
-    const emailError = emailValidator(email.value)
-    const passwordError = passwordValidator(password.value)
-    const locationError = nameValidator(location)
-    if (emailError || passwordError || nameError || locationError) {
-      setName({ ...name, error: nameError })
-      setEmail({ ...email, error: emailError })
-      setPassword({ ...password, error: passwordError })
-      console.log("ERROR", emailError, passwordError, nameError)
-    } else {
-        createUser(email.value, password.value, name.value, location)
-    }
 
-  }
+  const navigation = useNavigation();
 
   if (Platform.OS == "web") {
 
@@ -117,6 +103,8 @@ export default function RegisterScreen(props) {
           email: email.value,
           password: password.value,
           location: location,
+          lat: LatLng.lat,
+          lng: LatLng.lng,
         }
     console.log(data)
     if (emailError || passwordError || nameError || locationError) {
@@ -172,7 +160,7 @@ export default function RegisterScreen(props) {
                   errorText={password.error}
                   secureTextEntry
                 />
-                <SearchLocationInput style={{width: 260, height: 60}} location={location} setLocation={setLocation} />
+                <SearchLocationInput style={{width: 200, height: 60}} location={location} setlatLng={(val) => {setLatLng(val)}} setLocation={setLocation} />
               </View>
             <Button
               mode="outlined"
@@ -212,7 +200,7 @@ export default function RegisterScreen(props) {
                   returnKeyType="next"
                   value={name.value}
                   theme={{ colors: { primary: 'blue',underlineColor:'transparent',}}}
-                  style={{ width: "80%" }}
+                  style={{ width: 200 }}
                   onChangeText={(text) => setName({ value: text, error: '' })}
                   error={!!name.error}
                   errorText={name.error}
@@ -221,7 +209,7 @@ export default function RegisterScreen(props) {
                   label="Email"
                   returnKeyType="next"
                   theme={{ colors: { primary: 'blue',underlineColor:'transparent',}}}
-                  style={{ width: "80%" }}
+                  style={{ width: 200 }}
                   value={email.value}
                   onChangeText={(text) => setEmail({ value: text, error: '' })}
                   error={!!email.error}
@@ -235,14 +223,14 @@ export default function RegisterScreen(props) {
                   label="Password"
                   returnKeyType="done"
                   theme={{ colors: { primary: 'blue',underlineColor:'transparent',}}}
-                  style={{ width: "80%" }}
+                  style={{ width: 200 }}
                   value={password.value}
                   onChangeText={(text) => setPassword({ value: text, error: '' })}
                   error={!!password.error}
                   errorText={password.error}
                   secureTextEntry
                 />
-              <SearchLocationInput location={location} setLocation={setLocation} style={{ width: "80%" }} />
+               <SearchLocationInput style={{width: 200, height: 60}} location={location} setLatLng={(val) => {setLatLng(val)}} setLocation={setLocation} />
               </View>
             <Button
               mode="outlined"
@@ -333,7 +321,7 @@ export default function RegisterScreen(props) {
     },
     container: {
       width: "85%",
-      height: 460,
+      height: 570,
       maxHeight: "85%",
       marginTop: "auto",
       marginLeft: "auto",

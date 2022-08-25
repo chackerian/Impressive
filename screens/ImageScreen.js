@@ -10,7 +10,6 @@ export default function ImageScreen(props) {
 
   const [image, setImage] = useState(null);
   const [url, setImageURL] = useState("");
-  const [color, setColorValue] = useState("");
 
   const uploadImage = async (uri) => {
     const response = await fetch(uri);
@@ -35,8 +34,12 @@ export default function ImageScreen(props) {
   }
 
   let openImagePicker = async () => {
-    let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    let pickerResult = await ImagePicker.launchImageLibraryAsync();
+    let pickerResult = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
 
     setImage(pickerResult.uri);
 
