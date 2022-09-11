@@ -351,22 +351,32 @@ export default function SwipeScreen(props) {
     }
   }, [filter, user, route.params.filter])
 
-  async function addLike(email){
+  // removes the element from images array with email as varible
+  function removeElementFromImagesArray(email) {
+    let temparray = images;
 
-    console.log("LIKED", email)
+    console.log(temparray[0].email, email)
 
-            Alert.alert(
-              "New Match",
-              "",
-              [
-                {
-                  text: "Cancel",
-                  onPress: () => console.log("Cancel Pressed"),
-                  style: "cancel"
-                },
-                { text: "Go to match", onPress: () => navigation.navigate('Messages') }
-              ]
-            );
+    let targetIndex = temparray.findIndex(each => each.email == email);
+    temparray.splice(targetIndex, 1)
+    setImages(temparray);
+  }
+
+  async function addLike(email) {
+
+    removeElementFromImagesArray(email)
+    Alert.alert(
+      "New Match",
+      "",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "Go to match", onPress: () => navigation.navigate('Messages') }
+      ]
+    );
 
     store.collection('users').doc(props.route.params.user.email).update({
       likes: firebase.firestore.FieldValue.arrayUnion(email)
@@ -419,6 +429,7 @@ export default function SwipeScreen(props) {
   }
 
   var addDislike = function(email){
+    removeElementFromImagesArray(email);
     store.collection('users').doc(props.route.params.user.email).update({
       dislikes: firebase.firestore.FieldValue.arrayUnion(email)
     })
@@ -472,6 +483,10 @@ export default function SwipeScreen(props) {
     console.log("SET FILTER", tag)
     setFilter({tags: [tag]})
   }
+
+  useEffect(() => {
+    console.log("image array length ", images.length)
+  }, [images])
 
   return (
     <>
@@ -528,7 +543,7 @@ export default function SwipeScreen(props) {
         })}
       </CardStack>
      </View>
-     {images.length > 0 ?
+     {images.length !== 0 ?
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={[styles.button]} onPress={() => {
           swiper.swipeLeft();

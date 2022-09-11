@@ -44,6 +44,10 @@ export default function AddInterestsScreen(props) {
     setTags(newTags);
   };
 
+  const sendVerificationEmail = () => {
+    firebase.auth().currentUser.sendEmailVerification()
+  }
+
   const createUser = async (email, password, name, location, tags, lat, lng, age) => {
      firebase.auth().createUserWithEmailAndPassword(email, password)
      .then((userCredential) => {
@@ -58,6 +62,7 @@ export default function AddInterestsScreen(props) {
           interests: tags,
           age: age
         }
+        sendVerificationEmail()
         props.route.params.login(newUser);
        }
 
@@ -98,7 +103,7 @@ export default function AddInterestsScreen(props) {
                   errorText={age.error}
                 />
               <View style={styles.form}>
-                <TagInput 
+                <TagInput
                   tags={tags}
                   handleDelete={handleDelete}
                   handleAddition={handleAddition}
@@ -107,7 +112,6 @@ export default function AddInterestsScreen(props) {
             <Button
               mode="outlined"
               color='white'
-              style={{ width: 100 }}
               style={styles.button}
               onPress={onSignUpPressed}>Register
             </Button>
@@ -141,7 +145,7 @@ export default function AddInterestsScreen(props) {
                   errorText={age.error}
                 />
               <View style={styles.form}>
-               <TagInput 
+               <TagInput
                   tags={tags}
                   handleDelete={handleDelete}
                   handleAddition={handleAddition}
@@ -150,7 +154,6 @@ export default function AddInterestsScreen(props) {
             <Button
               mode="outlined"
               color='white'
-              style={{ width: 100 }}
               style={styles.button}
               onPress={onSignUpPressed}>Register
             </Button>

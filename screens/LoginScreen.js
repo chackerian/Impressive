@@ -276,7 +276,7 @@ export default function StartScreen(props) {
             <View style={styles.forgotPassword}>
                 <TouchableOpacity
                   onPress={() => navigation.navigate('ResetPasswordScreen')}>
-                  <Text style={styles.forgot}>Forgot your password?</Text>
+                  <Text style={styles.forgot} onPress={() => firebase.auth().sendPasswordResetEmail("vaibhavyash28@gmail.com")}>Forgot your password?</Text>
                 </TouchableOpacity>
               </View>
             <Text>Don’t have an account? </Text>

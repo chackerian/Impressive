@@ -64,9 +64,9 @@ function AuthNavigator() {
       }
     }
 
-        useEffect(() => {
-          getUser()
-        }, [])
+    useEffect(() => {
+      getUser()
+    }, [])
 
     function login(a) {
       console.log("LOGIN", a)
