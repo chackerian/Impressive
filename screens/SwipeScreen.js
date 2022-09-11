@@ -99,14 +99,13 @@ class ControlPanel extends Component {
 
 export default function SwipeScreen(props) {
 
-  const [cardsShow, setCardsShow] = useState(false);
   const [images, setImages] = useState([]);
   const [swiper, setSwiper] = useState();
   const [drawer, setDrawer] = useState();
   const [user, setUser] = useState();
   const [filter, setFilter] = useState({});
   const [shadowColor, setShadowColor] = useState("");
-  const [trigger, setTrigger] = useState(false);
+
   const navigation = useNavigation();
   const route = useRoute();
   const alertRef = React.createRef();
@@ -162,6 +161,10 @@ export default function SwipeScreen(props) {
       flexDirection:'row',
       alignItems: 'center',
       justifyContent: 'center',
+      position: "absolute",
+      top: 261,
+      left: 57,
+      zIndex: 100,
     },
     content:{
       flex: 5,
@@ -254,14 +257,13 @@ export default function SwipeScreen(props) {
   }
 
   async function initImages(user){
-    console.log("INIT IMAGES")
     const userLikes = user.likes
     const userDislikes = user.dislikes
     const email = user.email
 
     var interacted = userLikes.concat(userDislikes, email)
 
-    console.log("FILTER", filter, route.params)
+    console.log("FILTER", filter)
     if (filter.location) {
       console.log("location filter")
       var snapshot = await store.collection("users").get()
@@ -313,7 +315,6 @@ export default function SwipeScreen(props) {
           users.push(s.data());
         }
       });
-      console.log("USERS MAIN", images)
       setImages(users);
     }
   }
@@ -333,10 +334,6 @@ export default function SwipeScreen(props) {
 
   }
 
-  async function cards(){
-    setCardsShow(true)
-  }
-
   useEffect(() => {
     loadScript(
       `https://maps.googleapis.com/maps/api/js?key=AIzaSyDKZXVS2f74ntKveM2VAr0ReLdpKxkWkDc&libraries=places,geometry`,
@@ -351,32 +348,19 @@ export default function SwipeScreen(props) {
     }
   }, [filter, user, route.params.filter])
 
-  // removes the element from images array with email as varible
-  function removeElementFromImagesArray(email) {
-    let temparray = images;
-
-    console.log(temparray[0].email, email)
-
-    let targetIndex = temparray.findIndex(each => each.email == email);
-    temparray.splice(targetIndex, 1)
-    setImages(temparray);
-  }
-
-  async function addLike(email) {
-
-    removeElementFromImagesArray(email)
-    Alert.alert(
-      "New Match",
-      "",
-      [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
-        },
-        { text: "Go to match", onPress: () => navigation.navigate('Messages') }
-      ]
-    );
+  async function addLike(email){
+            Alert.alert(
+              "New Match",
+              "",
+              [
+                {
+                  text: "Cancel",
+                  onPress: () => console.log("Cancel Pressed"),
+                  style: "cancel"
+                },
+                { text: "Go to match", onPress: () => navigation.navigate('Messages') }
+              ]
+            );
 
     store.collection('users').doc(props.route.params.user.email).update({
       likes: firebase.firestore.FieldValue.arrayUnion(email)
@@ -501,7 +485,6 @@ export default function SwipeScreen(props) {
           </TouchableOpacity>
       </View>
      <View style={styles.viewport}>
-     {/*{ cardsShow || images.length == 0  ? <Text></Text> : <Button onPress={cards} title="Show Users" /> }*/}
      { images.length == 0 ? <Text>No Users Left</Text> : <Text></Text> }
       <CardStack
         style={styles.content}
@@ -518,9 +501,24 @@ export default function SwipeScreen(props) {
           var state = ""
         }
         return (
+          <View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity style={[styles.button]} onPress={() => {
+              addDislike(i.email);
+              swiper.swipeLeft();
+            }}>
+              <FontAwesomeIcon icon={ faTimesCircle } color={ '#ff2400' } size={ 40 } />
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.button]} onPress={() => {
+              addLike(i.email);
+              swiper.swipeRight();
+            }}>
+              <FontAwesomeIcon icon={ faHeart } color={ 'green' } size={ 40 } />
+            </TouchableOpacity>
+          </View>
           <Card style={[styles.card, styles.card1]} key={index}
-            onSwipedRight={(event) =>{ addLike(i.email)}}
-            onSwipedLeft={(event) => { addDislike(i.email) }}
+            onSwipedRight={(event) =>{ addLike(i.email);}}
+            onSwipedLeft={(event) => { addDislike(i.email);}}
           >
             <Image source={{uri: i.picture}} style={styles.image} />
             <View style={styles.info}>
@@ -539,10 +537,12 @@ export default function SwipeScreen(props) {
              </View>
             </View>
           </Card>
+          </View>
           )
         })}
       </CardStack>
      </View>
+<<<<<<< HEAD
      {images.length !== 0 ?
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={[styles.button]} onPress={() => {
@@ -557,6 +557,8 @@ export default function SwipeScreen(props) {
         </TouchableOpacity>
       </View>
       : <Text></Text>}
+=======
+>>>>>>> refs/remotes/origin/master
     </View>
     </>
   )

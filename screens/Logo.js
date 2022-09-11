@@ -15,13 +15,13 @@ export default function Logo({ goBack }) {
   if(isDeviceMobile) {
     return (
         <View style={mobleStyles.logo} onClick={() => navigation.goBack('StartScreen')}>
-          <Image source="https://png.pngtree.com/png-vector/20190307/ourlarge/pngtree-eagle-logo-vector-illustration-png-image_779923.jpg" style={mobleStyles.image} />
+          <Image source={image} />
         </View>
       )
   }
   return (
   	<View style={styles.logo} onClick={() => navigation.goBack('StartScreen')}>
-  		<Image source="https://png.pngtree.com/png-vector/20190307/ourlarge/pngtree-eagle-logo-vector-illustration-png-image_779923.jpg" style={styles.image} />
+  		<Image source={image} style={styles.image} />
   	</View>
   )
 }
