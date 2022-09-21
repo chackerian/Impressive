@@ -107,7 +107,7 @@ export default function RegisterScreen(props) {
           lng: LatLng.lng,
         }
     console.log(data)
-    if (emailError || passwordError || nameError || locationError) {
+    if (emailError || nameError || locationError) {
       console.log("ERROR", emailError, passwordError, nameError)
     } else {
       navigation.navigate("AddInterestsScreen", data)

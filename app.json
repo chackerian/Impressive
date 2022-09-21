@@ -31,7 +31,8 @@
       "package": "com.chackerian.test"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "description": "test",
     }
   }
 }

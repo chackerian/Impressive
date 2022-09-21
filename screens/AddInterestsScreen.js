@@ -201,9 +201,6 @@ export default function AddInterestsScreen(props) {
     login: {
       alignItems: 'center',
     },
-    facebook: {
-      backgroundColor: '#4267B2',
-    },
     headline: {
       fontWeight: "bold",
       fontSize: 25,

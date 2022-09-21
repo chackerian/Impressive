@@ -542,23 +542,6 @@ export default function SwipeScreen(props) {
         })}
       </CardStack>
      </View>
-<<<<<<< HEAD
-     {images.length !== 0 ?
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={[styles.button]} onPress={() => {
-          swiper.swipeLeft();
-        }}>
-          <FontAwesomeIcon icon={ faTimesCircle } color={ '#ff2400' } size={ 40 } />
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.button]} onPress={() => {
-          swiper.swipeRight();
-        }}>
-          <FontAwesomeIcon icon={ faHeart } color={ 'green' } size={ 40 } />
-        </TouchableOpacity>
-      </View>
-      : <Text></Text>}
-=======
->>>>>>> refs/remotes/origin/master
     </View>
     </>
   )

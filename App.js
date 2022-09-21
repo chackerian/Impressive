@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import firebase from 'firebase/app';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Helmet} from "react-helmet";
 
 import { LogBox, View, StyleSheet } from 'react-native';
 LogBox.ignoreLogs([
@@ -127,7 +128,24 @@ function AuthNavigator() {
       }
      />
   ) : (
+  <React.Fragment>
+    <Helmet>
+      <meta name="description" content="test" />
+
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content="https://socially-b729a.web.app/%22%3E" />
+      <meta property="og:title" content="Impressive" />
+      <meta property="og:description" content="test" />
+      <meta property="og:image" content="" />
+
+      <meta property="twitter:card" content="summary_large_image" />
+      <meta property="twitter:url" content="https://socially-b729a.web.app/%22%3E" />
+      <meta property="twitter:title" content="Impressive" />
+      <meta property="twitter:description" content="" />
+      <meta property="twitter:image" content="" />
+    </Helmet>
     <MyStack login={login} />
+  </React.Fragment>
   )
 }
 

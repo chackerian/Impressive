@@ -1,4 +1,4 @@
-import React, { useState} from 'react'
+import React, { useState, useEffect} from 'react'
 import { StyleSheet, Text, View, Alert, Platform, TouchableOpacity } from "react-native";
 import Logo from './Logo'
 import { useNavigation } from '@react-navigation/native';
@@ -23,6 +23,15 @@ export default function StartScreen(props) {
    const isDeviceMobile = useMediaQuery({
         query: "(max-width: 1224px)",
     });
+
+  // useEffect(() => {
+  //   document.head.innerHTML+=`
+  //   <meta name="description" content="Nested component" />
+  //   <title>Test</title>
+  //   <meta property="og:title" content="How to Become an SEO Expert (8 Steps)" />
+  //   <meta property="og:description" content="Get from SEO newbie to SEO pro in 8 simple steps." />
+  //   `
+  // }, []);
 
   const onLoginPressed = () => {
     const emailError = emailValidator(email.value)
@@ -232,7 +241,7 @@ export default function StartScreen(props) {
       <View style={styles.container}>
         <View style={styles.mainContainer}>
           <Logo />
-          <Text style={styles.headline2}>Make new connections based on interests</Text>
+          <Text style={styles.headline2}>new connections based on interests</Text>
             <View style={styles.login}>
               <View style={styles.form}>
                 <TextInput
